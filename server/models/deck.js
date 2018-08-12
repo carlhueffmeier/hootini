@@ -3,6 +3,7 @@ mongoose.Promise = global.Promise;
 
 // It might be a good idea to make the name of the deck
 // unique on a per-user basis
+// Look into: Validation and Multi-field unique values
 const deckSchema = new mongoose.Schema({
   name: {
     type: String,

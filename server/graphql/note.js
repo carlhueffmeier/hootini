@@ -1,30 +1,58 @@
 const { gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
-const Deck = mongoose.model('Deck');
 const Note = mongoose.model('Note');
 
 exports.typeDef = gql`
   extend type Query {
-    getNotes: [Note]
+    Note(id: ID!): Note!
+    allNotes: [Note]!
   }
 
   extend type Mutation {
-    addNote(deck: String!): Note
+    newNote(input: NewNote!): Note!
+    updateNote(input: UpdatedNote!): Note!
   }
 
   type Note {
-    deck: Deck
+    id: ID!
+    deck: Deck!
+  }
+
+  input NewNote {
+    deck: ID!
+  }
+
+  input UpdatedNote {
+    deck: ID
   }
 `;
 
+const getNote = (_, { id }) => {
+  return Note.findById(id);
+};
+
+const allNotes = () => {
+  return Note.find();
+};
+
+const newNote = (_, { input }) => {
+  return new Note(input).save();
+};
+
+const updateNote = (_, { input }) => {
+  const { id, ...update } = input;
+
+  return Note.findByIdAndUpdate(id, update, { new: true });
+};
+
 exports.resolvers = {
   Query: {
-    getNotes: () => Note.find().populate('deck')
+    Note: getNote,
+    allNotes
   },
+
   Mutation: {
-    addNote: async (obj, args) => {
-      const deck = await Deck.findOne({ name: args.deck });
-      return await new Note({ deck }).save();
-    }
+    newNote,
+    updateNote
   }
 };

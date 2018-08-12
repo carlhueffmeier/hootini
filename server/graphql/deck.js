@@ -4,23 +4,56 @@ const Deck = mongoose.model('Deck');
 
 exports.typeDef = gql`
   extend type Query {
-    getDecks: [Deck]
+    Deck(id: ID!): Deck!
+    allDecks: [Deck]!
   }
 
   extend type Mutation {
-    addDeck(name: String!): Deck
+    newDeck(input: NewDeck!): Deck!
+    updateDeck(input: UpdatedDeck!): Deck!
   }
 
   type Deck {
+    id: ID!
+    name: String!
+  }
+
+  input UpdatedDeck {
+    id: ID!
+    name: String
+  }
+
+  input NewDeck {
     name: String!
   }
 `;
 
+const getDeck = (_, { id }) => {
+  return Deck.findById(id);
+};
+
+const allDecks = () => {
+  return Deck.find();
+};
+
+const newDeck = (_, { input }) => {
+  return new Deck(input).save();
+};
+
+const updateDeck = (_, { input }) => {
+  const { id, ...update } = input;
+
+  return Deck.findById(id, update, { new: true });
+};
+
 exports.resolvers = {
   Query: {
-    getDecks: () => Deck.find()
+    Deck: getDeck,
+    allDecks
   },
+
   Mutation: {
-    addDeck: async (obj, args) => await new Deck({ name: args.name }).save()
+    newDeck,
+    updateDeck
   }
 };
