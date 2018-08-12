@@ -9,6 +9,10 @@ const {
   typeDef: NoteType,
   resolvers: noteTypeResolvers
 } = require('./noteType');
+const {
+  typeDef: Template,
+  resolvers: templateResolvers
+} = require('./template');
 
 // These are the queries and mutations not associated with a type
 // Empty for now!
@@ -31,8 +35,14 @@ const resolvers = {};
 // type definitions.
 // For the resolvers, we have to combine them via object deep merge.
 const schema = {
-  typeDefs: [Query, Mutation, Deck, Note, NoteType],
-  resolvers: merge(resolvers, deckResolvers, noteResolvers, noteTypeResolvers)
+  typeDefs: [Query, Mutation, Deck, Note, NoteType, Template],
+  resolvers: merge(
+    resolvers,
+    deckResolvers,
+    noteResolvers,
+    noteTypeResolvers,
+    templateResolvers
+  )
 };
 
 module.exports = schema;

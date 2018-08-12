@@ -26,12 +26,10 @@ const schema = require('./graphql/schema');
 const apolloServer = new ApolloServer(schema);
 const app = require('./app');
 apolloServer.applyMiddleware({ app });
-app.set('port', process.env.PORT || 3333);
+app.set('port', process.env.PORT || 5000);
 
-const server = app.listen(app.get('port'), () =>
-  console.log(
-    `🎡 GraphQL Playground ready at http://localhost:${server.address().port}${
-      apolloServer.graphqlPath
-    }`
-  )
-);
+const server = app.listen(app.get('port'), () => {
+  const playgroundUrl =
+    `http://localhost:${server.address().port}` + apolloServer.graphqlPath;
+  console.log(`🎡   GraphQL Playground ready at ${playgroundUrl}`);
+});

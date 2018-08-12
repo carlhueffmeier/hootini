@@ -18,12 +18,13 @@ exports.typeDef = gql`
     deck: Deck!
   }
 
-  input NewNote {
-    deck: ID!
+  input UpdatedNote {
+    id: ID!
+    deck: ID
   }
 
-  input UpdatedNote {
-    deck: ID
+  input NewNote {
+    deck: ID!
   }
 `;
 
