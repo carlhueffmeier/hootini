@@ -1,11 +1,12 @@
 const { gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const NoteType = mongoose.model('NoteType');
+const { createFilter } = require('../helper/utils');
 
 exports.typeDef = gql`
   extend type Query {
     NoteType(id: ID!): NoteType!
-    allNoteTypes: [NoteType]!
+    allNoteTypes(where: SearchNoteType): [NoteType]!
   }
 
   extend type Mutation {
@@ -26,10 +27,14 @@ exports.typeDef = gql`
   input NewNoteType {
     name: String!
   }
+
+  input SearchNoteType {
+    name: String
+  }
 `;
 
-const allNoteTypes = () => {
-  return NoteType.find();
+const allNoteTypes = (_, { where = {} }) => {
+  return NoteType.find(createFilter(where));
 };
 
 const getNoteType = (_, { id }) => {

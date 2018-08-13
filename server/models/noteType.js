@@ -4,12 +4,16 @@ mongoose.Promise = global.Promise;
 const fieldDefinitionSchema = new mongoose.Schema({
   key: {
     type: String,
-    unique: true,
     trim: true,
-    required: 'All fields need a unique key'
+    required: 'All fields need a unique key',
+    validate: async key => {
+      fieldDefinitionSchema.findOne();
+    }
   },
   type: {
     type: String,
+    default: 'Markdown',
+    enum: ['Markdown'],
     required: 'All fields need an associated type'
   }
 });
