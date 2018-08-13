@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Link } from 'react-router-dom';
 
 export default class DeckList extends Component {
   render() {
@@ -12,9 +13,9 @@ export default class DeckList extends Component {
               return 'Loading list of decks...';
             }
             const { allDecks } = data;
-            return allDecks.map(deck => (
-              <li key={deck.id}>
-                <span>{deck.name}</span>
+            return allDecks.map((deck, index) => (
+              <li key={index}>
+                <Link to={`/deck/${deck.slug}`}>{deck.name}</Link>
               </li>
             ));
           }}
@@ -27,7 +28,7 @@ export default class DeckList extends Component {
 const DECKS_QUERY = gql`
   query allDecks {
     allDecks {
-      id
+      slug
       name
     }
   }

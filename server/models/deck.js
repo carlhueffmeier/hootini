@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const slugs = require('slugs');
+const slug = require('slugs');
 mongoose.Promise = global.Promise;
 
 // It might be a good idea to make the name of the deck
@@ -18,18 +18,19 @@ const deckSchema = new mongoose.Schema({
   }
 });
 
-// deckSchema.pre('save', async function(next) {
-//   if (!this.isModified('name')) {
-//     next();
-//     return;
-//   }
-//   let slug = slugs(this.name);
-//   const existingSlugs = (await Deck.find({ slug: /^slug/ })).map(r => r.slug);
-//   for (let i = 1; existingSlugs.includes(slug); i += 1) {
-//     slug = `slug-${i}`;
-//   }
-//   this.slug = slug;
-//   next();
-// });
+deckSchema.pre('save', async function(next) {
+  if (!this.isModified('name')) {
+    next(); // skip it
+    return; // stop this function from running
+  }
+  this.slug = slug(this.name);
+  // find other stores that have a slug of wes, wes-1, wes-2
+  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
+  const decksWithSlug = await this.constructor.find({ slug: slugRegEx });
+  if (decksWithSlug.length) {
+    this.slug = `${this.slug}-${decksWithSlug.length + 1}`;
+  }
+  next();
+});
 
 module.exports = mongoose.model('Deck', deckSchema);

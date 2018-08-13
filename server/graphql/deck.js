@@ -5,7 +5,7 @@ const { createFilter } = require('../helper/utils');
 
 exports.typeDef = gql`
   extend type Query {
-    Deck(id: ID!): Deck!
+    Deck(where: SearchDeck): Deck!
     allDecks(where: SearchDeck): [Deck]!
   }
 
@@ -40,8 +40,8 @@ exports.typeDef = gql`
   }
 `;
 
-const getDeck = (_, { id }) => {
-  return Deck.findById(id);
+const getDeck = (_, { where = {} }) => {
+  return Deck.findOne(createFilter(where));
 };
 
 const allDecks = (_, { where = {} }) => {
