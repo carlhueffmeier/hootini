@@ -8,9 +8,12 @@ export default class DeckList extends Component {
     return (
       <ul>
         <Query query={DECKS_QUERY}>
-          {({ data, loading }) => {
+          {({ data, error, loading }) => {
             if (loading) {
               return 'Loading list of decks...';
+            }
+            if (error) {
+              return <li>Error! {error.message}</li>;
             }
             const { allDecks } = data;
             return allDecks.map((deck, index) => (

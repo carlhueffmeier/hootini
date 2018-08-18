@@ -10,22 +10,46 @@ exports.typeDef = gql`
   }
 
   extend type Mutation {
-    newNoteType(input: NewNoteType!): NoteType!
+    createNoteType(input: NewNoteType!): NoteType!
+    createNoteTypeAndConnectToTemplates(
+      input: NewNoteTypeAndConnectedTemplates!
+    ): NoteType!
     updateNoteType(input: UpdatedNoteType!): NoteType!
+    updateNoteTypeAndConnectToTemplates(
+      input: UpdatedNoteTypeAndConnectedTemplates
+    ): NoteType!
   }
 
   type NoteType {
     id: ID!
     name: String!
+    fieldDefinitions: [FieldDefinition!]!
+    templates: [Template!]!
   }
 
   input UpdatedNoteType {
     id: ID!
     name: String
+    fieldDefinitions: [UpdatedFieldDefinition!]
+  }
+
+  input UpdatedNoteTypeAndConnectedTemplates {
+    id: ID!
+    name: String
+    fieldDefinitions: [UpdatedFieldDefinition!]
+    templates: [ID!]
   }
 
   input NewNoteType {
     name: String!
+    fieldDefinitions: [NewFieldDefinition!]
+    templates: [NewTemplate!]
+  }
+
+  input NewNoteTypeAndConnectedTemplates {
+    name: String!
+    fieldDefinitions: [NewFieldDefinition!]
+    templates: [ID!]
   }
 
   input SearchNoteType {
@@ -34,21 +58,41 @@ exports.typeDef = gql`
 `;
 
 const allNoteTypes = (_, { where = {} }) => {
-  return NoteType.find(createFilter(where));
+  return NoteType.find(createFilter(where)).populate('templates');
 };
 
 const getNoteType = (_, { id }) => {
-  return NoteType.findById(id);
+  return NoteType.findById(id).populate('templates');
 };
 
-const newNoteType = (_, { input }) => {
+const createNoteType = (_, { input }) => {
   return new NoteType(input).save();
+};
+
+const createNoteTypeAndConnectToTemplates = (_, { input }) => {
+  const { id, templates, ...ownProps } = input;
+  return new NoteType({
+    ...ownProps,
+    templates: templates.map(mongoose.Types.ObjectId)
+  })
+    .save()
+    .populate('templates');
 };
 
 const updateNoteType = (_, { input }) => {
   const { id, ...update } = input;
+  return NoteType.findByIdAndUpdate(id, update, { new: true }).populate(
+    'templates'
+  );
+};
 
-  return NoteType.findByIdAndUpdate(id, update, { new: true });
+const updateNoteTypeAndConnectToTemplates = (_, { input }) => {
+  const { id, templates, ...update } = input;
+  return NoteType.findByIdAndUpdate(
+    id,
+    { ...update, templates: templates.map(mongoose.Types.ObjectId) },
+    { new: true }
+  ).populate('templates');
 };
 
 exports.resolvers = {
@@ -58,7 +102,9 @@ exports.resolvers = {
   },
 
   Mutation: {
-    newNoteType,
-    updateNoteType
+    createNoteType,
+    createNoteTypeAndConnectToTemplates,
+    updateNoteType,
+    updateNoteTypeAndConnectToTemplates
   }
 };

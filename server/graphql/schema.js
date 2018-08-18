@@ -5,6 +5,7 @@ const merge = require('lodash.merge');
 // their respective files
 const { typeDef: Deck, resolvers: deckResolvers } = require('./deck');
 const { typeDef: Note, resolvers: noteResolvers } = require('./note');
+const { typeDef: FieldDefinition } = require('./fieldDefinition');
 const {
   typeDef: NoteType,
   resolvers: noteTypeResolvers
@@ -35,7 +36,7 @@ const resolvers = {};
 // type definitions.
 // For the resolvers, we have to combine them via object deep merge.
 const schema = {
-  typeDefs: [Query, Mutation, Deck, Note, NoteType, Template],
+  typeDefs: [Query, Mutation, FieldDefinition, Deck, Note, NoteType, Template],
   resolvers: merge(
     resolvers,
     deckResolvers,

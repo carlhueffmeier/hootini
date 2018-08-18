@@ -8,14 +8,14 @@ export default class DeckView extends Component {
   };
 
   render() {
-    const { name, description, id } = this.props.deck;
+    const { name, description, slug } = this.props.deck;
     return (
       <div>
         <h1>Deck: {name}</h1>
         {description ? <p>{description}</p> : ''}
-        <Link to={`/deck/${id}/settings`}>Settings</Link>
-        <Link to={`/deck/${id}/review`}>Start review</Link>
-        <Link to={`/deck/${id}/new-note`}>Add note</Link>
+        <Link to={`/deck/${slug}/settings`}>Settings</Link>
+        <Link to={`/deck/${slug}/review`}>Start review</Link>
+        <Link to={`/deck/${slug}/new-note`}>Add note</Link>
       </div>
     );
   }

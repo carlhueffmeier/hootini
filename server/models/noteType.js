@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const arrayUniquePlugin = require('mongoose-unique-array');
 
 const fieldDefinitionSchema = new mongoose.Schema({
   key: {
     type: String,
     trim: true,
     required: 'All fields need a unique key',
-    validate: async key => {
-      fieldDefinitionSchema.findOne();
-    }
+    unique: true
   },
   type: {
     type: String,
@@ -18,13 +17,21 @@ const fieldDefinitionSchema = new mongoose.Schema({
   }
 });
 
+fieldDefinitionSchema.plugin(arrayUniquePlugin);
+
 const noteTypeSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
     required: 'You must supply a name'
   },
-  fieldDefinitions: [fieldDefinitionSchema]
+  fieldDefinitions: [fieldDefinitionSchema],
+  templates: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Template'
+    }
+  ]
 });
 
 module.exports = mongoose.model('NoteType', noteTypeSchema);

@@ -2,6 +2,7 @@
   "name": "mnemo",
   "version": "0.1.0",
   "private": true,
+  "repository": "github:carlhueffmeier/mnemo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:server": "cd server && npm run prod",

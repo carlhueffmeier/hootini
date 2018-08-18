@@ -5,7 +5,7 @@ import Downshift from 'downshift';
 
 export default class DeckSelect extends Component {
   static defaultProps = {
-    defaultSelectedItem: null,
+    preselect: null,
     onChange: () => {}
   };
 
@@ -14,7 +14,7 @@ export default class DeckSelect extends Component {
       <Downshift
         onChange={this.props.onChange}
         itemToString={deck => (deck ? deck.name : '')}
-        defaultSelectedItem={this.props.defaultSelectedItem}
+        defaultSelectedItem={this.props.preselect}
       >
         {({
           inputValue,
@@ -65,6 +65,7 @@ const SEARCH_DECKS = gql`
   query allDecks($name: String!) {
     allDecks(where: { name: $name }) {
       id
+      slug
       name
     }
   }
