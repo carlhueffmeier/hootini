@@ -27,17 +27,9 @@ export default class FormContentSection extends Component {
         <HorizontalPartition>
           <div {...css({ maxWidth: '15rem', marginBottom: '2rem' })}>
             <div {...css({ marginBottom: '1rem' })}>
-              <Field
-                name="deck"
-                component={DeckSelect}
-                format={deck => deck && deck.name}
-              />
+              <Field name="deck" component={DeckSelect} />
             </div>
-            <Field
-              name="noteType"
-              component={NoteTypeSelect}
-              format={type => type && type.name}
-            />
+            <Field name="noteType" component={NoteTypeSelect} />
           </div>
           <div {...css({ maxWidth: '30rem' })}>
             {this.props.noteType && (

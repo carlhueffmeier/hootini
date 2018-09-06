@@ -32,7 +32,6 @@ export default class DownshiftInput extends Component {
       ...options
     } = this.props;
 
-    console.log(input);
     return (
       <Downshift
         {...input}
@@ -41,7 +40,7 @@ export default class DownshiftInput extends Component {
           input.onChange(selectedItem);
         }}
         itemToString={itemToString}
-        inputValue={input.value}
+        selectedItem={input.value}
       >
         {({
           getInputProps,
