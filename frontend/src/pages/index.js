@@ -3,6 +3,7 @@ import { Router } from '@reach/router';
 import Dashboard from './Dashboard';
 import DeckDetails from './DeckDetails';
 import AddNote from './AddNote';
+import EditNoteType from './EditNoteType';
 
 class Pages extends Component {
   render() {
@@ -11,6 +12,7 @@ class Pages extends Component {
         <Dashboard path="/" />
         <DeckDetails path="/deck/:slug" />
         <AddNote path="/deck/:slug/add-note" />
+        <EditNoteType path="/note-types/:slug" />
       </Router>
     );
   }

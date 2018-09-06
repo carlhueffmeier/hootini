@@ -48,7 +48,7 @@ export default class NoteInput extends Component {
 
 const NOTE_TYPE_QUERY = gql`
   query NoteType($id: ID!) {
-    NoteType(id: $id) {
+    NoteType(where: { id: $id }) {
       id
       name
       fieldDefinitions {

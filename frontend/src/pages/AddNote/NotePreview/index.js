@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styled from 'react-emotion';
+import { navigate } from '@reach/router';
 import PreviewPane from './PreviewPane';
 import Tabs from '../../../components/Tabs';
 import * as typography from '../../../shared/typography';
@@ -39,11 +40,14 @@ export default class NotePreview extends Component {
   };
 
   state = {
+    activeTab: 0,
     isCardFlipped: false
   };
 
   flipCard = () =>
     this.setState(state => ({ isCardFlipped: !state.isCardFlipped }));
+
+  handleTabChange = tab => this.setState({ activeTab: tab });
 
   render() {
     const { noteTypeId, fields } = this.props;
@@ -60,7 +64,10 @@ export default class NotePreview extends Component {
           return (
             <Card>
               <CardTitle>Preview</CardTitle>
-              <Tabs>
+              <Tabs
+                activeTab={this.state.activeTab}
+                onChange={this.handleTabChange}
+              >
                 {NoteType.templates &&
                   NoteType.templates.map((template, index) => (
                     <Tabs.Tab key={index} title={template.name}>
@@ -77,7 +84,14 @@ export default class NotePreview extends Component {
                   {this.state.isCardFlipped ? 'Hide Answer' : 'Show Answer'}
                 </TextButton>
                 <div {...css({ marginLeft: 'auto' })}>
-                  <IconButton type="button">
+                  <IconButton
+                    type="button"
+                    onClick={() => {
+                      navigate(
+                        `/note-types/${NoteType.slug}#${this.state.activeTab}`
+                      );
+                    }}
+                  >
                     <EditIcon />
                   </IconButton>
                 </div>
@@ -92,10 +106,12 @@ export default class NotePreview extends Component {
 
 const NOTE_TYPE_QUERY = gql`
   query NoteType($id: ID!) {
-    NoteType(id: $id) {
+    NoteType(where: { id: $id }) {
       id
+      slug
       name
       templates {
+        id
         name
         front
         back

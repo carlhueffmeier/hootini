@@ -24,11 +24,28 @@ const TabContent = styled('div')({
 export default class Tabs extends Component {
   static Tab = props => props.children;
 
+  static defaultProps = {
+    onChange: () => {}
+  };
+
   state = {
     activeTab: 0
   };
 
-  openTab = tabId => this.setState({ activeTab: tabId });
+  isControlled() {
+    return typeof this.props.activeTab !== undefined;
+  }
+
+  getActiveTab = () => {
+    return this.isControlled() ? this.props.activeTab : this.state.activeTab;
+  };
+
+  openTab = tab => {
+    if (!this.isControlled()) {
+      this.setState({ activeTab: tab });
+    }
+    this.props.onChange(tab);
+  };
 
   render() {
     const { children } = this.props;
@@ -40,7 +57,7 @@ export default class Tabs extends Component {
               <TabButton
                 type="button"
                 onClick={() => this.openTab(i)}
-                isActive={i === this.state.activeTab}
+                isActive={i === this.getActiveTab()}
               >
                 {child.props.title}
               </TabButton>
@@ -50,7 +67,7 @@ export default class Tabs extends Component {
         <TabContent>
           {React.Children.map(
             children,
-            (child, i) => (i === this.state.activeTab ? child : null)
+            (child, i) => (i === this.getActiveTab() ? child : null)
           )}
         </TabContent>
       </Fragment>

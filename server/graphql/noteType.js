@@ -5,7 +5,7 @@ const { createFilter } = require('../helper/utils');
 
 exports.typeDef = gql`
   extend type Query {
-    NoteType(id: ID!): NoteType!
+    NoteType(where: SearchNoteType): NoteType!
     allNoteTypes(where: SearchNoteType): [NoteType]!
   }
 
@@ -23,6 +23,7 @@ exports.typeDef = gql`
   type NoteType {
     id: ID!
     name: String!
+    slug: String!
     fieldDefinitions: [FieldDefinition!]!
     templates: [Template!]!
   }
@@ -53,7 +54,9 @@ exports.typeDef = gql`
   }
 
   input SearchNoteType {
+    id: ID
     name: String
+    slug: String
   }
 `;
 
@@ -61,8 +64,11 @@ const allNoteTypes = (_, { where = {} }) => {
   return NoteType.find(createFilter(where)).populate('templates');
 };
 
-const getNoteType = (_, { id }) => {
-  return NoteType.findById(id).populate('templates');
+const getNoteType = async (_, { where = {} }) => {
+  if (where.id) {
+    return NoteType.findById(where.id).populate('templates');
+  }
+  return NoteType.findOne(createFilter(where)).populate('templates');
 };
 
 const createNoteType = (_, { input }) => {
