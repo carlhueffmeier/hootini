@@ -5,22 +5,35 @@
   "dependencies": {
     "apollo-boost": "^0.1.13",
     "downshift": "^2.1.0",
+    "emotion": "^9.2.8",
     "final-form": "^4.9.1",
     "graphql": "^0.13.2",
+    "hast-util-sanitize": "^1.2.0",
+    "lodash.merge": "^4.6.1",
     "markdown-to-jsx": "^6.7.0",
     "react": "^16.4.2",
     "react-apollo": "^2.1.11",
     "react-dom": "^16.4.2",
+    "react-emotion": "^9.2.8",
     "react-final-form": "^3.6.5",
-    "react-router-dom": "^4.3.1",
+    "react-icons": "^3.0.5",
     "react-scripts": "1.1.4",
-    "react-syntax-highlighter": "^8.0.1",
-    "styled-components": "^3.4.2"
+    "refractor": "^2.6.0",
+    "remark": "^9.0.0",
+    "remark-external-links": "^2.0.0",
+    "remark-parse": "^5.0.0",
+    "remark-react": "^4.0.3",
+    "remark-sub-super": "^1.0.14",
+    "unified": "^7.0.0",
+    "unist-util-visit": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "unist-util-inspect": "^4.1.3"
   }
 }
