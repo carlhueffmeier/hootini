@@ -61,7 +61,6 @@ const SEARCH_DECKS = gql`
   query allDecks($name: String!) {
     allDecks(where: { name: $name }) {
       id
-      slug
       name
     }
   }

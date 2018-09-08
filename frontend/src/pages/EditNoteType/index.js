@@ -3,17 +3,23 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import Navbar from '../../components/Navbar';
+import NoteTypeForm from './NoteTypeForm';
+
+const PageContainer = styled('div')({
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'column'
+});
 
 const Main = styled('main')({
-  padding: '0 2.8rem 2rem',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
+  flex: 1,
+  overflow: 'hidden',
+  width: '100%'
 });
 
 const Loading = () => (
   <Fragment>
-    <Navbar title={`Deck: ...`} />
+    <Navbar title={`Note Type: ...`} />
     <p>Loading details...</p>
   </Fragment>
 );
@@ -32,12 +38,12 @@ export default class EditNoteType extends Component {
           }
           const { NoteType } = data;
           return (
-            <Fragment>
+            <PageContainer>
               <Navbar title={`Edit Note Type: ${NoteType.name}`} />
               <Main>
-                <pre>{JSON.stringify(NoteType, null, 2)}</pre>
+                <NoteTypeForm initialValues={NoteType} />
               </Main>
-            </Fragment>
+            </PageContainer>
           );
         }}
       </Query>
@@ -52,6 +58,7 @@ const NOTE_TYPE_QUERY = gql`
       name
       slug
       fieldDefinitions {
+        id
         type
         key
       }

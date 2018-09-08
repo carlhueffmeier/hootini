@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'react-emotion';
-import * as colors from '../../shared/colors';
-import { TabButton } from '../../shared/Buttons';
+import * as colors from '../shared/colors';
+import { TabButton } from '../shared/Buttons';
 
 const Tabbar = styled('ul')({
   listStyle: 'none',

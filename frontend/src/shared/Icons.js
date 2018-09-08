@@ -65,11 +65,21 @@ function ChevronIcon({ direction = 'up' }) {
   );
 }
 
-function CloseIcon() {
+function XIcon() {
   return (
     <SVGContainer>
-      <StyledSVG viewBox="0 0 20 20">
+      <StyledSVG viewBox="0 0 24 24">
         <path d="M18.984 6.422l-5.578 5.578 5.578 5.578-1.406 1.406-5.578-5.578-5.578 5.578-1.406-1.406 5.578-5.578-5.578-5.578 1.406-1.406 5.578 5.578 5.578-5.578z" />
+      </StyledSVG>
+    </SVGContainer>
+  );
+}
+
+function DragHandleIcon() {
+  return (
+    <SVGContainer>
+      <StyledSVG viewBox="0 0 24 24">
+        <path d="M3.984 15v-2.016h16.031v2.016h-16.031zM20.016 9v2.016h-16.031v-2.016h16.031z" />
       </StyledSVG>
     </SVGContainer>
   );
@@ -95,4 +105,12 @@ function OptionsIcon() {
   );
 }
 
-export { ArrowIcon, BrandIcon, ChevronIcon, CloseIcon, EditIcon, OptionsIcon };
+export {
+  ArrowIcon,
+  BrandIcon,
+  ChevronIcon,
+  XIcon,
+  DragHandleIcon,
+  EditIcon,
+  OptionsIcon
+};

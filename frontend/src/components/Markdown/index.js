@@ -22,7 +22,7 @@ function markdownToJsx(markdown) {
       commonmark: true
     })
     .use(externalLinks, { target: false, rel: ['nofollow'] })
-    .use(processRuby)
+    // .use(processRuby)
     .use(subSupParser)
     .use(remarkRefractor)
     .use(reactRenderer, {
@@ -40,13 +40,13 @@ function markdownToJsx(markdown) {
   return processor.processSync(markdown).contents;
 }
 
-function processRuby() {
-  function visitor(node) {
-    console.log(node);
-  }
+// function processRuby() {
+//   function visitor(node) {
+//     console.log(node);
+//   }
 
-  return ast => visit(ast, 'html', visitor);
-}
+//   return ast => visit(ast, 'html', visitor);
+// }
 
 function remarkRefractor({ include, exclude } = {}) {
   function visitor(node) {

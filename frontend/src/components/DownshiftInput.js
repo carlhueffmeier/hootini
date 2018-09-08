@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { object, func, string } from 'prop-types';
 import Downshift from 'downshift';
-import { ArrowIcon } from '../../shared/Icons';
-import { css } from '../../helper/utils';
-import { Input, ControllerButton, Menu } from '../../shared/Inputs';
+import { ArrowIcon } from '../shared/Icons';
+import { css } from '../lib/utils';
+import { Input, ControllerButton, Menu } from '../shared/Inputs';
 
 export default class DownshiftInput extends Component {
   static propTypes = {

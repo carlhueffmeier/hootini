@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express');
 
 exports.typeDef = gql`
   type FieldDefinition {
+    id: ID!
     key: String!
     type: String!
   }

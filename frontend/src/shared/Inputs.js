@@ -37,7 +37,6 @@ const Input = styled('input')({
   border: 'none',
   padding: '0.5rem 1.5rem 0.5rem 0.5rem',
   color: colors.textDark,
-  transition: `border-color 100ms ${easeOutCirc}`,
   borderBottom: `1px solid ${colors.lightGrey1}`,
   [onAttention]: {
     outline: 'none',
@@ -54,7 +53,6 @@ const Textarea = styled('textarea')({
   resize: 'none',
   borderRadius: 2,
   borderBottom: '1px solid transparent',
-  transition: `border-color 100ms ${easeOutCirc}`,
   [onAttention]: {
     outline: 'none',
     borderColor: colors.primary
@@ -91,7 +89,8 @@ const BaseMenu = styled('ul')(
     isOpen
       ? {
           padding: '0.5rem 0',
-          transform: 'none'
+          transform: 'none',
+          opacity: 1
         }
       : null
 );

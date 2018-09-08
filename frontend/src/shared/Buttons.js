@@ -21,6 +21,11 @@ const commonButtonStyles = {
 const Button = styled('button')(
   {
     ...commonButtonStyles,
+    color: colors.textLight,
+    background: colors.primary,
+    minWidth: '4rem',
+    height: '2.25rem',
+    padding: '0 1rem',
     boxShadow:
       '0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12)',
     '&:active': {
@@ -41,18 +46,30 @@ const Button = styled('button')(
       color: colors.lightGrey3
     }
   },
-  props => ({
-    color: props.color || colors.textLight,
-    background: props.background || colors.primary,
-    minWidth: props.large ? '5.3rem' : '4rem',
-    height: props.large ? '3rem' : '2.25rem',
-    padding: props.large ? '0 1.5rem' : '0 1rem'
-  })
+  props => {
+    const styles = [];
+    if (props.color) {
+      styles.push({ color: props.color });
+    }
+    if (props.background) {
+      styles.push({ background: props.background });
+    }
+    if (props.large) {
+      styles.push({
+        minWidth: '5.3rem',
+        height: '3rem',
+        padding: '0 1.5rem'
+      });
+    }
+    return styles;
+  }
 );
 
 const TextButton = styled(Button)(
   {
     ...commonButtonStyles,
+    padding: '0 0.5rem',
+    color: colors.primary,
     backgroundColor: 'transparent',
     cursor: 'pointer',
     boxShadow: 'none',
@@ -70,10 +87,18 @@ const TextButton = styled(Button)(
       color: colors.lightGrey3
     }
   },
-  props => ({
-    color: props.color || colors.primary,
-    padding: props.large ? '0 1rem' : '0 0.5rem'
-  })
+  props => {
+    const styles = [];
+    if (props.color) {
+      styles.push({ color: props.color });
+    }
+    if (props.large) {
+      styles.push({
+        padding: '0 1rem'
+      });
+    }
+    return styles;
+  }
 );
 
 const OutlinedButton = styled(Button)({
@@ -147,4 +172,44 @@ const IconButton = styled('button')({
   }
 });
 
-export { Button, IconButton, TextButton, OutlinedButton, TabButton };
+const RoundIconButton = styled('button')(
+  {
+    opacity: 0.5,
+    color: 'white',
+    transition: `all 200ms ${easeOutCirc}`,
+    cursor: 'pointer',
+    height: '1rem',
+    width: '1rem',
+    border: 'none',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '0.9rem',
+
+    '&:active, &:focus': {
+      opacity: 1,
+      outline: 'none'
+    },
+    '&:hover': {
+      opacity: 0.8
+    },
+    '&:disabled': {
+      cursor: 'not-allowed',
+      color: colors.lightGrey2,
+      opacity: 0.3
+    }
+  },
+  props => ({
+    background: props.background
+  })
+);
+
+export {
+  Button,
+  IconButton,
+  TextButton,
+  OutlinedButton,
+  RoundIconButton,
+  TabButton
+};

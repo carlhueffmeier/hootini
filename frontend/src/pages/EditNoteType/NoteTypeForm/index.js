@@ -9,8 +9,9 @@ import {
 } from './styles';
 import { Form } from 'react-final-form';
 import FormContentSection from './FormContentSection';
+import arrayMutators from 'final-form-arrays';
 
-export default class EditNote extends Component {
+export default class NoteTypeForm extends Component {
   static propTypes = {
     onSubmit: func,
     initialValues: object
@@ -32,24 +33,24 @@ export default class EditNote extends Component {
     return (
       <Form
         onSubmit={this.props.onSubmit}
+        mutators={{
+          ...arrayMutators
+        }}
         initialValues={this.props.initialValues}
       >
-        {({ handleSubmit, values, pristine }) => (
+        {({ handleSubmit, mutators, values, pristine }) => (
           <FullPageForm onSubmit={handleSubmit}>
             <FormContentSection
               isShifted={this.state.isShifted}
               values={values}
+              mutators={mutators}
             />
             <FormButtonContainer>
               <CancelButton type="button">Cancel</CancelButton>
-              <PreviewButton
-                type="button"
-                disabled={!values.noteType}
-                onClick={this.handleShift}
-              >
+              <PreviewButton type="button" onClick={this.handleShift}>
                 {this.state.isShifted ? 'Input' : 'Preview'}
               </PreviewButton>
-              <Button disabled={!values.noteType || pristine}>Save</Button>
+              <Button disabled={pristine}>Save</Button>
             </FormButtonContainer>
           </FullPageForm>
         )}

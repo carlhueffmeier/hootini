@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'react-emotion';
 import { navigate } from '@reach/router';
 import { Button, OutlinedButton } from '../../shared/Buttons';
-import TimeSelector from '../../components/TimeSelector';
+import TimeSelector from '../../components/TimeSelect';
 
 const Container = styled('div')({
   display: 'flex',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Markdown from 'markdown-to-jsx';
-import { renderTemplate } from '../../../helper/utils';
+import { renderTemplate } from '../lib/utils';
 
 const markdownOptions = {
   forceBlock: true,

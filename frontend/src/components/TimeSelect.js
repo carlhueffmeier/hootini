@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Downshift from 'downshift';
-import { ArrowIcon } from '../../shared/Icons';
-import { ControllerButton, Input, Item, Menu } from '../../shared/Inputs';
-import { css } from '../../helper/utils';
-import { visuallyHidden } from '../../shared/styleHelper';
+import { ArrowIcon } from '../shared/Icons';
+import { ControllerButton, Input, Item, Menu } from '../shared/Inputs';
+import { css } from '../lib/utils';
+import { visuallyHidden } from '../shared/styleHelper';
 
 export default class TimeSelector extends Component {
   static defaultProps = {
