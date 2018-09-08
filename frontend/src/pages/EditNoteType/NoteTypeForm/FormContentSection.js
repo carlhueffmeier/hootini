@@ -14,12 +14,21 @@ export default class FormContentSection extends Component {
     values: object
   };
 
+  state = {
+    activeTemplateId: null
+  };
+
+  handleSelectTemplate = id => {
+    this.setState({ activeTemplateId: id });
+  };
+
   render() {
     const { values, isShifted } = this.props;
+    const { activeTemplateId } = this.state;
     return (
       <FormContentContainer isShifted={isShifted}>
         <HorizontalPartition>
-          <div {...css({ maxWidth: '15rem', marginBottom: '2rem' })}>
+          <div {...css({ maxWidth: '15rem', marginBottom: '1rem' })}>
             <Field name="name">
               {({ input, meta }) => (
                 <div {...css({ marginBottom: '1rem' })}>
@@ -32,14 +41,22 @@ export default class FormContentSection extends Component {
               <Label>Fields</Label>
               <FieldList values={values} />
             </div>
+          </div>
+          <div {...css({ maxWidth: '30rem' })}>
             <Label>Templates</Label>
-            <EditTemplates />
+            <EditTemplates
+              values={values}
+              activeTemplateId={activeTemplateId}
+              onSelectTemplate={this.handleSelectTemplate}
+            />
           </div>
         </HorizontalPartition>
         <HorizontalPartition>
           <NotePreview
-            templates={[{ name: 'mock', front: 'hey', back: 'there' }]}
+            templates={values.templates}
             fields={values}
+            activeTemplateId={activeTemplateId}
+            onSelectTemplate={this.handleSelectTemplate}
           />
         </HorizontalPartition>
       </FormContentContainer>

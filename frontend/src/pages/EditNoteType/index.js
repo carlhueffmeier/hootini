@@ -64,6 +64,7 @@ const NOTE_TYPE_QUERY = gql`
       }
 
       templates {
+        id
         name
         front
         back
