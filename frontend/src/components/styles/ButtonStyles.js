@@ -1,28 +1,27 @@
 import styled from 'react-emotion';
-import * as colors from './colors';
-import * as typography from './typography';
-import { easeOutCirc } from './timings';
 
-const commonButtonStyles = {
-  ...typography.button,
+const BaseButton = styled('button')(({ theme }) => ({
+  ...theme.typography.button,
   display: 'flex',
   cursor: 'pointer',
   justifyContent: 'center',
   alignItems: 'center',
   border: 'none',
   borderRadius: 5,
-  transition: `all 300ms ${easeOutCirc}`,
+  transition: `all 300ms ${theme.timings.easeOutCirc}`,
   '& svg': {
     margin: '0 0.5rem',
     fontSize: '1.5em'
+  },
+  '&:disabled': {
+    cursor: 'not-allowed'
   }
-};
+}));
 
-const Button = styled('button')(
-  {
-    ...commonButtonStyles,
-    color: colors.textLight,
-    background: colors.primary,
+const Button = styled(BaseButton)(
+  ({ theme }) => ({
+    color: theme.colors.textLight,
+    background: theme.colors.primary,
     minWidth: '4rem',
     height: '2.25rem',
     padding: '0 1rem',
@@ -43,18 +42,18 @@ const Button = styled('button')(
       boxShadow: 'none',
       cursor: 'not-allowed',
       background: 'rgba(79, 79, 79, 0.26)',
-      color: colors.lightGrey3
+      color: theme.colors.lightGrey3
     }
-  },
-  props => {
+  }),
+  ({ theme, textColor, backgroundColor, large }) => {
     const styles = [];
-    if (props.color) {
-      styles.push({ color: props.color });
+    if (textColor) {
+      styles.push({ color: theme.colors[textColor] });
     }
-    if (props.background) {
-      styles.push({ background: props.background });
+    if (backgroundColor) {
+      styles.push({ backgroundColor: theme.colors[backgroundColor] });
     }
-    if (props.large) {
+    if (large) {
       styles.push({
         minWidth: '5.3rem',
         height: '3rem',
@@ -66,33 +65,35 @@ const Button = styled('button')(
 );
 
 const TextButton = styled(Button)(
-  {
-    ...commonButtonStyles,
+  ({ theme }) => ({
     padding: '0 0.5rem',
-    color: colors.primary,
+    color: theme.colors.primary,
     backgroundColor: 'transparent',
     cursor: 'pointer',
     boxShadow: 'none',
     '&:active, &:focus': {
-      background: `${colors.primary}33`
+      background: `${theme.colors.primary}33`
     },
     '&:hover': {
-      background: `${colors.primary}11`
+      background: `${theme.colors.primary}11`
     },
     '&:active, &:focus, &:hover': {
       boxShadow: 'none'
     },
     '&:disabled': {
       background: 'transparent',
-      color: colors.lightGrey3
+      color: theme.colors.lightGrey3
     }
-  },
-  props => {
+  }),
+  ({ theme, textColor, backgroundColor, large }) => {
     const styles = [];
-    if (props.color) {
-      styles.push({ color: props.color });
+    if (textColor) {
+      styles.push({ color: theme.colors[textColor] });
     }
-    if (props.large) {
+    if (backgroundColor) {
+      styles.push({ backgroundColor: theme.colors[backgroundColor] });
+    }
+    if (large) {
       styles.push({
         padding: '0 1rem'
       });
@@ -101,26 +102,119 @@ const TextButton = styled(Button)(
   }
 );
 
-const OutlinedButton = styled(Button)({
+const OutlinedButton = styled(Button)(({ theme }) => ({
   background: 'transparent',
-  color: colors.primary,
-  border: `1px solid ${colors.lightGrey2}`,
+  color: theme.colors.primary,
+  border: `1px solid ${theme.colors.lightGrey2}`,
   boxShadow: 'none',
   '&:active, &:focus': {
-    background: `${colors.primary}33`
+    background: `${theme.colors.primary}33`
   },
   '&:hover': {
-    background: `${colors.primary}11`
+    background: `${theme.colors.primary}11`
   },
   '&:active, &:focus, &:hover': {
     boxShadow: 'none'
   },
   '&:disabled': {
     background: 'transparent',
-    color: colors.lightGrey3,
-    borderColor: colors.lightGrey3
+    color: theme.colors.lightGrey3,
+    borderColor: theme.colors.lightGrey3
   }
-});
+}));
+
+const TabButton = styled(Button)(({ theme, isActive }) => ({
+  color: isActive ? theme.colors.primary : theme.colors.textDark,
+  borderColor: isActive ? theme.colors.primary : 'transparent',
+  background: 'transparent',
+  paddingLeft: '1rem',
+  paddingRight: '1rem',
+  boxShadow: 'none',
+  borderRadius: 0,
+  borderBottomWidth: '2px',
+  borderBottomStyle: 'solid',
+  '&:active, &:focus': {
+    background: `${theme.colors.primary}33`
+  },
+  '&:hover': {
+    background: `${theme.colors.primary}11`
+  },
+  '&:active, &:focus, &:hover': {
+    boxShadow: 'none'
+  },
+  '&:disabled': {
+    background: 'transparent',
+    color: theme.colors.lightGrey3
+  }
+}));
+
+const IconButton = styled('button')(({ theme }) => ({
+  padding: '1rem',
+  color: theme.colors.secondary,
+  cursor: 'pointer',
+  fontSize: '1.5rem',
+  background: 'transparent',
+  border: 'none',
+  transition: `color 200ms ${theme.timings.easeOutCirc}`,
+  '&:active, &:focus': {
+    color: `${theme.colors.primary}ee`,
+    outline: 'none'
+  },
+  '&:hover': {
+    color: `${theme.colors.primary}bb`
+  },
+  '&:disabled': {
+    cursor: 'not-allowed',
+    color: theme.colors.lightGrey2
+  }
+}));
+
+const RoundIconButton = styled('button')(({ theme, backgroundColor }) => ({
+  opacity: 0.5,
+  color: 'white',
+  background: backgroundColor
+    ? theme.colors[backgroundColor]
+    : theme.colors.good,
+  transition: `all 200ms ${theme.timings.easeOutCirc}`,
+  cursor: 'pointer',
+  height: '1rem',
+  width: '1rem',
+  border: 'none',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '0.9rem',
+
+  '&:active, &:focus': {
+    opacity: 1,
+    outline: 'none'
+  },
+  '&:hover': {
+    opacity: 0.8
+  },
+  '&:disabled': {
+    cursor: 'not-allowed',
+    color: theme.colors.lightGrey2,
+    opacity: 0.3
+  }
+}));
+
+export {
+  Button,
+  IconButton,
+  TextButton,
+  OutlinedButton,
+  RoundIconButton,
+  TabButton
+};
+
+/*
+
+
+
+
+
 
 const TabButton = styled(Button)(
   {
@@ -213,3 +307,4 @@ export {
   RoundIconButton,
   TabButton
 };
+*/

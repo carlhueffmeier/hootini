@@ -1,4 +1,7 @@
 import { injectGlobal } from 'emotion';
+import * as typography from './shared/typography';
+import * as colors from './shared/colors';
+import * as timings from './shared/timings';
 
 injectGlobal`
   html {
@@ -19,3 +22,11 @@ injectGlobal`
     box-sizing: border-box;
   }
 `;
+
+const theme = {
+  typography,
+  colors,
+  timings
+};
+
+export default theme;

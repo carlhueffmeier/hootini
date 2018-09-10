@@ -7,7 +7,7 @@ import Tabs from './Tabs';
 import * as typography from '../shared/typography';
 import * as colors from '../shared/colors';
 import { css } from '../lib/utils';
-import { TextButton } from '../shared/Buttons';
+import { TextButton } from './styles/ButtonStyles';
 
 const Card = styled('div')({
   boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12)',
@@ -34,7 +34,7 @@ const TabActions = styled('div')({
 export default class NotePreview extends Component {
   static propTypes = {
     templates: PropTypes.array.isRequired,
-    fields: PropTypes.object.isRequired,
+    values: PropTypes.object,
     renderActions: PropTypes.func
   };
 
@@ -49,7 +49,7 @@ export default class NotePreview extends Component {
   handleTabChange = tab => this.setState({ activeTab: tab });
 
   render() {
-    const { templates, fields, renderActions } = this.props;
+    const { templates, values, renderActions } = this.props;
     const { activeTab, isCardFlipped } = this.state;
     return (
       <Card>
@@ -60,7 +60,7 @@ export default class NotePreview extends Component {
               <Tabs.Tab key={index} title={template.name}>
                 <RenderedTemplate
                   template={template}
-                  fields={fields}
+                  values={values}
                   showAnswer={isCardFlipped}
                 />
               </Tabs.Tab>

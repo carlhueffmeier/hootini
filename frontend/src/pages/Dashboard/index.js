@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import styled from 'react-emotion';
 import { Link } from '@reach/router';
-import DeckList from './DeckList';
+import DeckList from '../../components/DeckList';
 import Navbar from '../../components/Navbar';
-import { Main } from './styles';
+
+const Main = styled('main')({
+  padding: '0 2.8rem'
+});
 
 export default class Dashboard extends Component {
   render() {

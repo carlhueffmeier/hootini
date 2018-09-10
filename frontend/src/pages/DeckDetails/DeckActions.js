@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import { navigate } from '@reach/router';
-import { Button, OutlinedButton } from '../../shared/Buttons';
+import { Button, OutlinedButton } from '../../components/styles/ButtonStyles';
 import TimeSelector from '../../components/TimeSelect';
 
-const Container = styled('div')({
+const StyledDeckActions = styled('div')({
   display: 'flex',
   flexDirection: 'column'
 });
@@ -30,7 +30,7 @@ export default class DeckActions extends Component {
 
   render() {
     return (
-      <Container>
+      <StyledDeckActions>
         <OutlinedButton large onClick={this.handleAddNote}>
           Add Note
         </OutlinedButton>
@@ -40,7 +40,7 @@ export default class DeckActions extends Component {
           </Button>
           <TimeSelector />
         </StartReviewBox>
-      </Container>
+      </StyledDeckActions>
     );
   }
 }

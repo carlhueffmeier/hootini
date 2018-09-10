@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavContainer, HomeLink, MenuButton, PageTitle } from './styles/Navbar';
-import { BrandIcon, OptionsIcon } from '../shared/Icons';
+import {
+  NavContainer,
+  HomeLink,
+  MenuButton,
+  PageTitle
+} from './styles/NavbarStyles';
+import { BrandIcon, OptionsIcon } from './Icons';
 
 export default class Navbar extends Component {
   static propTypes = {

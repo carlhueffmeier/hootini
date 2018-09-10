@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { TabButton } from '../shared/Buttons';
-import { Tabbar, TabbarItem, TabContent } from './styles/TabbarStyles';
+import { TabButton } from './styles/ButtonStyles';
+import { Tabbar, TabbarItem, TabContent } from './styles/TabStyles';
 
 export default class Tabs extends Component {
   static Tab = props => props.children;

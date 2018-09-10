@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Downshift from 'downshift';
-import { ArrowIcon } from '../shared/Icons';
-import { ControllerButton, Input, Item, Menu } from '../shared/Inputs';
+import { ArrowIcon } from './Icons';
+import { ControllerButton, Input, Item, Menu } from './styles/FormStyles';
 import { css } from '../lib/utils';
 import { visuallyHidden } from '../shared/styleHelper';
 

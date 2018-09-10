@@ -1,35 +1,24 @@
 import React, { Component } from 'react';
 import { number, string, func } from 'prop-types';
-import styled from 'react-emotion';
 import { Draggable } from 'react-beautiful-dnd';
 import { Field } from 'react-final-form';
-import { DragHandleIcon, XIcon } from '../../../shared/Icons';
-import { Input } from '../../../shared/Inputs';
-import { RoundIconButton } from '../../../shared/Buttons';
-import * as colors from '../../../shared/colors';
+import { DragHandleIcon, XIcon } from './Icons';
+import { Input } from './styles/FormStyles';
+import { RoundIconButton } from './styles/ButtonStyles';
+import { StyledListItem } from './styles/DraggableListStyles';
 
-const StyledListItem = styled('li')({
-  margin: 0,
-  padding: 0,
-  display: 'flex',
-  alignItems: 'center',
-  '& > input': {
-    margin: '0 1rem'
-  }
-});
-
-export default class FieldListItem extends Component {
+export default class DraggableListItem extends Component {
   static propTypes = {
     index: number.isRequired,
-    uid: string.isRequired,
+    uniqueKey: string.isRequired,
     name: string.isRequired,
     onRemove: func.isRequired
   };
 
   render() {
-    const { name, onRemove, uid, ...rest } = this.props;
+    const { name, onRemove, uniqueKey, ...rest } = this.props;
     return (
-      <Draggable {...rest} draggableId={uid}>
+      <Draggable {...rest} draggableId={uniqueKey}>
         {provided => (
           <StyledListItem
             {...provided.draggableProps}
@@ -44,7 +33,7 @@ export default class FieldListItem extends Component {
             <RoundIconButton
               type="button"
               onClick={onRemove}
-              background={colors.danger}
+              backgroundColor="danger"
             >
               <XIcon />
             </RoundIconButton>

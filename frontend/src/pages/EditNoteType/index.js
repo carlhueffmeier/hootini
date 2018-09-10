@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import Navbar from '../../components/Navbar';
 import NoteTypeForm from './NoteTypeForm';
 
-const PageContainer = styled('div')({
+const Page = styled('div')({
   height: '100vh',
   display: 'flex',
   flexDirection: 'column'
@@ -38,12 +38,12 @@ export default class EditNoteType extends Component {
           }
           const { NoteType } = data;
           return (
-            <PageContainer>
+            <Page>
               <Navbar title={`Edit Note Type: ${NoteType.name}`} />
               <Main>
                 <NoteTypeForm initialValues={NoteType} />
               </Main>
-            </PageContainer>
+            </Page>
           );
         }}
       </Query>

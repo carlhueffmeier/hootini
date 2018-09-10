@@ -14,9 +14,13 @@ const TabbarItem = styled('li')({
 
 const TabContent = styled('div')({
   flex: 1,
+  display: 'flex',
   margin: '0 1rem',
   paddingTop: '1rem',
-  borderBottom: `1px solid ${colors.lightGrey1}`
+  overflow: 'auto',
+  ':not(:last-child)': {
+    borderBottom: `1px solid ${colors.lightGrey1}`
+  }
 });
 
 export { Tabbar, TabbarItem, TabContent };

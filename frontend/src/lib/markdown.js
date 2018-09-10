@@ -3,13 +3,25 @@ import remarkParser from 'remark-parse';
 import inspect from 'unist-util-inspect';
 import subSupParser from 'remark-sub-super';
 import reactRenderer from 'remark-react';
-import refractor from 'refractor/core';
 import unified from 'unified';
 import gh from 'hast-util-sanitize/lib/github';
 import merge from 'lodash.merge';
 import visit from 'unist-util-visit';
 import externalLinks from 'remark-external-links';
-import './prism.css';
+import refractor from 'refractor/core';
+import lang_markdown from 'refractor/lang/markdown';
+import lang_bash from 'refractor/lang/bash';
+import lang_sql from 'refractor/lang/sql';
+import lang_python from 'refractor/lang/python';
+import lang_ruby from 'refractor/lang/ruby';
+import lang_jsx from 'refractor/lang/jsx';
+
+refractor.register(lang_markdown);
+refractor.register(lang_bash);
+refractor.register(lang_sql);
+refractor.register(lang_python);
+refractor.register(lang_ruby);
+refractor.register(lang_jsx);
 
 const schema = merge(gh, {
   tagNames: ['span', 'hr'],
@@ -68,7 +80,7 @@ function remarkRefractor({ include, exclude } = {}) {
     try {
       data.hChildren = refractor.highlight(value, lang);
     } catch (err) {
-      data.hChildren = refractor.highlight(value, 'text');
+      data.hChildren = refractor.highlight(value, 'clike');
     }
     data.hProperties = data.hProperties || {};
     data.hProperties.className = [
@@ -81,6 +93,4 @@ function remarkRefractor({ include, exclude } = {}) {
   return ast => visit(ast, 'code', visitor);
 }
 
-export default function Markdown({ children }) {
-  return markdownToJsx(children);
-}
+export { markdownToJsx };

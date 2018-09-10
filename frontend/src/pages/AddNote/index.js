@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import Navbar from '../../components/Navbar';
-import EditNote from './EditNote';
+import EditNoteForm from './EditNoteForm';
 
 const PageContainer = styled('div')({
   height: '100vh',
@@ -34,7 +34,7 @@ export default class NewNoteScreen extends Component {
             <PageContainer>
               <Navbar title="Add Note" />
               <Main>
-                <EditNote initialValues={{ deck: Deck }} />
+                <EditNoteForm initialValues={{ deck: Deck }} />
               </Main>
             </PageContainer>
           );

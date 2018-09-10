@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { ThemeProvider } from 'emotion-theming';
+import theme from './AppStyles';
 import Pages from './pages';
-import './shared/GlobalStyles';
 
 export default class App extends Component {
   render() {
-    return <Pages />;
+    return (
+      <ThemeProvider theme={theme}>
+        <Pages />
+      </ThemeProvider>
+    );
   }
 }

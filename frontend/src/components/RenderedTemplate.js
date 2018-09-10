@@ -1,33 +1,49 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Markdown from 'markdown-to-jsx';
+import { shape, string, object, bool } from 'prop-types';
+import Markdown from './Markdown';
 import { renderTemplate } from '../lib/utils';
 
-const markdownOptions = {
-  forceBlock: true,
-  overrides: {
-    p: {
-      component: 'div'
-    }
-  }
-};
+// To revert back to markdown-to-jsx
+// import Markdown from 'markdown-to-jsx';
+// const markdownOptions = {
+//   forceBlock: true,
+//   overrides: {
+//     p: {
+//       component: 'div'
+//     }
+//   }
+// };
+
 export default class Preview extends Component {
   static propTypes = {
-    template: PropTypes.shape({
-      front: PropTypes.string.isRequired,
-      back: PropTypes.string.isRequired
+    template: shape({
+      front: string,
+      back: string
     }).isRequired,
-    fields: PropTypes.object.isRequired,
-    showAnswer: PropTypes.bool
+    values: object,
+    showAnswer: bool
+  };
+
+  static defaultProps = {
+    values: {},
+    template: {}
   };
 
   render() {
-    const { template, fields } = this.props;
-    const front = renderTemplate(template.front, fields);
-    if (this.props.showAnswer) {
-      const back = renderTemplate(template.back, { ...fields, _front_: front });
-      return <Markdown options={markdownOptions} children={back} />;
+    const {
+      template: { front = '', back = '' },
+      values,
+      showAnswer
+    } = this.props;
+
+    const renderedFront = renderTemplate(front, values);
+    if (showAnswer) {
+      const renderedBack = renderTemplate(back, {
+        ...values,
+        _front_: renderedFront
+      });
+      return <Markdown children={renderedBack} />;
     }
-    return <Markdown options={markdownOptions} children={front} />;
+    return <Markdown children={renderedFront} />;
   }
 }
