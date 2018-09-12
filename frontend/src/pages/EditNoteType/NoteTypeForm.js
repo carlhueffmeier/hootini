@@ -6,12 +6,15 @@ import NotePreview from '../../components/NotePreview';
 import TwoPageLayout from '../../components/TwoPageLayout';
 import EditSection from './EditSection';
 import arrayMutators from 'final-form-arrays';
-
 import styled from 'react-emotion';
 import {
   OutlinedButton,
   TextButton
 } from '../../components/styles/ButtonStyles';
+
+function path(path, obj) {
+  return path.reduce((result, key) => result && result[key], obj);
+}
 
 const FullPageForm = styled('form')({
   height: '100%',
@@ -34,11 +37,12 @@ export default class NoteTypeForm extends Component {
   };
 
   static defaultProps = {
+    initialValues: {},
     onSubmit: data => console.log('submitting 🧚‍', data)
   };
 
   state = {
-    activeTemplateId: this.props.initialValues.templates[0].id
+    activeTemplateId: path(['initialValues', 'templates', 0, 'id'], this.props)
   };
 
   handleSelectTemplate = id => {

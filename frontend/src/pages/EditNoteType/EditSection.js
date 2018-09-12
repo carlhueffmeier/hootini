@@ -20,6 +20,12 @@ const TemplateSection = styled('div')({
   maxWidth: '30rem'
 });
 
+const SectionHeading = styled('h5')(({ theme }) => ({
+  ...theme.typography.h5,
+  color: theme.colors.textDark,
+  margin: '0 0 1rem 0'
+}));
+
 export default class EditSection extends Component {
   static propTypes = {
     activeTemplateId: string,
@@ -43,7 +49,7 @@ export default class EditSection extends Component {
           <FieldList />
         </FieldSection>
         <TemplateSection>
-          <Label>Templates</Label>
+          <SectionHeading>Templates</SectionHeading>
           <EditTemplates
             activeTemplateId={activeTemplateId}
             onSelectTemplate={onSelectTemplate}

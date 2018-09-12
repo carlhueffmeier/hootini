@@ -44,7 +44,6 @@ const Input = styled('input')(({ theme }) => ({
 const Textarea = styled('textarea')(({ theme }) => ({
   ...theme.typography.subtitle1,
   padding: '0.5rem',
-  marginBottom: '0.5rem',
   backgroundColor: 'rgba(0, 0, 0, 0.06)',
   border: 'none',
   resize: 'none',
@@ -82,7 +81,7 @@ const BaseMenu = styled('ul')(
     boxShadow: `0 2px 10px 0 ${theme.colors.lightGrey2}`,
     transform: 'scale(0, 0)',
     transformOrigin: 'top right',
-    transition: `transform 300ms ${theme.timings.easeOutCirc}`
+    transition: `transform 200ms ${theme.timings.easeOutCirc}`
   }),
   ({ isOpen }) =>
     isOpen

@@ -10,8 +10,8 @@ const BaseButton = styled('button')(({ theme }) => ({
   borderRadius: 5,
   transition: `all 300ms ${theme.timings.easeOutCirc}`,
   '& svg': {
-    margin: '0 0.5rem',
-    fontSize: '1.5em'
+    fontSize: '1.5em',
+    margin: '0 0.5rem'
   },
   '&:disabled': {
     cursor: 'not-allowed'
@@ -22,6 +22,7 @@ const Button = styled(BaseButton)(
   ({ theme }) => ({
     color: theme.colors.textLight,
     background: theme.colors.primary,
+    opacity: 0.9,
     minWidth: '4rem',
     height: '2.25rem',
     padding: '0 1rem',
@@ -45,7 +46,7 @@ const Button = styled(BaseButton)(
       color: theme.colors.lightGrey3
     }
   }),
-  ({ theme, textColor, backgroundColor, large }) => {
+  ({ theme, textColor, backgroundColor, large, iconLeft, iconRight }) => {
     const styles = [];
     if (textColor) {
       styles.push({ color: theme.colors[textColor] });
@@ -59,6 +60,12 @@ const Button = styled(BaseButton)(
         height: '3rem',
         padding: '0 1.5rem'
       });
+    }
+    if (iconLeft) {
+      styles.push({ paddingLeft: '0.5rem' });
+    }
+    if (iconRight) {
+      styles.push({ paddingRight: '0.5rem' });
     }
     return styles;
   }
@@ -85,7 +92,7 @@ const TextButton = styled(Button)(
       color: theme.colors.lightGrey3
     }
   }),
-  ({ theme, textColor, backgroundColor, large }) => {
+  ({ theme, textColor, backgroundColor, large, iconLeft, iconRight }) => {
     const styles = [];
     if (textColor) {
       styles.push({ color: theme.colors[textColor] });
@@ -97,6 +104,12 @@ const TextButton = styled(Button)(
       styles.push({
         padding: '0 1rem'
       });
+    }
+    if (iconLeft) {
+      styles.push({ paddingLeft: 0 });
+    }
+    if (iconRight) {
+      styles.push({ paddingRight: 0 });
     }
     return styles;
   }
@@ -155,7 +168,7 @@ const IconButton = styled('button')(({ theme }) => ({
   fontSize: '1.5rem',
   background: 'transparent',
   border: 'none',
-  transition: `color 200ms ${theme.timings.easeOutCirc}`,
+  transition: `all 300ms ${theme.timings.easeOutSine}`,
   '&:active, &:focus': {
     color: `${theme.colors.primary}ee`,
     outline: 'none'
@@ -174,7 +187,7 @@ const RoundIconButton = styled('button')(({ theme, backgroundColor }) => ({
   color: 'white',
   background: backgroundColor
     ? theme.colors[backgroundColor]
-    : theme.colors.good,
+    : theme.colors.primary,
   transition: `all 200ms ${theme.timings.easeOutCirc}`,
   cursor: 'pointer',
   height: '1rem',
@@ -200,104 +213,42 @@ const RoundIconButton = styled('button')(({ theme, backgroundColor }) => ({
   }
 }));
 
-export {
-  Button,
-  IconButton,
-  TextButton,
-  OutlinedButton,
-  RoundIconButton,
-  TabButton
-};
-
-/*
-
-
-
-
-
-
-const TabButton = styled(Button)(
-  {
-    background: 'transparent',
-    color: colors.textDark,
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
-    boxShadow: 'none',
-    borderRadius: 0,
-    borderBottom: '2px solid transparent',
-    '&:active, &:focus': {
-      background: `${colors.primary}33`
-    },
-    '&:hover': {
-      background: `${colors.primary}11`
-    },
-    '&:active, &:focus, &:hover': {
-      boxShadow: 'none'
-    },
-    '&:disabled': {
-      background: 'transparent',
-      color: colors.lightGrey3
-    }
-  },
-  ({ isActive }) => ({
-    color: isActive ? colors.primary : colors.textDark,
-    borderColor: isActive ? colors.primary : 'transparent'
-  })
-);
-
-const IconButton = styled('button')({
-  padding: '1rem',
-  color: colors.secondary,
+const FloatingActionButton = styled('button')(({ theme, backgroundColor }) => ({
+  position: 'fixed',
+  bottom: '2rem',
+  right: '2rem',
+  color: 'white',
+  opacity: 0.9,
+  background: backgroundColor
+    ? theme.colors[backgroundColor]
+    : theme.colors.primary,
+  transition: `all 200ms ${theme.timings.easeOutCirc}`,
   cursor: 'pointer',
-  fontSize: '1.5rem',
-  background: 'transparent',
+  height: '3.5rem',
+  width: '3.5rem',
   border: 'none',
-  transition: `color 200ms ${easeOutCirc}`,
-  '&:active, &:focus': {
-    color: `${colors.primary}ee`,
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.8rem',
+  boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)',
+  '&:active:active': {
+    boxShadow:
+      '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
+  },
+  '&:focus, &:hover': {
+    opacity: 1,
+    boxShadow:
+      '0px 14px 14px rgba(0, 0, 0, 0.237602), 0px 0px 14px rgba(0, 0, 0, 0.12)'
+  },
+  '&:focus': {
     outline: 'none'
   },
-  '&:hover': {
-    color: `${colors.primary}bb`
-  },
   '&:disabled': {
-    cursor: 'not-allowed',
-    color: colors.lightGrey2
+    display: 'none'
   }
-});
-
-const RoundIconButton = styled('button')(
-  {
-    opacity: 0.5,
-    color: 'white',
-    transition: `all 200ms ${easeOutCirc}`,
-    cursor: 'pointer',
-    height: '1rem',
-    width: '1rem',
-    border: 'none',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '0.9rem',
-
-    '&:active, &:focus': {
-      opacity: 1,
-      outline: 'none'
-    },
-    '&:hover': {
-      opacity: 0.8
-    },
-    '&:disabled': {
-      cursor: 'not-allowed',
-      color: colors.lightGrey2,
-      opacity: 0.3
-    }
-  },
-  props => ({
-    background: props.background
-  })
-);
+}));
 
 export {
   Button,
@@ -305,6 +256,6 @@ export {
   TextButton,
   OutlinedButton,
   RoundIconButton,
-  TabButton
+  TabButton,
+  FloatingActionButton
 };
-*/

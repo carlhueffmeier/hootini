@@ -7,7 +7,9 @@ const StyledDeckInfo = styled('div')({
 });
 
 const Image = styled('img')({
-  width: '100%'
+  width: '100%',
+  maxWidth: '25rem',
+  opacity: 0.5
 });
 
 export default class DeckInfo extends Component {

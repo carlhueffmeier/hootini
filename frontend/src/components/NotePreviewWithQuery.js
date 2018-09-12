@@ -25,7 +25,7 @@ export default class NotePreviewWithQuery extends Component {
             <NotePreview
               templates={provided.noteType.templates}
               renderActions={providedByNotePreview =>
-                renderActions({ providedByNotePreview, ...provided })
+                renderActions({ ...providedByNotePreview, ...provided })
               }
               {...restProps}
             />

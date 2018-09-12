@@ -3,7 +3,9 @@ import Downshift from 'downshift';
 import { ArrowIcon } from './Icons';
 import { ControllerButton, Input, Item, Menu } from './styles/FormStyles';
 import { css } from '../lib/utils';
-import { visuallyHidden } from '../shared/styleHelper';
+import { VisuallyHidden } from '../shared/styleHelper';
+
+const HiddenLabel = VisuallyHidden.withComponent('label');
 
 export default class TimeSelector extends Component {
   static defaultProps = {
@@ -53,9 +55,7 @@ export default class TimeSelector extends Component {
         }) => (
           <div {...css({ width: '5rem' })}>
             <div {...css({ position: 'relative' })}>
-              <label {...getLabelProps()} {...css(visuallyHidden)}>
-                Review Time
-              </label>
+              <HiddenLabel {...getLabelProps()}>Review Time</HiddenLabel>
               <Input
                 {...getInputProps({
                   placeholder: 'time',

@@ -2,6 +2,9 @@ import { css as emoCSS } from 'react-emotion';
 
 const css = (...args) => ({ className: emoCSS(...args) });
 
+const wait = (timeInMs = 0) =>
+  new Promise(resolve => setTimeout(resolve, timeInMs));
+
 function renderTemplate(template, fields) {
   const re = /<%(\w+)%>/g;
   return template.replace(re, getField(fields));
@@ -28,4 +31,4 @@ function handleDragInFieldArray({ dragInfo, fields }) {
   fields.move(source.index, destination.index);
 }
 
-export { css, renderTemplate, handleDragInFieldArray };
+export { css, wait, renderTemplate, handleDragInFieldArray };

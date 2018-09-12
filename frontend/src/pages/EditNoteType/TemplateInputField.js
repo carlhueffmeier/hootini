@@ -2,15 +2,30 @@ import React, { Component, Fragment } from 'react';
 import { string } from 'prop-types';
 import styled from 'react-emotion';
 import { Field } from 'react-final-form';
-import { Label, Textarea } from '../../components/styles/FormStyles';
+import { Label, Textarea, Input } from '../../components/styles/FormStyles';
+import { Button } from '../../components/styles/ButtonStyles';
+import { TrashIcon } from '../../components/Icons';
 
 const TemplateInputFieldStyles = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  flex: 1,
-  '& > label': {
-    marginTop: '0.5rem'
+  flex: 1
+});
+
+const InputRow = styled('div')({
+  marginBottom: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  '& > textarea': {
+    maxWidth: '30rem'
+  },
+  '& > input': {
+    maxWidth: '15rem'
   }
+});
+
+const DeleteButton = styled(Button)({
+  alignSelf: 'flex-start'
 });
 
 export default class TemplateInputField extends Component {
@@ -22,24 +37,37 @@ export default class TemplateInputField extends Component {
     const { name } = this.props;
     return (
       <TemplateInputFieldStyles>
+        <Field name={`${name}.name`}>
+          {({ input, meta }) => (
+            <InputRow>
+              <Label>Name</Label>
+              <Input {...input} placeholder="Template name" />
+              {meta.touched && meta.error && <span>{meta.error}</span>}
+            </InputRow>
+          )}
+        </Field>
         <Field name={`${name}.front`}>
           {({ input, meta }) => (
-            <Fragment>
+            <InputRow>
               <Label>Front</Label>
               <Textarea {...input} rows="4" />
               {meta.touched && meta.error && <span>{meta.error}</span>}
-            </Fragment>
+            </InputRow>
           )}
         </Field>
         <Field name={`${name}.back`}>
           {({ input, meta }) => (
-            <Fragment>
+            <InputRow>
               <Label>Back</Label>
               <Textarea {...input} rows="4" />
               {meta.touched && meta.error && <span>{meta.error}</span>}
-            </Fragment>
+            </InputRow>
           )}
         </Field>
+        <DeleteButton iconLeft backgroundColor="danger">
+          <TrashIcon />
+          Delete
+        </DeleteButton>
       </TemplateInputFieldStyles>
     );
   }

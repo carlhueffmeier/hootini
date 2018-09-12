@@ -4,6 +4,7 @@ import * as colors from '../../shared/colors';
 const Tabbar = styled('ul')({
   listStyle: 'none',
   display: 'flex',
+  flexWrap: 'wrap',
   margin: 0,
   padding: '0 1rem'
 });

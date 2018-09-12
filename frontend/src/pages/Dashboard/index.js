@@ -2,12 +2,14 @@ import React, { Component, Fragment } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'react-emotion';
-import { Link } from '@reach/router';
 import DeckList from '../../components/DeckList';
 import Navbar from '../../components/Navbar';
+import AddDeckButton from './AddDeckButton';
 
 const Main = styled('main')({
-  padding: '0 2.8rem'
+  padding: '0 2.8rem',
+  maxWidth: 1000,
+  margin: '0 auto'
 });
 
 export default class Dashboard extends Component {
@@ -27,7 +29,7 @@ export default class Dashboard extends Component {
               <Navbar title="All Decks" />
               <Main>
                 <DeckList decks={allDecks} />
-                <Link to="/new-deck">+ New Deck</Link>
+                <AddDeckButton />
               </Main>
             </Fragment>
           );

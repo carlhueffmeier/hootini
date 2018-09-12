@@ -3,7 +3,8 @@ import { Link } from '@reach/router';
 import * as colors from '../../shared/colors';
 
 const NavContainer = styled('nav')`
-  background-color: ${colors.brand};
+  opacity: 0.9;
+  background: ${colors.brand};
   color: ${colors.textLight};
   height: 3.75rem;
   width: 100%;

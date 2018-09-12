@@ -1,42 +1,34 @@
 import React, { Component, Fragment } from 'react';
-import { bool, object } from 'prop-types';
 import styled from 'react-emotion';
+import posed from 'react-pose';
 
-const TwoPageContainer = styled('div')(
-  {
-    flex: 1,
-    position: 'relative'
+const twoPageContainerProps = {
+  input: {
+    x: '0',
+    transition: { type: 'spring', damping: 30, stiffness: 400 }
   },
-  ({ isShifted }) =>
-    isShifted
-      ? {
-          '& > div:first-child': {
-            transform: 'translateX(-100vw)'
-          },
-          '& > div:last-child': {
-            transform: 'none'
-          }
-        }
-      : null
-);
+  preview: {
+    x: '-100vw',
+    transition: { type: 'spring', damping: 30, stiffness: 400 }
+  }
+};
+
+const TwoPageContainer = styled(posed.div(twoPageContainerProps))({
+  flex: 1,
+  display: 'flex',
+  width: '200vw'
+});
 
 const SinglePage = styled('div')(({ theme }) => ({
-  position: 'absolute',
-  top: 0,
-  left: 0,
+  width: '100vw',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  width: '100vw',
   padding: '2rem 1rem 0.5rem',
   overflowY: 'auto',
-  transition: `transform 200ms ${theme.timings.easeInOutCirc}`,
   '@media (min-width:400px)': {
     paddingLeft: '2.8rem',
     paddingRight: '2.8rem'
-  },
-  ':nth-child(2)': {
-    transform: 'translateX(100vw)'
   }
 }));
 
@@ -87,9 +79,10 @@ export default class TwoPageLayout extends Component {
   };
 
   render() {
+    const { isShifted } = this.state;
     return (
       <Fragment>
-        <TwoPageContainer isShifted={this.state.isShifted}>
+        <TwoPageContainer pose={isShifted ? 'preview' : 'input'}>
           <SinglePage>{this.renderTypeOf(TwoPageLayout.Left)}</SinglePage>
           <SinglePage>{this.renderTypeOf(TwoPageLayout.Right)}</SinglePage>
         </TwoPageContainer>

@@ -20,9 +20,9 @@ export default class EditTemplates extends Component {
     return (
       <ConnectedFieldArray name="templates">
         {({ values: { templates }, fields }) => {
-          const activeTab = templates.findIndex(
-            template => template.id === activeTemplateId
-          );
+          const activeTab =
+            templates.findIndex(template => template.id === activeTemplateId) ||
+            0;
           return (
             <Fragment>
               <DraggableTabbar
@@ -49,14 +49,16 @@ export default class EditTemplates extends Component {
                     <TextButton
                       type="button"
                       textColor="good"
-                      onClick={() =>
+                      onClick={() => {
+                        const newId = shortid.generate();
                         fields.push({
-                          id: shortid.generate(),
+                          id: newId,
                           name: ''
-                        })
-                      }
+                        });
+                        onSelectTemplate(newId);
+                      }}
                     >
-                      + New Template
+                      + Add
                     </TextButton>
                   </TabbarItem>
                 }

@@ -9,14 +9,14 @@ import * as colors from '../shared/colors';
 import { css } from '../lib/utils';
 import { TextButton } from './styles/ButtonStyles';
 
-const Card = styled('div')({
+const Card = styled('div')(({ theme }) => ({
   boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12)',
   display: 'flex',
   flexDirection: 'column',
   borderRadius: 2,
   height: '100%',
-  background: '#FAFAFA'
-});
+  background: theme.colors.backgroundLight
+}));
 
 const CardTitle = styled('h3')({
   ...typography.h5,
@@ -70,11 +70,12 @@ export default class NotePreview extends Component {
           <TextButton type="button" onClick={this.flipCard}>
             {isCardFlipped ? 'Hide Answer' : 'Show Answer'}
           </TextButton>
-          {renderActions && (
-            <div {...css({ marginLeft: 'auto' })}>
-              {renderActions({ activeTab })}
-            </div>
-          )}
+          {console.log(this.state) ||
+            (renderActions && (
+              <div {...css({ marginLeft: 'auto' })}>
+                {renderActions({ activeTab })}
+              </div>
+            ))}
         </TabActions>
       </Card>
     );

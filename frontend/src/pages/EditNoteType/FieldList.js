@@ -41,7 +41,7 @@ export default class FieldList extends Component {
                       })
                     }
                   >
-                    + New Field
+                    + Add
                   </TextButton>
                 </li>
               </Fragment>

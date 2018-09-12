@@ -64,6 +64,7 @@ const SEARCH_NOTETYPES = gql`
   query allNoteTypes($name: String!) {
     allNoteTypes(where: { name: $name }) {
       id
+      slug
       name
     }
   }

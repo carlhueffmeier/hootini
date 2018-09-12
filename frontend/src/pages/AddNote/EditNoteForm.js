@@ -14,6 +14,7 @@ import {
   OutlinedButton,
   TextButton
 } from '../../components/styles/ButtonStyles';
+import { VisuallyHidden } from '../../shared/styleHelper';
 
 const FullPageForm = styled('form')({
   height: '100%',
@@ -66,6 +67,7 @@ export default class EditNote extends Component {
                             );
                           }}
                         >
+                          <VisuallyHidden>Edit Template</VisuallyHidden>
                           <EditIcon />
                         </IconButton>
                       )}
