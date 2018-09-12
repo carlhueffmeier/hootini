@@ -82,12 +82,14 @@ export default class NoteTypeForm extends Component {
                 )}
               </TwoPageLayout.Right>
               <TwoPageLayout.Bottom>
-                {({ isShifted, toggleShift }) => (
+                {({ isShiftable, isShifted, toggleShift }) => (
                   <Fragment>
                     <CancelButton type="button">Cancel</CancelButton>
-                    <PreviewButton type="button" onClick={toggleShift}>
-                      {isShifted ? 'Input' : 'Preview'}
-                    </PreviewButton>
+                    {isShiftable && (
+                      <PreviewButton type="button" onClick={toggleShift}>
+                        {isShifted ? 'Input' : 'Preview'}
+                      </PreviewButton>
+                    )}
                     <Button disabled={pristine}>Save</Button>
                   </Fragment>
                 )}

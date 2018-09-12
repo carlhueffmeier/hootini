@@ -5,6 +5,8 @@ import { TextButton } from '../../components/styles/ButtonStyles';
 import { handleDragInFieldArray } from '../../lib/utils';
 import DraggableList from '../../components/DraggableList';
 import DraggableListItem from '../../components/DraggableListItem';
+import { NAVBAR_HEIGHT } from '../../components/styles/NavbarStyles';
+import { navbarHeight } from '../../shared/dimensions';
 
 export default class FieldList extends Component {
   render() {
@@ -25,6 +27,7 @@ export default class FieldList extends Component {
                       uniqueKey={uniqueKey}
                       index={index}
                       name={`${name}.key`}
+                      offset={{ y: -navbarHeight }}
                       onRemove={() => fields.remove(index)}
                     />
                   );

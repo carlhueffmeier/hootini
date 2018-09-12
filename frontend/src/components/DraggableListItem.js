@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { number, string, func } from 'prop-types';
+import { number, string, func, shape } from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { Field } from 'react-final-form';
 import { DragHandleIcon, XIcon } from './Icons';
@@ -12,8 +12,28 @@ export default class DraggableListItem extends Component {
     index: number.isRequired,
     uniqueKey: string.isRequired,
     name: string.isRequired,
+    offset: shape({
+      x: number,
+      y: number
+    }),
     onRemove: func.isRequired
   };
+
+  correctOffset(draggableProps) {
+    if (!this.props.offset) {
+      return draggableProps;
+    }
+    const { x = 0, y = 0 } = this.props.offset;
+    console.log(x, y);
+    return {
+      ...draggableProps,
+      style: {
+        ...draggableProps.style,
+        top: draggableProps.style.top + y,
+        left: draggableProps.style.left + x
+      }
+    };
+  }
 
   render() {
     const { name, onRemove, uniqueKey, ...rest } = this.props;
@@ -21,7 +41,7 @@ export default class DraggableListItem extends Component {
       <Draggable {...rest} draggableId={uniqueKey}>
         {provided => (
           <StyledListItem
-            {...provided.draggableProps}
+            {...this.correctOffset(provided.draggableProps)}
             innerRef={provided.innerRef}
           >
             <span {...provided.dragHandleProps}>

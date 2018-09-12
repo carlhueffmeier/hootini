@@ -22,22 +22,20 @@ const Button = styled(BaseButton)(
   ({ theme }) => ({
     color: theme.colors.textLight,
     background: theme.colors.primary,
-    opacity: 0.9,
+    opacity: 0.8,
     minWidth: '4rem',
     height: '2.25rem',
     padding: '0 1rem',
     boxShadow:
       '0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12)',
-    '&:active': {
-      boxShadow:
-        '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
-    },
     '&:focus, &:hover': {
+      outline: 'none',
       boxShadow:
         '0px 4px 4px rgba(0, 0, 0, 0.24), 0px 0px 4px rgba(0, 0, 0, 0.12)'
     },
-    '&:focus': {
-      outline: 'none'
+    '&:active': {
+      boxShadow:
+        '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
     },
     '&:disabled': {
       boxShadow: 'none',
@@ -115,26 +113,35 @@ const TextButton = styled(Button)(
   }
 );
 
-const OutlinedButton = styled(Button)(({ theme }) => ({
-  background: 'transparent',
-  color: theme.colors.primary,
-  border: `1px solid ${theme.colors.lightGrey2}`,
-  boxShadow: 'none',
-  '&:active, &:focus': {
-    background: `${theme.colors.primary}33`
-  },
-  '&:hover': {
-    background: `${theme.colors.primary}11`
-  },
-  '&:active, &:focus, &:hover': {
-    boxShadow: 'none'
-  },
-  '&:disabled': {
+const OutlinedButton = styled(Button)(
+  ({ theme }) => ({
     background: 'transparent',
-    color: theme.colors.lightGrey3,
-    borderColor: theme.colors.lightGrey3
+    color: theme.colors.primary,
+    border: `1px solid ${theme.colors.lightGrey2}`,
+    boxShadow: 'none',
+    '&:active, &:focus': {
+      background: `${theme.colors.primary}33`
+    },
+    '&:hover': {
+      background: `${theme.colors.primary}11`
+    },
+    '&:active, &:focus, &:hover': {
+      boxShadow: 'none'
+    },
+    '&:disabled': {
+      background: 'transparent',
+      color: theme.colors.lightGrey3,
+      borderColor: theme.colors.lightGrey3
+    }
+  }),
+  ({ theme, textColor }) => {
+    const styles = [];
+    if (textColor) {
+      styles.push({ color: theme.colors[textColor] });
+    }
+    return styles;
   }
-}));
+);
 
 const TabButton = styled(Button)(({ theme, isActive }) => ({
   color: isActive ? theme.colors.primary : theme.colors.textDark,

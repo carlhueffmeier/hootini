@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { string, number, func, bool, node } from 'prop-types';
+import { string, number, func, bool, node, shape } from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { TabbarItem } from './styles/TabStyles';
 import { TabButton } from './styles/ButtonStyles';
@@ -10,13 +10,32 @@ export default class DraggableTab extends Component {
     index: number.isRequired,
     onClick: func,
     isActive: bool,
-    children: node
+    children: node,
+    offset: shape({
+      x: number,
+      y: number
+    })
   };
 
   static defaultProps = {
     onClick: () => {},
     isActive: false
   };
+
+  correctOffset(draggableProps) {
+    if (!this.props.offset) {
+      return draggableProps;
+    }
+    const { x = 0, y = 0 } = this.props.offset;
+    return {
+      ...draggableProps,
+      style: {
+        ...draggableProps.style,
+        top: draggableProps.style.top + y,
+        left: draggableProps.style.left + x
+      }
+    };
+  }
 
   render() {
     const { uniqueKey, index, onClick, isActive, children } = this.props;
@@ -29,7 +48,7 @@ export default class DraggableTab extends Component {
       >
         {provided => (
           <TabbarItem
-            {...provided.draggableProps}
+            {...this.correctOffset(provided.draggableProps)}
             innerRef={provided.innerRef}
             {...provided.dragHandleProps}
           >

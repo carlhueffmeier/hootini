@@ -8,12 +8,12 @@ import FieldList from './FieldList';
 
 const NameSection = styled('div')({
   maxWidth: '15rem',
-  marginBottom: '2rem'
+  marginBottom: '3rem'
 });
 
 const FieldSection = styled('div')({
   maxWidth: '15rem',
-  marginBottom: '2rem'
+  marginBottom: '3rem'
 });
 
 const TemplateSection = styled('div')({
@@ -23,7 +23,7 @@ const TemplateSection = styled('div')({
 const SectionHeading = styled('h5')(({ theme }) => ({
   ...theme.typography.h5,
   color: theme.colors.textDark,
-  margin: '0 0 1rem 0'
+  margin: '0 0 1.5rem 0'
 }));
 
 export default class EditSection extends Component {

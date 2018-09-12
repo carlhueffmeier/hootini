@@ -76,16 +76,18 @@ export default class EditNote extends Component {
                 }
               </TwoPageLayout.Right>
               <TwoPageLayout.Bottom>
-                {({ isShifted, toggleShift }) => (
+                {({ isShiftable, isShifted, toggleShift }) => (
                   <Fragment>
                     <CancelButton type="button">Cancel</CancelButton>
-                    <PreviewButton
-                      type="button"
-                      disabled={!values.noteType}
-                      onClick={toggleShift}
-                    >
-                      {isShifted ? 'Input' : 'Preview'}
-                    </PreviewButton>
+                    {isShiftable && (
+                      <PreviewButton
+                        type="button"
+                        disabled={!values.noteType}
+                        onClick={toggleShift}
+                      >
+                        {isShifted ? 'Input' : 'Preview'}
+                      </PreviewButton>
+                    )}
                     <Button disabled={!values.noteType || pristine}>
                       Save
                     </Button>

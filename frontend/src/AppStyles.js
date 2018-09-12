@@ -2,6 +2,7 @@ import { injectGlobal } from 'emotion';
 import * as typography from './shared/typography';
 import * as colors from './shared/colors';
 import * as timings from './shared/timings';
+import * as dimensions from './shared/dimensions';
 import naturalWhite from './assets/ep_naturalwhite.png';
 
 injectGlobal`
@@ -28,7 +29,8 @@ injectGlobal`
 const theme = {
   typography,
   colors,
-  timings
+  timings,
+  dimensions
 };
 
 export default theme;

@@ -6,7 +6,7 @@ const Tabbar = styled('ul')({
   display: 'flex',
   flexWrap: 'wrap',
   margin: 0,
-  padding: '0 1rem'
+  padding: 0
 });
 
 const TabbarItem = styled('li')({
@@ -16,7 +16,6 @@ const TabbarItem = styled('li')({
 const TabContent = styled('div')({
   flex: 1,
   display: 'flex',
-  margin: '0 1rem',
   paddingTop: '1rem',
   overflow: 'auto',
   ':not(:last-child)': {

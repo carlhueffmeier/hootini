@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'react-emotion';
 import posed from 'react-pose';
+import WindowSize from '@reach/window-size';
+
+const BREAKPOINT = 1200;
 
 const twoPageContainerProps = {
   input: {
@@ -16,11 +19,14 @@ const twoPageContainerProps = {
 const TwoPageContainer = styled(posed.div(twoPageContainerProps))({
   flex: 1,
   display: 'flex',
-  width: '200vw'
+  width: '200vw',
+  [`@media (min-width: ${BREAKPOINT}px)`]: {
+    width: '100vw'
+  }
 });
 
 const SinglePage = styled('div')(({ theme }) => ({
-  width: '100vw',
+  flex: 1,
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
@@ -45,13 +51,13 @@ const BottomBar = styled('div')({
 });
 
 export default class TwoPageLayout extends Component {
-  static Left = ({ children, provided }) => (
+  static Left = ({ children, ...provided }) => (
     <Fragment>{children(provided)}</Fragment>
   );
-  static Right = ({ children, provided }) => (
+  static Right = ({ children, ...provided }) => (
     <Fragment>{children(provided)}</Fragment>
   );
-  static Bottom = ({ children, provided }) => (
+  static Bottom = ({ children, ...provided }) => (
     <Fragment>{children(provided)}</Fragment>
   );
 
@@ -64,14 +70,17 @@ export default class TwoPageLayout extends Component {
     toggleShift: this.toggleShift
   };
 
-  renderTypeOf = type => {
+  renderTypeOf = (type, providedFromRender) => {
     const filteredComponents = React.Children.map(
       this.props.children,
       child => {
         if (child.type !== type) {
           return null;
         }
-        const clone = React.cloneElement(child, { provided: this.state });
+        const clone = React.cloneElement(child, {
+          ...this.state,
+          ...providedFromRender
+        });
         return clone;
       }
     );
@@ -81,13 +90,28 @@ export default class TwoPageLayout extends Component {
   render() {
     const { isShifted } = this.state;
     return (
-      <Fragment>
-        <TwoPageContainer pose={isShifted ? 'preview' : 'input'}>
-          <SinglePage>{this.renderTypeOf(TwoPageLayout.Left)}</SinglePage>
-          <SinglePage>{this.renderTypeOf(TwoPageLayout.Right)}</SinglePage>
-        </TwoPageContainer>
-        <BottomBar>{this.renderTypeOf(TwoPageLayout.Bottom)}</BottomBar>
-      </Fragment>
+      <WindowSize>
+        {sizes => {
+          const isShiftable = sizes.width < BREAKPOINT;
+          return (
+            <Fragment>
+              <TwoPageContainer
+                pose={isShiftable && isShifted ? 'preview' : 'input'}
+              >
+                <SinglePage>
+                  {this.renderTypeOf(TwoPageLayout.Left, { isShiftable })}
+                </SinglePage>
+                <SinglePage>
+                  {this.renderTypeOf(TwoPageLayout.Right, { isShiftable })}
+                </SinglePage>
+              </TwoPageContainer>
+              <BottomBar>
+                {this.renderTypeOf(TwoPageLayout.Bottom, { isShiftable })}
+              </BottomBar>
+            </Fragment>
+          );
+        }}
+      </WindowSize>
     );
   }
 }

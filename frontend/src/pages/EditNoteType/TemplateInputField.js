@@ -3,8 +3,6 @@ import { string } from 'prop-types';
 import styled from 'react-emotion';
 import { Field } from 'react-final-form';
 import { Label, Textarea, Input } from '../../components/styles/FormStyles';
-import { Button } from '../../components/styles/ButtonStyles';
-import { TrashIcon } from '../../components/Icons';
 
 const TemplateInputFieldStyles = styled('div')({
   display: 'flex',
@@ -22,10 +20,6 @@ const InputRow = styled('div')({
   '& > input': {
     maxWidth: '15rem'
   }
-});
-
-const DeleteButton = styled(Button)({
-  alignSelf: 'flex-start'
 });
 
 export default class TemplateInputField extends Component {
@@ -64,10 +58,6 @@ export default class TemplateInputField extends Component {
             </InputRow>
           )}
         </Field>
-        <DeleteButton iconLeft backgroundColor="danger">
-          <TrashIcon />
-          Delete
-        </DeleteButton>
       </TemplateInputFieldStyles>
     );
   }
