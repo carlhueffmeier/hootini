@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import shortid from 'shortid';
 import ConnectedFieldArray from '../../components/ConnectedFieldArray';
 import { TextButton } from '../../components/styles/ButtonStyles';
-import { handleDragInFieldArray } from '../../lib/utils';
+import {
+  handleDragInFieldArray,
+  getUniqueKey,
+  addLocalId
+} from '../../lib/utils';
 import DraggableList from '../../components/DraggableList';
 import DraggableListItem from '../../components/DraggableListItem';
-import { NAVBAR_HEIGHT } from '../../components/styles/NavbarStyles';
 import { navbarHeight } from '../../shared/dimensions';
 
 export default class FieldList extends Component {
@@ -20,7 +22,8 @@ export default class FieldList extends Component {
               <Fragment>
                 {fields.map((name, index) => {
                   const uniqueKey =
-                    (values.fieldDefinitions[index] || {}).id || String(index);
+                    getUniqueKey(values.fieldDefinitions[index]) ||
+                    String(index);
                   return (
                     <DraggableListItem
                       key={uniqueKey}
@@ -39,7 +42,7 @@ export default class FieldList extends Component {
                     textColor="good"
                     onClick={() =>
                       fields.push({
-                        id: shortid.generate(),
+                        ...addLocalId(),
                         key: ''
                       })
                     }

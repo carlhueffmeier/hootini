@@ -18,7 +18,7 @@ export default class AddDeck extends Component {
 
   render() {
     return (
-      <Mutation mutation={NEW_DECK} refetchQueries={['allDecks']}>
+      <Mutation mutation={NEW_DECK_MUTATION} refetchQueries={['allDecks']}>
         {(createDeck, { loading, error }) => (
           <DeckForm
             loading={loading}
@@ -31,7 +31,7 @@ export default class AddDeck extends Component {
   }
 }
 
-const NEW_DECK = gql`
+const NEW_DECK_MUTATION = gql`
   mutation newDeck($name: String!) {
     newDeck(input: { name: $name }) {
       slug

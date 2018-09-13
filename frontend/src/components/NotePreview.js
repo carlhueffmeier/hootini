@@ -4,7 +4,7 @@ import styled from 'react-emotion';
 import RenderedTemplate from './RenderedTemplate';
 import * as typography from '../shared/typography';
 import * as colors from '../shared/colors';
-import { css } from '../lib/utils';
+import { css, getUniqueKey } from '../lib/utils';
 import { TextButton, TabButton } from './styles/ButtonStyles';
 import { Tabbar, TabbarItem, TabContent } from './styles/TabStyles';
 
@@ -45,28 +45,51 @@ export default class NotePreview extends Component {
     renderActions: PropTypes.func
   };
 
+  static defaultProps = {
+    onSelectTab: () => {}
+  };
+
   state = {
     activeTab: 0,
     isCardFlipped: false
   };
 
+  isControlled(key) {
+    return this.props.hasOwnProperty(key);
+  }
+
+  getState() {
+    return Object.keys(this.state).reduce(
+      (combinedState, key) => ({
+        ...combinedState,
+        [key]: this.isControlled(key) ? this.props[key] : this.state[key]
+      }),
+      {}
+    );
+  }
+
+  selectTab(tab) {
+    if (!this.isControlled('activeTab')) {
+      this.setState({ activeTab: tab });
+    }
+    this.props.onSelectTab(tab);
+  }
+
   flipCard = () =>
     this.setState(state => ({ isCardFlipped: !state.isCardFlipped }));
 
-  selectTab = tab => this.setState({ activeTab: tab });
-
   render() {
     const { templates, values, renderActions } = this.props;
-    const { activeTab, isCardFlipped } = this.state;
+    const { activeTab, isCardFlipped } = this.getState();
+
     return (
       <Card>
         <CardTitle>Preview</CardTitle>
         <StyledTabbar>
           {templates &&
             templates.map((template, index) => (
-              <TabbarItem>
+              <TabbarItem key={getUniqueKey(template)}>
                 <TabButton
-                  key={index}
                   type="button"
                   onClick={() => this.selectTab(index)}
                   isActive={index === activeTab}
@@ -82,6 +105,7 @@ export default class NotePreview extends Component {
               (template, index) =>
                 index === activeTab ? (
                   <RenderedTemplate
+                    key={getUniqueKey(template)}
                     template={template}
                     values={values}
                     showAnswer={isCardFlipped}

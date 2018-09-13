@@ -10,3 +10,5 @@ exports.createFilter = where =>
     }),
     {}
   );
+
+exports.pluck = (key, array) => array.map(item => item[key]);

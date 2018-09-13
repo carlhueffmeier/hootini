@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { object, func } from 'prop-types';
+import { object, func, bool, string } from 'prop-types';
 import { Button } from '../../components/styles/ButtonStyles';
 import { Form } from 'react-final-form';
 import NotePreview from '../../components/NotePreview';
@@ -32,26 +32,28 @@ const PreviewButton = styled(OutlinedButton)({
 
 export default class NoteTypeForm extends Component {
   static propTypes = {
-    onSubmit: func,
-    initialValues: object
+    onSubmit: func.isRequired,
+    initialValues: object,
+    loading: bool.isRequired,
+    error: string.isRequired
   };
 
   static defaultProps = {
-    initialValues: {},
-    onSubmit: data => console.log('submitting 🧚‍', data)
+    initialValues: {}
   };
 
   state = {
-    activeTemplateId: path(['initialValues', 'templates', 0, 'id'], this.props)
+    activeTab:
+      path(['initialValues', 'templates', 'length'], this.props) > 0 ? 0 : null
   };
 
-  handleSelectTemplate = id => {
-    this.setState({ activeTemplateId: id });
+  setActiveTab = tab => {
+    this.setState({ activeTab: tab });
   };
 
   render() {
-    const { onSubmit, initialValues } = this.props;
-    const { activeTemplateId } = this.state;
+    const { onSubmit, initialValues, loading } = this.props;
+    const { activeTab } = this.state;
     return (
       <Form
         onSubmit={onSubmit}
@@ -66,8 +68,8 @@ export default class NoteTypeForm extends Component {
               <TwoPageLayout.Left>
                 {() => (
                   <EditSection
-                    activeTemplateId={activeTemplateId}
-                    onSelectTemplate={this.handleSelectTemplate}
+                    activeTab={activeTab}
+                    onSelectTab={this.setActiveTab}
                   />
                 )}
               </TwoPageLayout.Left>
@@ -76,8 +78,8 @@ export default class NoteTypeForm extends Component {
                   <NotePreview
                     templates={values.templates}
                     fields={values}
-                    activeTemplateId={activeTemplateId}
-                    onSelectTemplate={this.handleSelectTemplate}
+                    activeTab={activeTab}
+                    onSelectTab={this.setActiveTab}
                   />
                 )}
               </TwoPageLayout.Right>
@@ -90,7 +92,7 @@ export default class NoteTypeForm extends Component {
                         {isShifted ? 'Input' : 'Preview'}
                       </PreviewButton>
                     )}
-                    <Button disabled={pristine}>Save</Button>
+                    <Button disabled={pristine || loading}>Save</Button>
                   </Fragment>
                 )}
               </TwoPageLayout.Bottom>

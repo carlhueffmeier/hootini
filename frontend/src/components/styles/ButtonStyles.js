@@ -168,20 +168,21 @@ const TabButton = styled(Button)(({ theme, isActive }) => ({
   }
 }));
 
-const IconButton = styled('button')(({ theme }) => ({
-  padding: '1rem',
-  color: theme.colors.secondary,
+const IconButton = styled('button')(({ theme, color, padding }) => ({
+  padding: padding ? padding : '1rem',
+  color: color ? color : theme.colors.primary,
+  opacity: 0.4,
   cursor: 'pointer',
   fontSize: '1.5rem',
   background: 'transparent',
   border: 'none',
-  transition: `all 300ms ${theme.timings.easeOutSine}`,
+  transition: `all 200ms ${theme.timings.easeOutSine}`,
   '&:active, &:focus': {
-    color: `${theme.colors.primary}ee`,
+    opacity: 0.9,
     outline: 'none'
   },
   '&:hover': {
-    color: `${theme.colors.primary}bb`
+    opacity: 0.7
   },
   '&:disabled': {
     cursor: 'not-allowed',

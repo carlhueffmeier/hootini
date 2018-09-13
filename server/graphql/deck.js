@@ -19,6 +19,9 @@ exports.typeDef = gql`
     name: String!
     slug: String!
     description: String
+    createdAt: Int
+    lastReview: Int
+    lastNoteType: NoteType
   }
 
   input UpdatedDeck {

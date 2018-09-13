@@ -32,6 +32,13 @@ exports.typeDef = gql`
     front: String
     back: String
   }
+
+  input UpsertedTemplate {
+    id: ID
+    name: String
+    front: String
+    back: String
+  }
 `;
 
 const getTemplate = (_, { id }) => {

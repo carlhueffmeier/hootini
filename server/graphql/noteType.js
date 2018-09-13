@@ -1,7 +1,8 @@
 const { gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const NoteType = mongoose.model('NoteType');
-const { createFilter } = require('../helper/utils');
+const Template = mongoose.model('Template');
+const { createFilter, pluck } = require('../helper/utils');
 
 exports.typeDef = gql`
   extend type Query {
@@ -17,6 +18,9 @@ exports.typeDef = gql`
     updateNoteType(input: UpdatedNoteType!): NoteType!
     updateNoteTypeAndConnectToTemplates(
       input: UpdatedNoteTypeAndConnectedTemplates
+    ): NoteType!
+    updateNoteTypeAndUpsertTemplates(
+      input: UpdatedNoteTypeAndUpsertedTemplates
     ): NoteType!
   }
 
@@ -51,6 +55,13 @@ exports.typeDef = gql`
     name: String!
     fieldDefinitions: [NewFieldDefinition!]
     templates: [ID!]
+  }
+
+  input UpdatedNoteTypeAndUpsertedTemplates {
+    id: ID!
+    name: String
+    fieldDefinitions: [UpsertedFieldDefinition!]
+    templates: [UpsertedTemplate!]
   }
 
   input SearchNoteType {
@@ -101,6 +112,42 @@ const updateNoteTypeAndConnectToTemplates = (_, { input }) => {
   ).populate('templates');
 };
 
+const updateNoteTypeAndUpsertTemplates = async (_, { input }) => {
+  let { id, templates, ...update } = input;
+  if (templates) {
+    console.log('templates', templates);
+    const bulkOps = templates.map(
+      ({ id: templateId, ...templateData }) =>
+        templateId
+          ? {
+              updateOne: {
+                filter: { _id: templateId },
+                update: { $set: templateData }
+              }
+            }
+          : {
+              insertOne: {
+                document: templateData
+              }
+            }
+    );
+    console.log('bulkOps', bulkOps);
+    const bulkWriteResult = await Template.bulkWrite(bulkOps);
+    console.log('bulkWriteResult', bulkWriteResult);
+    const allTemplateIds = [
+      ...pluck('id', templates),
+      ...pluck('_id', bulkWriteResult.getInsertedIds())
+    ];
+    console.log('allTemplateIds', bulkWriteResult.getInsertedIds());
+    update.templates = allTemplateIds.map(mongoose.Types.ObjectId);
+  }
+  const res = await NoteType.findByIdAndUpdate(id, update, {
+    new: true
+  }).populate('templates');
+  console.log('result', res);
+  return res;
+};
+
 exports.resolvers = {
   Query: {
     allNoteTypes,
@@ -111,6 +158,7 @@ exports.resolvers = {
     createNoteType,
     createNoteTypeAndConnectToTemplates,
     updateNoteType,
-    updateNoteTypeAndConnectToTemplates
+    updateNoteTypeAndConnectToTemplates,
+    updateNoteTypeAndUpsertTemplates
   }
 };

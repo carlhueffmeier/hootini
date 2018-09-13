@@ -2,11 +2,18 @@ import React, { Component } from 'react';
 import { number, string, func, shape } from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { Field } from 'react-final-form';
-import { DragHandleIcon, XIcon } from './Icons';
+import styled from 'react-emotion';
+import { DragHandleIcon, RemoveCircleIcon } from './Icons';
 import { Input } from './styles/FormStyles';
-import { RoundIconButton } from './styles/ButtonStyles';
+import { IconButton } from './styles/ButtonStyles';
 import { StyledListItem } from './styles/DraggableListStyles';
+import { correctDraggableOffset } from '../lib/utils';
 
+const RemoveButton = styled(IconButton)(({ theme }) => ({
+  padding: '0.3rem',
+  fontSize: '1.4rem',
+  color: theme.colors.danger
+}));
 export default class DraggableListItem extends Component {
   static propTypes = {
     index: number.isRequired,
@@ -20,19 +27,10 @@ export default class DraggableListItem extends Component {
   };
 
   correctOffset(draggableProps) {
-    if (!this.props.offset) {
-      return draggableProps;
-    }
-    const { x = 0, y = 0 } = this.props.offset;
-    console.log(x, y);
-    return {
-      ...draggableProps,
-      style: {
-        ...draggableProps.style,
-        top: draggableProps.style.top + y,
-        left: draggableProps.style.left + x
-      }
-    };
+    const { offset } = this.props;
+    return offset
+      ? correctDraggableOffset(draggableProps, offset)
+      : draggableProps;
   }
 
   render() {
@@ -50,13 +48,9 @@ export default class DraggableListItem extends Component {
             <Field name={name} placeholder="Unique field name">
               {({ input, meta }) => <Input {...input} />}
             </Field>
-            <RoundIconButton
-              type="button"
-              onClick={onRemove}
-              backgroundColor="danger"
-            >
-              <XIcon />
-            </RoundIconButton>
+            <RemoveButton type="button" onClick={onRemove}>
+              <RemoveCircleIcon />
+            </RemoveButton>
           </StyledListItem>
         )}
       </Draggable>

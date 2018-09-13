@@ -14,6 +14,12 @@ exports.typeDef = gql`
 
   input NewFieldDefinition {
     key: String!
-    type: String!
+    type: String
+  }
+
+  input UpsertedFieldDefinition {
+    id: ID
+    key: String
+    type: String
   }
 `;

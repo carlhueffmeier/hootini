@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { string } from 'prop-types';
 import styled from 'react-emotion';
 import { Field } from 'react-final-form';

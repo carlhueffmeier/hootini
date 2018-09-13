@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { string, func } from 'prop-types';
+import { number, func } from 'prop-types';
 import styled from 'react-emotion';
 import { Field } from 'react-final-form';
 import { Input, Label } from '../../components/styles/FormStyles';
@@ -28,12 +28,12 @@ const SectionHeading = styled('h5')(({ theme }) => ({
 
 export default class EditSection extends Component {
   static propTypes = {
-    activeTemplateId: string,
-    onSelectTemplate: func
+    activeTab: number,
+    onSelectTab: func
   };
 
   render() {
-    const { activeTemplateId, onSelectTemplate } = this.props;
+    const { activeTab, onSelectTab } = this.props;
     return (
       <Fragment>
         <Field name="name">
@@ -50,10 +50,7 @@ export default class EditSection extends Component {
         </FieldSection>
         <TemplateSection>
           <SectionHeading>Templates</SectionHeading>
-          <EditTemplates
-            activeTemplateId={activeTemplateId}
-            onSelectTemplate={onSelectTemplate}
-          />
+          <EditTemplates activeTab={activeTab} onSelectTab={onSelectTab} />
         </TemplateSection>
       </Fragment>
     );

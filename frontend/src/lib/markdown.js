@@ -48,7 +48,7 @@ function markdownToJsx(markdown) {
     .use(subSupParser)
     .use(externalLinks, { target: false, rel: ['nofollow'] })
     .parse(markdown);
-  console.log(inspect(tree));
+  // console.log(inspect(tree));
   return processor.processSync(markdown).contents;
 }
 

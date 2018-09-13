@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { string, func } from 'prop-types';
+import { number, func } from 'prop-types';
 import styled from 'react-emotion';
-import shortid from 'shortid';
 import ConnectedFieldArray from '../../components/ConnectedFieldArray';
 import { TabbarItem, TabContent } from '../../components/styles/TabStyles';
 import {
@@ -11,7 +10,11 @@ import {
 import DraggableTabbar from '../../components/DraggableTabbar';
 import DraggableTab from '../../components/DraggableTab';
 import TemplateInputField from './TemplateInputField';
-import { handleDragInFieldArray } from '../../lib/utils';
+import {
+  handleDragInFieldArray,
+  addLocalId,
+  getUniqueKey
+} from '../../lib/utils';
 import { TrashIcon } from '../../components/Icons';
 import { navbarHeight } from '../../shared/dimensions';
 
@@ -22,37 +25,53 @@ const InnerTabContent = styled('div')({
 
 export default class EditTemplates extends Component {
   static propTypes = {
-    activeTemplateId: string,
-    onSelectTemplate: func
+    activeTab: number,
+    onSelectTab: func
   };
 
+  handleDragEnd({ fields, dragInfo }) {
+    const { activeTab, onSelectTab } = this.props;
+    // Move field entries
+    if (!handleDragInFieldArray({ dragInfo, fields })) {
+      // If no move happened, nothing to be done
+      return;
+    }
+
+    const { source, destination } = dragInfo;
+    if (destination && source.index === activeTab) {
+      // If the active tab is moved, make sure it stays active after move
+      onSelectTab(destination.index);
+    } else if (source.index > activeTab && destination.index <= activeTab) {
+      // If a tab is moved before, shift the active tab to the right
+      onSelectTab(activeTab + 1);
+    } else if (source.index < activeTab && destination.index >= activeTab) {
+      // If a tab is moved after the active tab, shift the active tab to the left
+      onSelectTab(activeTab - 1);
+    }
+  }
+
   render() {
-    const { activeTemplateId, onSelectTemplate } = this.props;
+    const { activeTab, onSelectTab } = this.props;
     return (
       <ConnectedFieldArray name="templates">
         {({ values: { templates }, fields }) => {
-          const activeTab =
-            templates.findIndex(template => template.id === activeTemplateId) ||
-            0;
           return (
             <Fragment>
               <DraggableTabbar
-                onDragEnd={dragInfo =>
-                  handleDragInFieldArray({ dragInfo, fields })
-                }
+                onDragEnd={dragInfo => this.handleDragEnd({ dragInfo, fields })}
                 renderTabs={fields.map((_, index) => {
                   const currentTemplate = templates[index];
                   if (!currentTemplate) {
                     return null;
                   }
-                  const uniqueKey = currentTemplate.id || String(index);
+                  const uniqueKey = getUniqueKey(currentTemplate);
                   return (
                     <DraggableTab
                       key={uniqueKey}
                       uniqueKey={uniqueKey}
                       index={index}
                       offset={{ y: -navbarHeight }}
-                      onClick={() => onSelectTemplate(currentTemplate.id)}
+                      onClick={() => onSelectTab(index)}
                       isActive={index === activeTab}
                     >
                       {currentTemplate.name}
@@ -65,12 +84,11 @@ export default class EditTemplates extends Component {
                       type="button"
                       textColor="good"
                       onClick={() => {
-                        const newId = shortid.generate();
                         fields.push({
-                          id: newId,
+                          ...addLocalId(),
                           name: ''
                         });
-                        onSelectTemplate(newId);
+                        onSelectTab(templates.length);
                       }}
                     >
                       + Add
@@ -91,7 +109,7 @@ export default class EditTemplates extends Component {
                             fields.remove(index);
                             if (templates.length > 0) {
                               const nextTab = Math.max(0, activeTab - 1);
-                              onSelectTemplate(templates[nextTab].id);
+                              onSelectTab(nextTab);
                             }
                           }}
                         >

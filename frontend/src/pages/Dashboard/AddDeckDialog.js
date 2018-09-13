@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import { bool, func } from 'prop-types';
 import { DialogOverlay, DialogContent } from '@reach/dialog';
 import '@reach/dialog/styles.css';
-import {
-  IconButton,
-  TextButton,
-  Button
-} from '../../components/styles/ButtonStyles';
 import styled from 'react-emotion';
 import AddDeck from './AddDeck';
 

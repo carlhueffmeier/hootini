@@ -12,6 +12,17 @@ const deckSchema = new mongoose.Schema({
     required: 'You must supply a name'
   },
   slug: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  lastReview: {
+    type: Date
+  },
+  lastNoteType: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'NoteType'
+  },
   description: {
     type: String,
     trim: true

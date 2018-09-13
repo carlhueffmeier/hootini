@@ -3,6 +3,7 @@ import { string, number, func, bool, node, shape } from 'prop-types';
 import { Draggable } from 'react-beautiful-dnd';
 import { TabbarItem } from './styles/TabStyles';
 import { TabButton } from './styles/ButtonStyles';
+import { correctDraggableOffset } from '../lib/utils';
 
 export default class DraggableTab extends Component {
   static propTypes = {
@@ -23,18 +24,10 @@ export default class DraggableTab extends Component {
   };
 
   correctOffset(draggableProps) {
-    if (!this.props.offset) {
-      return draggableProps;
-    }
-    const { x = 0, y = 0 } = this.props.offset;
-    return {
-      ...draggableProps,
-      style: {
-        ...draggableProps.style,
-        top: draggableProps.style.top + y,
-        left: draggableProps.style.left + x
-      }
-    };
+    const { offset } = this.props;
+    return offset
+      ? correctDraggableOffset(draggableProps, offset)
+      : draggableProps;
   }
 
   render() {
