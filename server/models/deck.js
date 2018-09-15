@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const slug = require('slugs');
 mongoose.Promise = global.Promise;
 
-// It might be a good idea to make the name of the deck
-// unique on a per-user basis
-// Look into: Validation and Multi-field unique values
+// When deck is removed:
+// * Remove all associated notes, cards
+
 const deckSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,6 +17,9 @@ const deckSchema = new mongoose.Schema({
     default: Date.now
   },
   lastReview: {
+    type: Date
+  },
+  lastActivity: {
     type: Date
   },
   lastNoteType: {
@@ -35,7 +38,7 @@ deckSchema.pre('save', async function(next) {
     return; // stop this function from running
   }
   this.slug = slug(this.name);
-  // find other stores that have a slug of wes, wes-1, wes-2
+  // Find other decks with the same slug and append an incremental number
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
   const decksWithSlug = await this.constructor.find({ slug: slugRegEx });
   if (decksWithSlug.length) {

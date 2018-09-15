@@ -14,6 +14,7 @@ const {
   typeDef: Template,
   resolvers: templateResolvers
 } = require('./template');
+const { typeDef: Card, resolvers: cardResolvers } = require('./card');
 
 // These are the queries and mutations not associated with a type
 // Empty for now!
@@ -36,13 +37,23 @@ const resolvers = {};
 // type definitions.
 // For the resolvers, we have to combine them via object deep merge.
 const schema = {
-  typeDefs: [Query, Mutation, FieldDefinition, Deck, Note, NoteType, Template],
+  typeDefs: [
+    Query,
+    Mutation,
+    FieldDefinition,
+    Deck,
+    Note,
+    NoteType,
+    Template,
+    Card
+  ],
   resolvers: merge(
     resolvers,
     deckResolvers,
     noteResolvers,
     noteTypeResolvers,
-    templateResolvers
+    templateResolvers,
+    cardResolvers
   )
 };
 

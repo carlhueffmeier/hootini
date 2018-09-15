@@ -2,11 +2,20 @@
 // exports.createFilter = map(when(is(String), construct(RegExp)(__, 'i')));
 // I was told the above version wasn't readable... 🤔
 
+const excludedKeys = ['id', '_id'];
+const translateKeys = key =>
+  ({
+    id: '_id'
+  }[key] || key);
+
 exports.createFilter = where =>
   Object.entries(where).reduce(
     (filter, [key, val]) => ({
       ...filter,
-      [key]: typeof val === 'string' ? new RegExp(val, 'i') : val
+      [translateKeys(key)]:
+        !excludedKeys.includes(key) && typeof val === 'string'
+          ? new RegExp(val, 'i')
+          : val
     }),
     {}
   );

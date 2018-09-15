@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { arrayOf, shape, string } from 'prop-types';
+import { arrayOf, shape, string, number } from 'prop-types';
 import DeckListItem from './DeckListItem';
 import { StyledList, ListItem, ListItemLink } from './styles/DeckListStyles';
 
@@ -8,7 +8,9 @@ export default class DeckListView extends Component {
     decks: arrayOf(
       shape({
         name: string.isRequired,
-        slug: string.isRequired
+        slug: string.isRequired,
+        cardsDue: number.isRequired,
+        cardsTotal: number.isRequired
       })
     )
   };
@@ -20,7 +22,11 @@ export default class DeckListView extends Component {
         {decks.map((deck, index) => (
           <ListItem key={index}>
             <ListItemLink to={`/deck/${deck.slug}`}>
-              <DeckListItem name={deck.name} dueCount={18} cardCount={2065} />
+              <DeckListItem
+                name={deck.name}
+                dueCount={deck.cardsDue}
+                cardCount={deck.cardsTotal}
+              />
             </ListItemLink>
           </ListItem>
         ))}

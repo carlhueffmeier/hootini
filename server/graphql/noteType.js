@@ -71,15 +71,17 @@ exports.typeDef = gql`
   }
 `;
 
+const populateOptions = [{ path: 'fieldDefinitions' }, { path: 'templates' }];
+
 const allNoteTypes = (_, { where = {} }) => {
-  return NoteType.find(createFilter(where)).populate('templates');
+  return NoteType.find(createFilter(where)).populate(populateOptions);
 };
 
 const getNoteType = async (_, { where = {} }) => {
   if (where.id) {
-    return NoteType.findById(where.id).populate('templates');
+    return NoteType.findById(where.id).populate(populateOptions);
   }
-  return NoteType.findOne(createFilter(where)).populate('templates');
+  return NoteType.findOne(createFilter(where)).populate(populateOptions);
 };
 
 const createNoteType = (_, { input }) => {
@@ -93,13 +95,13 @@ const createNoteTypeAndConnectToTemplates = (_, { input }) => {
     templates: templates.map(mongoose.Types.ObjectId)
   })
     .save()
-    .populate('templates');
+    .populate(populateOptions);
 };
 
 const updateNoteType = (_, { input }) => {
   const { id, ...update } = input;
   return NoteType.findByIdAndUpdate(id, update, { new: true }).populate(
-    'templates'
+    populateOptions
   );
 };
 
@@ -109,13 +111,12 @@ const updateNoteTypeAndConnectToTemplates = (_, { input }) => {
     id,
     { ...update, templates: templates.map(mongoose.Types.ObjectId) },
     { new: true }
-  ).populate('templates');
+  ).populate(populateOptions);
 };
 
 const updateNoteTypeAndUpsertTemplates = async (_, { input }) => {
   let { id, templates, ...update } = input;
-  if (templates) {
-    console.log('templates', templates);
+  if (templates && templates.length > 0) {
     const bulkOps = templates.map(
       ({ id: templateId, ...templateData }) =>
         templateId
@@ -131,20 +132,20 @@ const updateNoteTypeAndUpsertTemplates = async (_, { input }) => {
               }
             }
     );
-    console.log('bulkOps', bulkOps);
     const bulkWriteResult = await Template.bulkWrite(bulkOps);
-    console.log('bulkWriteResult', bulkWriteResult);
     const allTemplateIds = [
       ...pluck('id', templates),
       ...pluck('_id', bulkWriteResult.getInsertedIds())
     ];
-    console.log('allTemplateIds', bulkWriteResult.getInsertedIds());
     update.templates = allTemplateIds.map(mongoose.Types.ObjectId);
   }
+  // * If templates were removed -> remove all notes with that template (high priority)
+  // * If templates were added -> add new cards with that template (ask the user for confirmation -> maybe separate action like `generateCards`)
+  // * If fields were removed -> remove fields from cards (no negative repercussions, low priority)
+  // * If fields were added -> don't care (if null assume empty)
   const res = await NoteType.findByIdAndUpdate(id, update, {
     new: true
-  }).populate('templates');
-  console.log('result', res);
+  }).populate(populateOptions);
   return res;
 };
 

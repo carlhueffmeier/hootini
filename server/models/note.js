@@ -1,16 +1,14 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const fieldSchema = new mongoose.Schema({
-  key: {
-    type: String,
-    unique: true,
-    trim: true,
-    required: 'All fields need a unique key'
-  },
+// * Remove when note type is removed
+// * Change key when note type key is changed
+
+const noteFieldSchema = new mongoose.Schema({
+  definition: mongoose.Schema.Types.ObjectId,
+  key: String,
   value: {
-    type: String,
-    trim: true
+    type: String
   }
 });
 
@@ -23,7 +21,7 @@ const noteSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'NoteType'
   },
-  fields: [fieldSchema]
+  fields: [noteFieldSchema]
 });
 
 module.exports = mongoose.model('Note', noteSchema);

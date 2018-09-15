@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import Navbar from '../../components/Navbar';
@@ -18,6 +18,17 @@ const Main = styled('main')({
 });
 
 export default class NewNoteScreen extends Component {
+  handleSubmit = async (createNote, formData) => {
+    const { deck, noteType, ...fields } = formData;
+    const variables = {
+      deck: deck.id,
+      noteType: noteType.id,
+      fields: Object.entries(fields).map(([key, value]) => ({ key, value }))
+    };
+    const { data } = await createNote({ variables });
+    console.log(data);
+  };
+
   render() {
     const { slug } = this.props;
     return (
@@ -31,12 +42,23 @@ export default class NewNoteScreen extends Component {
           }
           const { Deck } = data;
           return (
-            <PageContainer>
-              <Navbar title="Add Note" />
-              <Main>
-                <EditNoteForm initialValues={{ deck: Deck }} />
-              </Main>
-            </PageContainer>
+            <Mutation mutation={CREATE_NOTE_MUTATION}>
+              {(createNote, { loading, error }) => (
+                <PageContainer>
+                  <Navbar title="Add Note" />
+                  <Main>
+                    <EditNoteForm
+                      initialValues={{ deck: Deck }}
+                      loading={loading}
+                      error={error}
+                      onSubmit={formData =>
+                        this.handleSubmit(createNote, formData)
+                      }
+                    />
+                  </Main>
+                </PageContainer>
+              )}
+            </Mutation>
           );
         }}
       </Query>
@@ -51,6 +73,24 @@ const DECK_QUERY = gql`
       slug
       name
       description
+    }
+  }
+`;
+
+const CREATE_NOTE_MUTATION = gql`
+  mutation createNote($noteType: ID!, $deck: ID!, $fields: [NewNoteField!]!) {
+    createNote(input: { noteType: $noteType, deck: $deck, fields: $fields }) {
+      id
+      deck {
+        name
+      }
+      noteType {
+        name
+      }
+      fields {
+        key
+        value
+      }
     }
   }
 `;

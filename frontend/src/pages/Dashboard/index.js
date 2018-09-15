@@ -44,6 +44,8 @@ const DECKS_QUERY = gql`
     allDecks {
       slug
       name
+      cardsTotal
+      cardsDue
     }
   }
 `;

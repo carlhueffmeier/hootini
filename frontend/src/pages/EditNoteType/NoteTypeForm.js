@@ -35,7 +35,7 @@ export default class NoteTypeForm extends Component {
     onSubmit: func.isRequired,
     initialValues: object,
     loading: bool.isRequired,
-    error: string.isRequired
+    error: object
   };
 
   static defaultProps = {
