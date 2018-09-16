@@ -1,7 +1,6 @@
 const { gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const Deck = mongoose.model('Deck');
-const Card = mongoose.model('Card');
 const { createFilter } = require('../helper/utils');
 
 exports.typeDef = gql`
@@ -47,72 +46,77 @@ exports.typeDef = gql`
   }
 `;
 
+// Add all cards that belong to the deck inside an array
+const addCardsStage = ({ as = 'cards' } = {}) => ({
+  $lookup: {
+    from: 'cards',
+    localField: '_id',
+    foreignField: 'deck',
+    as
+  }
+});
+
+const addDueCardsStage = ({ input = '$cards', output = 'cardsDue' } = {}) => ({
+  // Add a field 'cardsDue' that holds an array of the due cards
+  $addFields: {
+    [output]: {
+      $filter: {
+        input,
+        as: 'card',
+        cond: {
+          $or: [
+            // 'Due cards' have either a due date in the past
+            { $lte: ['$card.due', new Date()] },
+            // Or they have no due date at all
+            { $ne: [{ $type: '$card.due' }, 'date'] }
+          ]
+        }
+      }
+    }
+  }
+});
+
+const replaceArrayWithOwnSizeStage = arrayKeys => ({
+  $addFields: arrayKeys.reduce(
+    (stage, key) => ({
+      ...stage,
+      [key]: { $size: `$${key}` }
+    }),
+    {}
+  )
+});
+
 const getDeck = async (_, { where = {} }) => {
-  const deck = await Deck.findOne(createFilter(where));
-  console.log(deck, createFilter(where));
-  // * Skip queries when possible
-  const cardsTotal = await Card.find({ deck }).estimatedDocumentCount();
-  const cardsDue = await Card.find({
-    deck,
-    due: { $lte: Date.now() }
-  }).estimatedDocumentCount();
-  return {
-    ...deck.toObject(),
-    id: deck._id,
-    cardsTotal,
-    cardsDue
-  };
+  const result = await Deck.aggregate([
+    { $match: createFilter(where) },
+    { $limit: 1 },
+    addCardsStage({ as: 'cardsTotal' }),
+    addDueCardsStage({ input: '$cardsTotal', output: 'cardsDue' }),
+    replaceArrayWithOwnSizeStage(['cardsTotal', 'cardsDue']),
+    // We also need to add the id field for GraphQL
+    { $addFields: { id: '$_id' } }
+  ]);
+  return result.length > 0 ? result[0] : null;
 };
 
 const allDecks = async (_, { where = {} }) => {
-  const decks = await Deck.find(createFilter(where));
-  let cardsTotal = await Card.aggregate([
-    {
-      $group: {
-        _id: '$deck',
-        count: { $sum: 1 }
-      }
-    }
+  return Deck.aggregate([
+    { $match: createFilter(where) },
+    addCardsStage({ as: 'cardsTotal' }),
+    addDueCardsStage({ input: '$cardsTotal', output: 'cardsDue' }),
+    replaceArrayWithOwnSizeStage(['cardsTotal', 'cardsDue']),
+    // We also need to add the id field for GraphQL
+    { $addFields: { id: '$_id' } }
   ]);
-  cardsTotal = cardsTotal.reduce(
-    (totalByDeck, row) => ({ ...totalByDeck, [row._id]: row.count }),
-    {}
-  );
-  let cardsDue = await Card.aggregate([
-    {
-      $match: {
-        $or: [{ due: { $lte: new Date() } }, { due: { $exists: false } }]
-      }
-    },
-    {
-      $group: {
-        _id: '$deck',
-        count: { $sum: 1 }
-      }
-    }
-  ]);
-  cardsDue = cardsDue.reduce(
-    (dueByDeck, row) => ({ ...dueByDeck, [row._id]: row.count }),
-    {}
-  );
-
-  const decksWithMetainfo = decks.map(deck => ({
-    ...deck.toObject(),
-    id: deck._id,
-    cardsTotal: cardsTotal[deck._id] || 0,
-    cardsDue: cardsDue[deck._id] || 0
-  }));
-
-  return decksWithMetainfo;
 };
 
+// TODO: Support queries for cardsDue etc. on new and updated decks
 const newDeck = (_, { input }) => {
   return new Deck(input).save();
 };
 
 const updateDeck = (_, { input }) => {
   const { id, ...update } = input;
-
   return Deck.findById(id, update, { new: true });
 };
 
