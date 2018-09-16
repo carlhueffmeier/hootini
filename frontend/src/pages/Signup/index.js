@@ -27,16 +27,27 @@ export default class Signup extends Component {
       <Fragment>
         <Navbar title="Signup" />
         <Main>
-          <User />
-          <Mutation mutation={SIGNUP_MUTATION}>
-            {(signup, { loading, error }) => (
-              <SignupForm
-                loading={loading}
-                error={error}
-                onSubmit={formData => this.handleSubmit(signup, formData)}
-              />
-            )}
-          </Mutation>
+          <User>
+            {({ data, error, loading }) => {
+              if (loading) {
+                return 'Loading...';
+              }
+              if (data && data.me) {
+                return <h2>Hi {data.me.name} 👋</h2>;
+              }
+              return (
+                <Mutation mutation={SIGNUP_MUTATION}>
+                  {(signup, { loading, error }) => (
+                    <SignupForm
+                      loading={loading}
+                      error={error}
+                      onSubmit={formData => this.handleSubmit(signup, formData)}
+                    />
+                  )}
+                </Mutation>
+              );
+            }}
+          </User>
         </Main>
       </Fragment>
     );
