@@ -6,6 +6,7 @@ import { navigate } from '@reach/router';
 import gql from 'graphql-tag';
 import SignupForm from '../../components/SignupForm';
 import { wait } from '../../lib/utils';
+import User from '../../components/User';
 
 const Main = styled('main')({
   padding: '0 2.8rem',
@@ -26,6 +27,7 @@ export default class Signup extends Component {
       <Fragment>
         <Navbar title="Signup" />
         <Main>
+          <User />
           <Mutation mutation={SIGNUP_MUTATION}>
             {(signup, { loading, error }) => (
               <SignupForm

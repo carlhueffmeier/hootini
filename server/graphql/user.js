@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken');
 const User = mongoose.model('User');
 
 exports.typeDef = gql`
+  extend type Query {
+    me: User
+  }
   extend type Mutation {
     signup(input: UserSignupInput): User!
   }
@@ -48,8 +51,14 @@ const signup = async (_, { input: { email, password, name } }, { res }) => {
   return newUser;
 };
 
+const me = (_, __, { req }) => {
+  return req.user;
+};
+
 exports.resolvers = {
-  Query: {},
+  Query: {
+    me
+  },
 
   Mutation: {
     signup
