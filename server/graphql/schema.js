@@ -3,6 +3,7 @@ const merge = require('lodash.merge');
 
 // The definitions and resolvers specific to one type live in
 // their respective files
+const { typeDef: User, resolvers: userResolvers } = require('./user');
 const { typeDef: Deck, resolvers: deckResolvers } = require('./deck');
 const { typeDef: Note, resolvers: noteResolvers } = require('./note');
 const { typeDef: FieldDefinition } = require('./fieldDefinition');
@@ -40,6 +41,7 @@ const schema = {
   typeDefs: [
     Query,
     Mutation,
+    User,
     FieldDefinition,
     Deck,
     Note,
@@ -49,6 +51,7 @@ const schema = {
   ],
   resolvers: merge(
     resolvers,
+    userResolvers,
     deckResolvers,
     noteResolvers,
     noteTypeResolvers,

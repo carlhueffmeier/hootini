@@ -15,6 +15,7 @@ mongoose.connection.on('error', err => {
 });
 
 // Import mongoose models
+require('./models/user');
 require('./models/deck');
 require('./models/note');
 require('./models/noteType');
@@ -23,9 +24,14 @@ require('./models/card');
 
 // Start the app
 const schema = require('./graphql/schema');
-const apolloServer = new ApolloServer(schema);
+const apolloServer = new ApolloServer({
+  ...schema,
+  context: createContext
+});
 const app = require('./app');
-apolloServer.applyMiddleware({ app });
+// We have to turn off 'cors' to prevent apollo from overwriting origin headers
+// https://github.com/apollographql/apollo-server/blob/79191397faa3f544e9241faa8e9110014bf00e43/packages/apollo-server-express/src/ApolloServer.ts#L127
+apolloServer.applyMiddleware({ app, cors: false });
 app.set('port', process.env.PORT || 5000);
 
 const server = app.listen(app.get('port'), () => {
@@ -33,3 +39,7 @@ const server = app.listen(app.get('port'), () => {
     `http://localhost:${server.address().port}` + apolloServer.graphqlPath;
   console.log(`🎡   GraphQL Playground ready at ${playgroundUrl}`);
 });
+
+function createContext({ req, res }) {
+  return { req, res };
+}
