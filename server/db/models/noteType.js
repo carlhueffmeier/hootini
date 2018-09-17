@@ -19,6 +19,10 @@ const fieldDefinitionSchema = new mongoose.Schema({
 });
 
 const noteTypeSchema = new mongoose.Schema({
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   name: {
     type: String,
     trim: true,

@@ -1,26 +1,10 @@
-const mongoose = require('mongoose');
 const { ApolloServer } = require('apollo-server-express');
 
 // Import configuration options from 'variables.env'
 require('dotenv').config({ path: 'variables.env' });
 
 // Connect to database and handle connection issues
-mongoose.connect(
-  process.env.DATABASE,
-  { useNewUrlParser: true }
-);
-mongoose.Promise = global.Promise; // use ES6 promises
-mongoose.connection.on('error', err => {
-  console.error(`Can't connect to database → ${err.message}`);
-});
-
-// Import mongoose models
-require('./models/user');
-require('./models/deck');
-require('./models/note');
-require('./models/noteType');
-require('./models/template');
-require('./models/card');
+const generateModels = require('./db');
 
 // Start the app
 const schema = require('./graphql/schema');
@@ -40,6 +24,11 @@ const server = app.listen(app.get('port'), () => {
   console.log(`🎡   GraphQL Playground ready at ${playgroundUrl}`);
 });
 
+// Put the request and response objects into the context
 function createContext({ req, res }) {
-  return { req, res };
+  return {
+    db: generateModels({ user: req.user }),
+    req,
+    res
+  };
 }

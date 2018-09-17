@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { object, func, bool, string } from 'prop-types';
+import { object, func, bool } from 'prop-types';
 import { Button } from '../../components/styles/ButtonStyles';
 import { Form } from 'react-final-form';
 import NotePreview from '../../components/NotePreview';

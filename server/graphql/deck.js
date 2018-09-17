@@ -1,7 +1,4 @@
 const { gql } = require('apollo-server-express');
-const mongoose = require('mongoose');
-const Deck = mongoose.model('Deck');
-const { createFilter } = require('../helper/utils');
 
 exports.typeDef = gql`
   extend type Query {
@@ -46,78 +43,21 @@ exports.typeDef = gql`
   }
 `;
 
-// Add all cards that belong to the deck inside an array
-const addCardsStage = ({ as = 'cards' } = {}) => ({
-  $lookup: {
-    from: 'cards',
-    localField: '_id',
-    foreignField: 'deck',
-    as
-  }
-});
-
-const addDueCardsStage = ({ input = '$cards', output = 'cardsDue' } = {}) => ({
-  // Add a field 'cardsDue' that holds an array of the due cards
-  $addFields: {
-    [output]: {
-      $filter: {
-        input,
-        as: 'card',
-        cond: {
-          $or: [
-            // 'Due cards' have either a due date in the past
-            { $lte: ['$card.due', new Date()] },
-            // Or they have no due date at all
-            { $ne: [{ $type: '$card.due' }, 'date'] }
-          ]
-        }
-      }
-    }
-  }
-});
-
-const replaceArrayWithOwnSizeStage = arrayKeys => ({
-  $addFields: arrayKeys.reduce(
-    (stage, key) => ({
-      ...stage,
-      [key]: { $size: `$${key}` }
-    }),
-    {}
-  )
-});
-
-const getDeck = async (_, { where = {} }) => {
-  const result = await Deck.aggregate([
-    { $match: createFilter(where) },
-    { $limit: 1 },
-    addCardsStage({ as: 'cardsTotal' }),
-    addDueCardsStage({ input: '$cardsTotal', output: 'cardsDue' }),
-    replaceArrayWithOwnSizeStage(['cardsTotal', 'cardsDue']),
-    // We also need to add the id field for GraphQL
-    { $addFields: { id: '$_id' } }
-  ]);
-  return result.length > 0 ? result[0] : null;
+const getDeck = (_, { where = {} }, { db }) => {
+  return db.deck.findOne(where);
 };
 
-const allDecks = async (_, { where = {} }) => {
-  return Deck.aggregate([
-    { $match: createFilter(where) },
-    addCardsStage({ as: 'cardsTotal' }),
-    addDueCardsStage({ input: '$cardsTotal', output: 'cardsDue' }),
-    replaceArrayWithOwnSizeStage(['cardsTotal', 'cardsDue']),
-    // We also need to add the id field for GraphQL
-    { $addFields: { id: '$_id' } }
-  ]);
+const allDecks = async (_, { where = {} }, { db }) => {
+  return db.deck.find(where);
 };
 
-// TODO: Support queries for cardsDue etc. on new and updated decks
-const newDeck = (_, { input }) => {
-  return new Deck(input).save();
+const newDeck = (_, { input }, { db }) => {
+  return db.deck.create(input);
 };
 
-const updateDeck = (_, { input }) => {
+const updateDeck = (_, { input }, { db }) => {
   const { id, ...update } = input;
-  return Deck.findById(id, update, { new: true });
+  return db.deck.findOneAndUpdate({ id }, update);
 };
 
 exports.resolvers = {

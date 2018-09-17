@@ -6,6 +6,10 @@ mongoose.Promise = global.Promise;
 // * Remove all associated notes, cards
 
 const deckSchema = new mongoose.Schema({
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   name: {
     type: String,
     trim: true,

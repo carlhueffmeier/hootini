@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Form } from 'react-final-form';
-import styled from 'react-emotion';
 import { navigate } from '@reach/router';
+import styled from 'react-emotion';
+import { Form } from 'react-final-form';
 import { TextButton } from './styles/ButtonStyles';
 import FormInputField from './FormInputField';
 import { wait } from '../lib/utils';
@@ -27,26 +27,20 @@ const Error = styled('div')(({ theme }) => ({
 }));
 
 export default class SignupForm extends Component {
-  handleSubmit = async (signup, formData) => {
-    await signup({ variables: formData });
+  handleSubmit = async (signin, formData) => {
+    await signin({ variables: formData });
     await wait();
     navigate(`/`);
   };
 
   render() {
     return (
-      <Mutation mutation={SIGNUP_MUTATION}>
-        {(signup, { loading, error }) => (
-          <Form onSubmit={formData => this.handleSubmit(signup, formData)}>
+      <Mutation mutation={SIGNIN_MUTATION}>
+        {(signin, { loading, error }) => (
+          <Form onSubmit={formData => this.handleSubmit(signin, formData)}>
             {({ handleSubmit, pristine, dirtySinceLastSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <FormContent>
-                  <FormInputField
-                    label="Name"
-                    name="name"
-                    placeholder="Name"
-                    required
-                  />
                   <FormInputField
                     label="Email"
                     name="email"
@@ -78,9 +72,9 @@ export default class SignupForm extends Component {
   }
 }
 
-const SIGNUP_MUTATION = gql`
-  mutation signup($name: String!, $email: String!, $password: String!) {
-    signup(input: { name: $name, email: $email, password: $password }) {
+const SIGNIN_MUTATION = gql`
+  mutation signin($email: String!, $password: String!) {
+    signin(input: { email: $email, password: $password }) {
       id
       name
       email

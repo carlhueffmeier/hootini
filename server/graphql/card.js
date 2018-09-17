@@ -1,6 +1,4 @@
 const { gql } = require('apollo-server-express');
-const mongoose = require('mongoose');
-const Card = mongoose.model('Card');
 
 exports.typeDef = gql`
   extend type Query {
@@ -29,26 +27,16 @@ exports.typeDef = gql`
   }
 `;
 
-const getCard = (_, { id }) => {
-  return Card.findById(id);
+const getCard = (_, { id }, { db }) => {
+  return db.card.findOne({ id });
 };
 
-const allCards = () => {
-  return Card.find();
+const allCards = (_, __, { db }) => {
+  return db.card.find();
 };
 
-const reviewCard = async (_, { input }) => {
-  const { id, answer, timeOfReview } = input;
-
-  const reviewedCard = await Card.findById(id);
-  const update = rescheduleCard({
-    interval: reviewedCard.interval,
-    dueTime: reviewedCard.due,
-    ease: reviewedCard.ease,
-    timeOfReview,
-    answer
-  });
-  return Card.findByIdAndUpdate(id, update, { new: true });
+const reviewCard = async (_, { input }, { db }) => {
+  return db.card.review(input);
 };
 
 exports.resolvers = {

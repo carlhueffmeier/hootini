@@ -1,8 +1,4 @@
 const { gql } = require('apollo-server-express');
-const mongoose = require('mongoose');
-const NoteType = mongoose.model('NoteType');
-const Template = mongoose.model('Template');
-const { createFilter, pluck } = require('../helper/utils');
 
 exports.typeDef = gql`
   extend type Query {
@@ -71,95 +67,35 @@ exports.typeDef = gql`
   }
 `;
 
-const populateOptions = [{ path: 'fieldDefinitions' }, { path: 'templates' }];
-
-const allNoteTypes = (_, { where = {} }) => {
-  return NoteType.find(createFilter(where)).populate(populateOptions);
+const getNoteType = async (_, { where = {} }, { db }) => {
+  return db.noteType.findOne(where);
 };
 
-const getNoteType = async (_, { where = {} }) => {
-  if (where.id) {
-    return NoteType.findById(where.id).populate(populateOptions);
-  }
-  return NoteType.findOne(createFilter(where)).populate(populateOptions);
+const allNoteTypes = (_, { where = {} }, { db }) => {
+  return db.noteType.find(where);
 };
 
-const createNoteType = (_, { input }) => {
-  return new NoteType(input).save();
+const createNoteType = (_, { input }, { db }) => {
+  return db.noteType.create(input);
 };
 
-const createNoteTypeAndConnectToTemplates = (_, { input }) => {
-  const { id, templates, ...ownProps } = input;
-  return new NoteType({
-    ...ownProps,
-    templates: templates.map(mongoose.Types.ObjectId)
-  })
-    .save()
-    .populate(populateOptions);
-};
-
-const updateNoteType = (_, { input }) => {
-  const { id, ...update } = input;
-  return NoteType.findByIdAndUpdate(id, update, { new: true }).populate(
-    populateOptions
-  );
-};
-
-const updateNoteTypeAndConnectToTemplates = (_, { input }) => {
-  const { id, templates, ...update } = input;
-  return NoteType.findByIdAndUpdate(
-    id,
-    { ...update, templates: templates.map(mongoose.Types.ObjectId) },
-    { new: true }
-  ).populate(populateOptions);
-};
-
-const updateNoteTypeAndUpsertTemplates = async (_, { input }) => {
+const updateNoteTypeAndUpsertTemplates = async (_, { input }, { db }) => {
   let { id, templates, ...update } = input;
   if (templates && templates.length > 0) {
-    const bulkOps = templates.map(
-      ({ id: templateId, ...templateData }) =>
-        templateId
-          ? {
-              updateOne: {
-                filter: { _id: templateId },
-                update: { $set: templateData }
-              }
-            }
-          : {
-              insertOne: {
-                document: templateData
-              }
-            }
-    );
-    const bulkWriteResult = await Template.bulkWrite(bulkOps);
-    const allTemplateIds = [
-      ...pluck('id', templates),
-      ...pluck('_id', bulkWriteResult.getInsertedIds())
-    ];
-    update.templates = allTemplateIds.map(mongoose.Types.ObjectId);
+    const { allIds } = await db.template.upsertMany(templates);
+    update.templates = allIds;
   }
-  // * If templates were removed -> remove all notes with that template (high priority)
-  // * If templates were added -> add new cards with that template (ask the user for confirmation -> maybe separate action like `generateCards`)
-  // * If fields were removed -> remove fields from cards (no negative repercussions, low priority)
-  // * If fields were added -> don't care (if null assume empty)
-  const res = await NoteType.findByIdAndUpdate(id, update, {
-    new: true
-  }).populate(populateOptions);
-  return res;
+  return db.noteType.findOneAndUpdate({ id }, update);
 };
 
 exports.resolvers = {
   Query: {
-    allNoteTypes,
-    NoteType: getNoteType
+    NoteType: getNoteType,
+    allNoteTypes
   },
 
   Mutation: {
     createNoteType,
-    createNoteTypeAndConnectToTemplates,
-    updateNoteType,
-    updateNoteTypeAndConnectToTemplates,
     updateNoteTypeAndUpsertTemplates
   }
 };

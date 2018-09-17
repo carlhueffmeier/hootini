@@ -13,6 +13,10 @@ const noteFieldSchema = new mongoose.Schema({
 });
 
 const noteSchema = new mongoose.Schema({
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   deck: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Deck'

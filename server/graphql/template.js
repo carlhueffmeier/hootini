@@ -1,6 +1,4 @@
 const { gql } = require('apollo-server-express');
-const mongoose = require('mongoose');
-const Template = mongoose.model('Template');
 
 exports.typeDef = gql`
   extend type Query {
@@ -41,22 +39,21 @@ exports.typeDef = gql`
   }
 `;
 
-const getTemplate = (_, { id }) => {
-  return Template.findById(id);
+const getTemplate = (_, { id }, { db }) => {
+  return db.template.findOne({ id });
 };
 
-const allTemplates = () => {
-  return Template.find();
+const allTemplates = (_, { where = {} }, { db }) => {
+  return db.template.find(where);
 };
 
-const newTemplate = (_, { input }) => {
-  return new Template(input).save();
+const newTemplate = (_, { input }, { db }) => {
+  return db.template.create(input);
 };
 
-const updateTemplate = (_, { input }) => {
+const updateTemplate = (_, { input }, { db }) => {
   const { id, ...update } = input;
-
-  return Template.findByIdAndUpdate(id, update, { new: true });
+  return db.template.findOneAndUpdate({ id }, update);
 };
 
 exports.resolvers = {

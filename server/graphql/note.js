@@ -1,8 +1,4 @@
 const { gql } = require('apollo-server-express');
-const mongoose = require('mongoose');
-const Note = mongoose.model('Note');
-const Deck = mongoose.model('Deck');
-const Card = mongoose.model('Card');
 
 exports.typeDef = gql`
   extend type Query {
@@ -56,52 +52,21 @@ exports.typeDef = gql`
   }
 `;
 
-const getNote = (_, { id }) => {
-  return Note.findById(id);
+const getNote = (_, { id }, { db }) => {
+  return db.note.findOne({ id });
 };
 
-const allNotes = () => {
-  return Note.find();
+const allNotes = (_, __, { db }) => {
+  return db.note.find();
 };
 
-const createNote = async (_, { input }) => {
-  await Deck.findByIdAndUpdate(input.deck, {
-    lastActivity: Date.now(),
-    lastNoteType: input.noteType
-  });
-  // * First get note type and check whether the 'fields' are matching
-  let newNote = await Note.findByIdAndUpdate(mongoose.Types.ObjectId(), input, {
-    new: true,
-    upsert: true,
-    runValidators: true,
-    setDefaultsOnInsert: true,
-    populate: [{ path: 'noteType' }, { path: 'deck' }]
-  });
-
-  const {
-    noteType: { templates }
-  } = newNote;
-  const newCards = templates.map(template => ({
-    deck: newNote.deck,
-    note: newNote,
-    template: template
-  }));
-  const insertedCards = await Card.insertMany(newCards);
-  console.log(`${insertedCards.length} cards inserted 🕊`, insertedCards);
-  return {
-    note: {
-      ...newNote.toObject(),
-      id: newNote._id
-    },
-    cardsAdded: insertedCards.length
-  };
+const createNote = (_, { input }, { db }) => {
+  return db.note.create(input);
 };
 
-const updateNote = (_, { input }) => {
+const updateNote = (_, { input }, { db }) => {
   const { id, ...update } = input;
-
-  // * If deck changed, find all cards and update them as well
-  return Note.findByIdAndUpdate(id, update, { new: true });
+  return db.note.findOneAndUpdate({ id }, update);
 };
 
 exports.resolvers = {

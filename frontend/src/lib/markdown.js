@@ -1,6 +1,6 @@
 import remarkParser from 'remark-parse';
 // import blockElements from 'remark-parse/lib/block-elements.json';
-import inspect from 'unist-util-inspect';
+// import inspect from 'unist-util-inspect';
 import subSupParser from 'remark-sub-super';
 import reactRenderer from 'remark-react';
 import unified from 'unified';
@@ -41,13 +41,13 @@ function markdownToJsx(markdown) {
       clean: false,
       sanitize: schema
     });
-  const tree = unified()
-    .use(remarkParser, {
-      commonmark: true
-    })
-    .use(subSupParser)
-    .use(externalLinks, { target: false, rel: ['nofollow'] })
-    .parse(markdown);
+  // const tree = unified()
+  //   .use(remarkParser, {
+  //     commonmark: true
+  //   })
+  //   .use(subSupParser)
+  //   .use(externalLinks, { target: false, rel: ['nofollow'] })
+  //   .parse(markdown);
   // console.log(inspect(tree));
   return processor.processSync(markdown).contents;
 }
