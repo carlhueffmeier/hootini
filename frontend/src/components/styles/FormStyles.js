@@ -93,9 +93,7 @@ const BaseMenu = styled('ul')(
       : null
 );
 
-const Menu = React.forwardRef((props, ref) => (
-  <BaseMenu innerRef={ref} {...props} />
-));
+const Menu = React.forwardRef((props, ref) => <BaseMenu innerRef={ref} {...props} />);
 
 const Item = styled('li')(
   ({ theme }) => ({
@@ -126,4 +124,39 @@ const Item = styled('li')(
   }
 );
 
-export { ControllerButton, Input, Textarea, Label, Menu, Item };
+const FormContent = styled('div')({
+  margin: '0 1rem 1rem 1rem'
+});
+
+const FormActions = styled('div')({
+  display: 'flex',
+  justifyContent: 'flex-end'
+});
+
+const FormError = styled('div')(({ theme }) => ({
+  ...theme.typography.caption,
+  background: theme.colors.lightGrey1,
+  color: theme.colors.danger,
+  padding: '0.5rem',
+  margin: '1rem',
+  textAlign: 'center'
+}));
+
+const InputRow = styled('div')({
+  '&>label': {
+    marginTop: '1.5rem'
+  }
+});
+
+export {
+  ControllerButton,
+  Input,
+  InputRow,
+  Textarea,
+  Label,
+  Menu,
+  Item,
+  FormContent,
+  FormActions,
+  FormError
+};

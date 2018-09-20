@@ -16,4 +16,6 @@ const CURRENT_USER_QUERY = gql`
 const User = props => (
   <Query query={CURRENT_USER_QUERY}>{payload => props.children(payload)}</Query>
 );
+
 export default User;
+export { CURRENT_USER_QUERY };

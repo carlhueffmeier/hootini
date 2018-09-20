@@ -3,13 +3,14 @@ const { ObjectId } = mongoose.Types;
 const { AuthenticationError } = require('apollo-server-express');
 
 const throwAuthError = () => {
-  console.warn('auth error');
-  throw new AuthenticationError("You don't have sufficient access rights");
+  try {
+    throw new AuthenticationError("You don't have sufficient access rights");
+  } catch (error) {
+    console.error('Authentication Error');
+    console.error(error);
+    throw error;
+  }
 };
-
-const matchUserStage = user => ({
-  $where: { owner: ObjectId(user.id) }
-});
 
 const checkAuth = user => {
   if (!user) {
@@ -18,18 +19,20 @@ const checkAuth = user => {
 };
 
 const addUserInfo = user => ({
-  owner: ObjectId(user.id)
+  owner: ObjectId(user.id || user._id)
 });
 
 const createFilter = (where, user) => {
+  if (!user) {
+    throw new Error("Don't forget to pass a user to createFilter");
+  }
   if (where.id) {
-    return { _id: id, ...addUserInfo(user) };
+    return { _id: where.id, ...addUserInfo(user) };
   }
   return { ...where, ...addUserInfo(user) };
 };
 
 module.exports = {
-  matchUserStage,
   checkAuth,
   addUserInfo,
   createFilter,

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const slug = require('slugs');
+const { setSchemaOptions } = require('../schemaOptions');
 
 // When key changes:
 // Change all associated notes' fields
@@ -54,4 +56,5 @@ noteTypeSchema.pre('save', async function(next) {
   next();
 });
 
+setSchemaOptions(noteTypeSchema);
 module.exports = mongoose.model('NoteType', noteTypeSchema);

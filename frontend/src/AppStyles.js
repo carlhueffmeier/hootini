@@ -3,7 +3,6 @@ import * as typography from './shared/typography';
 import * as colors from './shared/colors';
 import * as timings from './shared/timings';
 import * as dimensions from './shared/dimensions';
-import naturalWhite from './assets/ep_naturalwhite.png';
 
 injectGlobal`
   html {
@@ -16,7 +15,7 @@ injectGlobal`
     font-family: 'Roboto', sans-serif;
     width: 100%;
     min-height: 100%;
-    background: linear-gradient(#ffffffaa, #ffffffaa), url(${naturalWhite});
+    background: ${colors.backgroundLight};
   }
 
   *,

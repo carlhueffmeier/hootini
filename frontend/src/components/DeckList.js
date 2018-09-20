@@ -3,7 +3,7 @@ import { arrayOf, shape, string, number } from 'prop-types';
 import DeckListItem from './DeckListItem';
 import { StyledList, ListItem, ListItemLink } from './styles/DeckListStyles';
 
-export default class DeckListView extends Component {
+class DeckListView extends Component {
   static propTypes = {
     decks: arrayOf(
       shape({
@@ -22,11 +22,7 @@ export default class DeckListView extends Component {
         {decks.map((deck, index) => (
           <ListItem key={index}>
             <ListItemLink to={`/deck/${deck.slug}`}>
-              <DeckListItem
-                name={deck.name}
-                dueCount={deck.cardsDue}
-                cardCount={deck.cardsTotal}
-              />
+              <DeckListItem name={deck.name} dueCount={deck.cardsDue} cardCount={deck.cardsTotal} />
             </ListItemLink>
           </ListItem>
         ))}
@@ -34,3 +30,5 @@ export default class DeckListView extends Component {
     );
   }
 }
+
+export default DeckListView;

@@ -3,7 +3,7 @@ import { func, node } from 'prop-types';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { Tabbar } from './styles/TabStyles';
 
-export default class DraggableTabbar extends Component {
+class DraggableTabbar extends Component {
   static propTypes = {
     onDragEnd: func.isRequired,
     renderTabs: node,
@@ -27,3 +27,5 @@ export default class DraggableTabbar extends Component {
     );
   }
 }
+
+export default DraggableTabbar;

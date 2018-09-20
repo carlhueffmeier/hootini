@@ -5,9 +5,19 @@ import gql from 'graphql-tag';
 import DownshiftInput from './DownshiftInput';
 import { Label, Item } from './styles/FormStyles';
 
+const SEARCH_NOTETYPES_QUERY = gql`
+  query allNoteTypes($name: String!) {
+    allNoteTypes(where: { name: $name }) {
+      id
+      slug
+      name
+    }
+  }
+`;
+
 const itemToString = type => type && type.name;
 
-export default class DeckSelect extends Component {
+class NoteTypeSelect extends Component {
   static propTypes = {
     input: object.isRequired,
     meta: object.isRequired
@@ -19,19 +29,9 @@ export default class DeckSelect extends Component {
         {...this.props}
         itemToString={itemToString}
         inputProps={{ placeholder: 'Select a note type' }}
-        renderLabel={({ getLabelProps }) => (
-          <Label {...getLabelProps()}>Type</Label>
-        )}
-        renderMenu={({
-          getItemProps,
-          inputValue,
-          highlightedIndex,
-          selectedItem
-        }) => (
-          <Query
-            query={SEARCH_NOTETYPES}
-            variables={{ name: inputValue || '' }}
-          >
+        renderLabel={({ getLabelProps }) => <Label {...getLabelProps()}>Type</Label>}
+        renderMenu={({ getItemProps, inputValue, highlightedIndex, selectedItem }) => (
+          <Query query={SEARCH_NOTETYPES_QUERY} variables={{ name: inputValue || '' }}>
             {({ loading, error, data: { allNoteTypes = [] } = {} }) => {
               if (loading) {
                 return <li>Loading...</li>;
@@ -60,12 +60,5 @@ export default class DeckSelect extends Component {
   }
 }
 
-const SEARCH_NOTETYPES = gql`
-  query allNoteTypes($name: String!) {
-    allNoteTypes(where: { name: $name }) {
-      id
-      slug
-      name
-    }
-  }
-`;
+export default NoteTypeSelect;
+export { SEARCH_NOTETYPES_QUERY };

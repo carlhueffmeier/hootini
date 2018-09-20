@@ -2,9 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const { getUserIdFromCookie } = require('./helper/utils');
 
 const app = express();
 
@@ -17,17 +17,17 @@ app.use(
 
 app.use(morgan('tiny'));
 app.use(cookieParser());
-// Decode the JWT so we can get the user Id on each request
+
+// Extract the user id and store for this request
 app.use((req, res, next) => {
-  const { token } = req.cookies;
-  if (token) {
-    const { userId } = jwt.verify(token, process.env.APP_SECRET);
-    // Put the userId onto the req for future requests to access
+  const userId = getUserIdFromCookie(req);
+  if (userId) {
     req.userId = userId;
   }
   next();
 });
 
+// If a user id was found, query the user data
 app.use(async (req, res, next) => {
   if (!req.userId) {
     return next();

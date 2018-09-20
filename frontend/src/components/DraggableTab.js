@@ -5,7 +5,7 @@ import { TabbarItem } from './styles/TabStyles';
 import { TabButton } from './styles/ButtonStyles';
 import { correctDraggableOffset } from '../lib/utils';
 
-export default class DraggableTab extends Component {
+class DraggableTab extends Component {
   static propTypes = {
     uniqueKey: string.isRequired,
     index: number.isRequired,
@@ -25,9 +25,7 @@ export default class DraggableTab extends Component {
 
   correctOffset(draggableProps) {
     const { offset } = this.props;
-    return offset
-      ? correctDraggableOffset(draggableProps, offset)
-      : draggableProps;
+    return offset ? correctDraggableOffset(draggableProps, offset) : draggableProps;
   }
 
   render() {
@@ -54,3 +52,5 @@ export default class DraggableTab extends Component {
     );
   }
 }
+
+export default DraggableTab;

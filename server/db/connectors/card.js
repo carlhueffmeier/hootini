@@ -5,7 +5,27 @@ const { checkAuth, createFilter } = require('../authHelper');
 
 function generateCardModel({ user } = {}) {
   const find = (where = {}) => {
+    // deckId: ID
+    // deckSlug: String
+    // dueTime_lt: DateTime
+    // dueTime_gt: DateTime
+    // dueTime_in: [DateTime!]
     checkAuth(user);
+    // Card.aggregate([
+    //   { $where: createFilter({}, user)},
+    //   { $lookup: {
+    //     from: 'deck',
+    //     foreignField: '_id',
+    //     localField: 'deck',
+    //     as: deck
+    //   }},
+    //   {$addFields: {
+    //     deck: {
+    //       $arrayElemAt: ['$deck', 0]
+    //     }
+    //   }},
+    //   { $where: { 'deck.slug'}}
+    // ])
     return Card.find(createFilter(where, user));
   };
 
@@ -13,6 +33,8 @@ function generateCardModel({ user } = {}) {
     checkAuth(user);
     return Card.findOne(createFilter(where, user));
   };
+
+  // const findCards
 
   const review = async ({ id, answer, timeOfReview }) => {
     checkAuth(user);

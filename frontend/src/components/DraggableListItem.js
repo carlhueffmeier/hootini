@@ -14,7 +14,8 @@ const RemoveButton = styled(IconButton)(({ theme }) => ({
   fontSize: '1.4rem',
   color: theme.colors.danger
 }));
-export default class DraggableListItem extends Component {
+
+class DraggableListItem extends Component {
   static propTypes = {
     index: number.isRequired,
     uniqueKey: string.isRequired,
@@ -28,9 +29,7 @@ export default class DraggableListItem extends Component {
 
   correctOffset(draggableProps) {
     const { offset } = this.props;
-    return offset
-      ? correctDraggableOffset(draggableProps, offset)
-      : draggableProps;
+    return offset ? correctDraggableOffset(draggableProps, offset) : draggableProps;
   }
 
   render() {
@@ -57,3 +56,5 @@ export default class DraggableListItem extends Component {
     );
   }
 }
+
+export default DraggableListItem;

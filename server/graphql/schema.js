@@ -1,21 +1,18 @@
 const { gql } = require('apollo-server-express');
 const merge = require('lodash.merge');
 
-// The definitions and resolvers specific to one type live in
-// their respective files
-const { typeDef: User, resolvers: userResolvers } = require('./user');
-const { typeDef: Deck, resolvers: deckResolvers } = require('./deck');
-const { typeDef: Note, resolvers: noteResolvers } = require('./note');
-const { typeDef: FieldDefinition } = require('./fieldDefinition');
-const {
-  typeDef: NoteType,
-  resolvers: noteTypeResolvers
-} = require('./noteType');
-const {
-  typeDef: Template,
-  resolvers: templateResolvers
-} = require('./template');
-const { typeDef: Card, resolvers: cardResolvers } = require('./card');
+// Import type definitions and resolvers for custom scalar types
+const { typeDef: DateTime, resolvers: dateTimeResolvers } = require('./scalars/DateTime');
+
+// Import type definitions and resolvers for all entities
+const { typeDef: User, resolvers: userResolvers } = require('./entities/User');
+const { typeDef: Deck, resolvers: deckResolvers } = require('./entities/Deck');
+const { typeDef: Note, resolvers: noteResolvers } = require('./entities/Note');
+const { typeDef: NoteField } = require('./entities/NoteField');
+const { typeDef: NoteType, resolvers: noteTypeResolvers } = require('./entities/NoteType');
+const { typeDef: FieldDefinition } = require('./entities/FieldDefinition');
+const { typeDef: Template, resolvers: templateResolvers } = require('./entities/Template');
+const { typeDef: Card, resolvers: cardResolvers } = require('./entities/Card');
 
 // These are the queries and mutations not associated with a type
 // Empty for now!
@@ -41,9 +38,11 @@ const schema = {
   typeDefs: [
     Query,
     Mutation,
+    DateTime,
     User,
     FieldDefinition,
     Deck,
+    NoteField,
     Note,
     NoteType,
     Template,
@@ -51,6 +50,7 @@ const schema = {
   ],
   resolvers: merge(
     resolvers,
+    dateTimeResolvers,
     userResolvers,
     deckResolvers,
     noteResolvers,

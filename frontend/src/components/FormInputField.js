@@ -9,7 +9,7 @@ const MetaError = styled('span')(({ theme }) => ({
   color: theme.colors.danger
 }));
 
-export default class FormInputField extends Component {
+class FormInputField extends Component {
   static propTypes = {
     name: string.isRequired,
     label: string
@@ -30,3 +30,5 @@ export default class FormInputField extends Component {
     );
   }
 }
+
+export default FormInputField;

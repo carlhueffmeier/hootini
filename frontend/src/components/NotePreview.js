@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import RenderedTemplate from './RenderedTemplate';
+import RenderedTemplate from './TemplateRenderer';
 import * as typography from '../shared/typography';
 import * as colors from '../shared/colors';
 import { css, getUniqueKey } from '../lib/utils';
@@ -38,7 +38,7 @@ const TabActions = styled('div')({
   padding: '0.5rem'
 });
 
-export default class NotePreview extends Component {
+class NotePreview extends Component {
   static propTypes = {
     templates: PropTypes.array.isRequired,
     values: PropTypes.object,
@@ -75,8 +75,7 @@ export default class NotePreview extends Component {
     this.props.onSelectTab(tab);
   }
 
-  flipCard = () =>
-    this.setState(state => ({ isCardFlipped: !state.isCardFlipped }));
+  flipCard = () => this.setState(state => ({ isCardFlipped: !state.isCardFlipped }));
 
   render() {
     const { templates, values, renderActions } = this.props;
@@ -118,12 +117,12 @@ export default class NotePreview extends Component {
             {isCardFlipped ? 'Hide Answer' : 'Show Answer'}
           </TextButton>
           {renderActions && (
-            <div {...css({ marginLeft: 'auto' })}>
-              {renderActions({ activeTab })}
-            </div>
+            <div {...css({ marginLeft: 'auto' })}>{renderActions({ activeTab })}</div>
           )}
         </TabActions>
       </Card>
     );
   }
 }
+
+export default NotePreview;

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const { setSchemaOptions } = require('../schemaOptions');
 
 const templateSchema = new mongoose.Schema({
   owner: {
@@ -21,4 +22,5 @@ const templateSchema = new mongoose.Schema({
   }
 });
 
+setSchemaOptions(templateSchema);
 module.exports = mongoose.model('Template', templateSchema);

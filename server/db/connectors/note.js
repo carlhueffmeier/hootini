@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Note = mongoose.model('Note');
+const NoteType = mongoose.model('NoteType');
 const Deck = mongoose.model('Deck');
 const Card = mongoose.model('Card');
 const { checkAuth, createFilter, addUserInfo } = require('../authHelper');
@@ -25,9 +26,7 @@ function generateNoteModel({ user } = {}) {
 
   const create = async input => {
     checkAuth(user);
-    const noteType = await NoteType.findOne(
-      createFilter({ id: input.noteType })
-    );
+    const noteType = await NoteType.findOne(createFilter({ id: input.noteType }, user));
     if (!noteType) {
       throw new Error('Note type not found.');
     }
@@ -62,8 +61,7 @@ function generateNoteModel({ user } = {}) {
       note: {
         ...newNote.toObject(),
         deck,
-        noteType,
-        id: newNote._id
+        noteType
       },
       cardsAdded: insertedCards.length
     };

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const { setSchemaOptions } = require('../schemaOptions');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -21,4 +22,5 @@ const userSchema = new mongoose.Schema({
   permissions: [String]
 });
 
+setSchemaOptions(userSchema);
 module.exports = mongoose.model('User', userSchema);

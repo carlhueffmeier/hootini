@@ -5,9 +5,18 @@ import gql from 'graphql-tag';
 import DownshiftInput from './DownshiftInput';
 import { Label, Item } from './styles/FormStyles';
 
+const SEARCH_DECKS_QUERY = gql`
+  query allDecks($name: String!) {
+    allDecks(where: { name: $name }) {
+      id
+      name
+    }
+  }
+`;
+
 const itemToString = deck => deck && deck.name;
 
-export default class DeckSelect extends Component {
+class DeckSelect extends Component {
   static propTypes = {
     input: object.isRequired,
     meta: object.isRequired
@@ -19,16 +28,9 @@ export default class DeckSelect extends Component {
         {...this.props}
         itemToString={itemToString}
         inputProps={{ placeholder: 'Select Deck' }}
-        renderLabel={({ getLabelProps }) => (
-          <Label {...getLabelProps()}>Deck</Label>
-        )}
-        renderMenu={({
-          getItemProps,
-          inputValue,
-          highlightedIndex,
-          selectedItem
-        }) => (
-          <Query query={SEARCH_DECKS} variables={{ name: inputValue || '' }}>
+        renderLabel={({ getLabelProps }) => <Label {...getLabelProps()}>Deck</Label>}
+        renderMenu={({ getItemProps, inputValue, highlightedIndex, selectedItem }) => (
+          <Query query={SEARCH_DECKS_QUERY} variables={{ name: inputValue || '' }}>
             {({ loading, error, data: { allDecks = [] } = {} }) => {
               if (loading) {
                 return <li>Loading...</li>;
@@ -57,11 +59,5 @@ export default class DeckSelect extends Component {
   }
 }
 
-const SEARCH_DECKS = gql`
-  query allDecks($name: String!) {
-    allDecks(where: { name: $name }) {
-      id
-      name
-    }
-  }
-`;
+export default DeckSelect;
+export { SEARCH_DECKS_QUERY };

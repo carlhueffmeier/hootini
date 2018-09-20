@@ -44,6 +44,37 @@ const replaceArrayWithOwnSizeStage = arrayKeys => ({
   )
 });
 
+const populateNoteTypeStages = [
+  {
+    $lookup: {
+      from: 'notetypes',
+      let: { lastNoteType: '$lastNoteType' },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $eq: ['$_id', '$$lastNoteType']
+            }
+          }
+        },
+        {
+          $addFields: {
+            id: '$_id'
+          }
+        }
+      ],
+      as: 'lastNoteType'
+    }
+  },
+  {
+    $addFields: {
+      lastNoteType: {
+        $arrayElemAt: ['$lastNoteType', 0]
+      }
+    }
+  }
+];
+
 function generateDeckModel({ user } = {}) {
   const find = (where = {}) => {
     checkAuth(user);
@@ -52,6 +83,7 @@ function generateDeckModel({ user } = {}) {
       addCardsStage({ as: 'cardsTotal' }),
       addDueCardsStage({ input: '$cardsTotal', output: 'cardsDue' }),
       replaceArrayWithOwnSizeStage(['cardsTotal', 'cardsDue']),
+      ...populateNoteTypeStages,
       // We also need to add the id field for GraphQL
       { $addFields: { id: '$_id' } }
     ]);
@@ -65,6 +97,7 @@ function generateDeckModel({ user } = {}) {
       addCardsStage({ as: 'cardsTotal' }),
       addDueCardsStage({ input: '$cardsTotal', output: 'cardsDue' }),
       replaceArrayWithOwnSizeStage(['cardsTotal', 'cardsDue']),
+      ...populateNoteTypeStages,
       // We also need to add the id field for GraphQL
       { $addFields: { id: '$_id' } }
     ]);

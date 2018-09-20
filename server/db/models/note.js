@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const { setSchemaOptions } = require('../schemaOptions');
 
 // * Remove when note type is removed
 // * Change key when note type key is changed
@@ -28,4 +29,5 @@ const noteSchema = new mongoose.Schema({
   fields: [noteFieldSchema]
 });
 
+setSchemaOptions(noteSchema);
 module.exports = mongoose.model('Note', noteSchema);

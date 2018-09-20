@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  NavContainer,
-  HomeLink,
-  MenuButton,
-  PageTitle
-} from './styles/NavbarStyles';
+import { NavContainer, HomeLink, MenuButton, PageTitle } from './styles/NavbarStyles';
 import { BrandIcon, OptionsIcon } from './Icons';
+import User from './User';
 
-export default class Navbar extends Component {
+class Navbar extends Component {
   static propTypes = {
     title: PropTypes.string,
     onMenuOpen: PropTypes.func
@@ -22,9 +18,19 @@ export default class Navbar extends Component {
   render() {
     return (
       <NavContainer>
-        <HomeLink to="/">
-          <BrandIcon />
-        </HomeLink>
+        <User>
+          {({ data }) =>
+            data && data.me ? (
+              <HomeLink to="/decks">
+                <BrandIcon />
+              </HomeLink>
+            ) : (
+              <HomeLink to="/">
+                <BrandIcon />
+              </HomeLink>
+            )
+          }
+        </User>
         <PageTitle>{this.props.title}</PageTitle>
         <MenuButton onClick={this.props.onMenuOpen}>
           <OptionsIcon />
@@ -33,3 +39,5 @@ export default class Navbar extends Component {
     );
   }
 }
+
+export default Navbar;

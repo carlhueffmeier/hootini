@@ -3,7 +3,7 @@ const Template = mongoose.model('Template');
 const { createFilter, checkAuth } = require('../authHelper');
 const { pluck } = require('../../helper/utils');
 
-function generateTemplateModel() {
+function generateTemplateModel({ user }) {
   const find = (where = {}) => {
     checkAuth(user);
     return Template.find(createFilter(where, user));
@@ -21,7 +21,7 @@ function generateTemplateModel() {
     });
   };
 
-  const upsertMany = async ([templates]) => {
+  const upsertMany = async templates => {
     checkAuth(user);
     const bulkOps = templates.map(
       ({ id: templateId, ...templateData }) =>
@@ -39,14 +39,12 @@ function generateTemplateModel() {
             }
     );
     const bulkWriteResult = await Template.bulkWrite(bulkOps);
-    const insertedIds = pluck('_id', bulkWriteResult.getInsertedIds()).map(
-      mongoose.Types.ObjectId
-    );
+    const insertedIds = pluck('_id', bulkWriteResult.getInsertedIds()).map(mongoose.Types.ObjectId);
     const existingIds = pluck('id', templates).map(mongoose.Types.ObjectId);
     return {
       existingIds,
       insertedIds,
-      allIds: [...insertedIds, existingIds]
+      allIds: [...existingIds, ...insertedIds]
     };
   };
 

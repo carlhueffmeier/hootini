@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const { DEFAULT_INTERVAL } = require('../../helper/scheduler');
+const { setSchemaOptions } = require('../schemaOptions');
 
 // * Cards have to be removed when note is removed
 // * Cards have to be removed when template is removed
@@ -44,4 +45,5 @@ const cardSchema = new mongoose.Schema({
   }
 });
 
+setSchemaOptions(cardSchema);
 module.exports = mongoose.model('Card', cardSchema);

@@ -3,7 +3,7 @@ import { string, object } from 'prop-types';
 import SingleNoteType from './SingleNoteType';
 import NotePreview from './NotePreview';
 
-export default class NotePreviewWithQuery extends Component {
+class NotePreviewWithQuery extends Component {
   static propTypes = {
     noteTypeId: string.isRequired,
     values: object.isRequired
@@ -20,7 +20,7 @@ export default class NotePreviewWithQuery extends Component {
           if (error) {
             return 'Error loading preview';
           }
-          const provided = { noteType: data.NoteType };
+          const provided = { noteType: data.noteType };
           return (
             <NotePreview
               templates={provided.noteType.templates}
@@ -35,3 +35,5 @@ export default class NotePreviewWithQuery extends Component {
     );
   }
 }
+
+export default NotePreviewWithQuery;

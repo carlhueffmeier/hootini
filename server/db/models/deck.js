@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const slug = require('slugs');
 mongoose.Promise = global.Promise;
+const { setSchemaOptions } = require('../schemaOptions');
 
 // When deck is removed:
 // * Remove all associated notes, cards
@@ -51,4 +52,5 @@ deckSchema.pre('save', async function(next) {
   next();
 });
 
+setSchemaOptions(deckSchema);
 module.exports = mongoose.model('Deck', deckSchema);

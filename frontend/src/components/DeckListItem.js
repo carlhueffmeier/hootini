@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { string, number } from 'prop-types';
 import { Container, DeckName, Info, InfoRow } from './styles/DeckListStyles';
 
-export default class DeckListItem extends Component {
+class DeckListItem extends Component {
   static propTypes = {
     name: string.isRequired,
     dueCount: number.isRequired,
@@ -22,3 +22,5 @@ export default class DeckListItem extends Component {
     );
   }
 }
+
+export default DeckListItem;

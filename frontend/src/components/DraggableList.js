@@ -4,7 +4,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import shortid from 'shortid';
 import { StyledList } from './styles/DraggableListStyles';
 
-export default class DraggableList extends Component {
+class DraggableList extends Component {
   static propTypes = {
     onDragEnd: func.isRequired,
     renderTabs: node,
@@ -21,10 +21,7 @@ export default class DraggableList extends Component {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={droppableId}>
           {provided => (
-            <StyledList
-              {...provided.droppableProps}
-              innerRef={provided.innerRef}
-            >
+            <StyledList {...provided.droppableProps} innerRef={provided.innerRef}>
               {children(provided)}
             </StyledList>
           )}
@@ -33,3 +30,5 @@ export default class DraggableList extends Component {
     );
   }
 }
+
+export default DraggableList;

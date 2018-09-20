@@ -5,19 +5,17 @@ const { createFilter, checkAuth } = require('../authHelper');
 const populateOptions = [{ path: 'fieldDefinitions' }, { path: 'templates' }];
 
 function generateNoteTypeModel({ user }) {
-  const find = (where = {}) => {
+  const find = async (where = {}) => {
     checkAuth(user);
     return NoteType.find(createFilter(where, user)).populate(populateOptions);
   };
 
-  const findOne = (where = {}) => {
+  const findOne = async (where = {}) => {
     checkAuth(user);
-    return NoteType.findOne(createFilter(where, user)).populate(
-      populateOptions
-    );
+    return NoteType.findOne(createFilter(where, user)).populate(populateOptions);
   };
 
-  const findOneAndUpdate = (where = {}) => {
+  const findOneAndUpdate = (where = {}, update) => {
     checkAuth(user);
     // * If templates were removed -> remove all notes with that template (high priority)
     // * If templates were added -> add new cards with that template (ask the user for confirmation -> maybe separate action like `generateCards`)

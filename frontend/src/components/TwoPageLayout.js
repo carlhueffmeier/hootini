@@ -50,16 +50,10 @@ const BottomBar = styled('div')({
   }
 });
 
-export default class TwoPageLayout extends Component {
-  static Left = ({ children, ...provided }) => (
-    <Fragment>{children(provided)}</Fragment>
-  );
-  static Right = ({ children, ...provided }) => (
-    <Fragment>{children(provided)}</Fragment>
-  );
-  static Bottom = ({ children, ...provided }) => (
-    <Fragment>{children(provided)}</Fragment>
-  );
+class TwoPageLayout extends Component {
+  static Left = ({ children, ...provided }) => <Fragment>{children(provided)}</Fragment>;
+  static Right = ({ children, ...provided }) => <Fragment>{children(provided)}</Fragment>;
+  static Bottom = ({ children, ...provided }) => <Fragment>{children(provided)}</Fragment>;
 
   toggleShift = () => {
     this.setState(state => ({ isShifted: !state.isShifted }));
@@ -71,19 +65,16 @@ export default class TwoPageLayout extends Component {
   };
 
   renderTypeOf = (type, providedFromRender) => {
-    const filteredComponents = React.Children.map(
-      this.props.children,
-      child => {
-        if (child.type !== type) {
-          return null;
-        }
-        const clone = React.cloneElement(child, {
-          ...this.state,
-          ...providedFromRender
-        });
-        return clone;
+    const filteredComponents = React.Children.map(this.props.children, child => {
+      if (child.type !== type) {
+        return null;
       }
-    );
+      const clone = React.cloneElement(child, {
+        ...this.state,
+        ...providedFromRender
+      });
+      return clone;
+    });
     return filteredComponents[0] ? filteredComponents[0] : null;
   };
 
@@ -95,19 +86,11 @@ export default class TwoPageLayout extends Component {
           const isShiftable = sizes.width < BREAKPOINT;
           return (
             <Fragment>
-              <TwoPageContainer
-                pose={isShiftable && isShifted ? 'preview' : 'input'}
-              >
-                <SinglePage>
-                  {this.renderTypeOf(TwoPageLayout.Left, { isShiftable })}
-                </SinglePage>
-                <SinglePage>
-                  {this.renderTypeOf(TwoPageLayout.Right, { isShiftable })}
-                </SinglePage>
+              <TwoPageContainer pose={isShiftable && isShifted ? 'preview' : 'input'}>
+                <SinglePage>{this.renderTypeOf(TwoPageLayout.Left, { isShiftable })}</SinglePage>
+                <SinglePage>{this.renderTypeOf(TwoPageLayout.Right, { isShiftable })}</SinglePage>
               </TwoPageContainer>
-              <BottomBar>
-                {this.renderTypeOf(TwoPageLayout.Bottom, { isShiftable })}
-              </BottomBar>
+              <BottomBar>{this.renderTypeOf(TwoPageLayout.Bottom, { isShiftable })}</BottomBar>
             </Fragment>
           );
         }}
@@ -115,3 +98,5 @@ export default class TwoPageLayout extends Component {
     );
   }
 }
+
+export default TwoPageLayout;

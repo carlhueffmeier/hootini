@@ -3,7 +3,7 @@ import { string } from 'prop-types';
 import { FormSpy } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 
-export default class ConnectedFieldArray extends Component {
+class ConnectedFieldArray extends Component {
   static propTypes = {
     name: string.isRequired
   };
@@ -13,11 +13,11 @@ export default class ConnectedFieldArray extends Component {
     return (
       <FormSpy subscription={{ values: true }}>
         {({ values }) => (
-          <FieldArray name={name}>
-            {({ fields }) => children({ values, fields })}
-          </FieldArray>
+          <FieldArray name={name}>{({ fields }) => children({ values, fields })}</FieldArray>
         )}
       </FormSpy>
     );
   }
 }
+
+export default ConnectedFieldArray;

@@ -5,7 +5,7 @@ import { ArrowIcon } from './Icons';
 import { css } from '../lib/utils';
 import { Input, ControllerButton, Menu } from './styles/FormStyles';
 
-export default class DownshiftInput extends Component {
+class DownshiftInput extends Component {
   static propTypes = {
     input: object.isRequired,
     meta: object.isRequired,
@@ -78,3 +78,5 @@ export default class DownshiftInput extends Component {
     );
   }
 }
+
+export default DownshiftInput;

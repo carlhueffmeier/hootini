@@ -9,8 +9,8 @@ const SingleNoteType = ({ id, children }) => (
 );
 
 const NOTE_TYPE_QUERY = gql`
-  query NoteType($id: ID!) {
-    NoteType(where: { id: $id }) {
+  query noteType($id: ID!) {
+    noteType(where: { id: $id }) {
       id
       slug
       name
