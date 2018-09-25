@@ -14,7 +14,7 @@ const Card = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   borderRadius: 2,
   height: '100%',
-  background: theme.colors.backgroundLight
+  background: theme.colors.backgroundLight1
 }));
 
 const CardTitle = styled('h3')({

@@ -1,31 +1,25 @@
 import React, { Component, Fragment } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import styled from 'react-emotion';
 import PleaseSignIn from '../components/PleaseSignIn';
+import Navbar from '../components/Navbar';
+import Review from '../components/Review';
 
 const DUE_CARDS_QUERY = gql`
-  query dueCards($slug: String!) {
-    dueCards(where: { deckSlug: $slug }) {
+  query allCards($deckSlug: String!, $when: DateTime!) {
+    allCards(where: { deckSlug: $deckSlug, dueTime_lt: $when }) {
       id
       fields {
         key
         value
       }
-      noteType {
+      template {
         front
         back
       }
     }
   }
 `;
-
-const Main = styled('main')({
-  padding: '0 2.8rem 2rem',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
-});
 
 const Loading = () => (
   <Fragment>
@@ -39,23 +33,17 @@ class ReviewPage extends Component {
     const { slug } = this.props;
     return (
       <PleaseSignIn>
-        <Query query={DUE_CARDS_QUERY} variables={{ deckSlug: slug }}>
+        <Query query={DUE_CARDS_QUERY} variables={{ deckSlug: slug, when: Date.now() }}>
           {({ data, error, loading }) => {
             if (loading) {
               return <Loading />;
             }
             if (error) {
-              return <li>Error! {error.message}</li>;
+              return <p>Error! {error.message}</p>;
             }
-            const { Deck } = data;
-            return (
-              <Fragment>
-                <Main>
-                  <DeckInfo deck={Deck} />
-                  <DeckActions deck={Deck} />
-                </Main>
-              </Fragment>
-            );
+            const { allCards } = data;
+            console.log('all cards', allCards);
+            return <Review cards={allCards} deckSlug={slug} />;
           }}
         </Query>
       </PleaseSignIn>

@@ -77,7 +77,9 @@ class NoteTypeForm extends Component {
               <TwoPageLayout.Bottom>
                 {({ isShiftable, isShifted, toggleShift }) => (
                   <Fragment>
-                    <CancelButton type="button">Cancel</CancelButton>
+                    <CancelButton type="button" onClick={() => window.history.back()}>
+                      Go back
+                    </CancelButton>
                     {isShiftable && (
                       <PreviewButton type="button" onClick={toggleShift}>
                         {isShifted ? 'Input' : 'Preview'}

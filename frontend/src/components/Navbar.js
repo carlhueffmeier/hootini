@@ -11,7 +11,7 @@ class Navbar extends Component {
   };
 
   static defaultProps = {
-    title: 'Mnemo',
+    title: 'hootini',
     onMenuOpen: () => console.log('open menu')
   };
 

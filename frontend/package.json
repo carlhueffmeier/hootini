@@ -1,5 +1,5 @@
 {
-  "name": "mnemo-frontend",
+  "name": "hootini-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -39,12 +39,15 @@
     "unist-util-visit": "^1.4.0"
   },
   "scripts": {
+    "now-start": "cd build && serve -s ./",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "now && now alias"
   },
   "devDependencies": {
+    "serve": "^10.0.2",
     "unist-util-inspect": "^4.1.3"
   }
 }

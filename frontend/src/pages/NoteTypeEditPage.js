@@ -58,7 +58,7 @@ class EditNoteTypePage extends Component {
               return <Loading />;
             }
             if (error) {
-              return <li>Error! {error.message}</li>;
+              return <p>Error! {error.message}</p>;
             }
             const { noteType } = data;
             return (

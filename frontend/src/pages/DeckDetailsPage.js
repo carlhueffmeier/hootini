@@ -3,8 +3,8 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'react-emotion';
 import Navbar from '../components/Navbar';
-import DeckActions from '../components/DeckActions';
-import DeckInfo from '../components/DeckInfo';
+import DeckActions from '../components/DeckDetailsActions';
+import DeckInfo from '../components/DeckDetailsInfo';
 import PleaseSignIn from '../components/PleaseSignIn';
 
 const DECK_QUERY = gql`
@@ -13,6 +13,8 @@ const DECK_QUERY = gql`
       id
       slug
       name
+      cardsTotal
+      cardsDue
       lastNoteType {
         id
         slug
@@ -47,7 +49,7 @@ class DeckDetailsPage extends Component {
               return <Loading />;
             }
             if (error) {
-              return <li>Error! {error.message}</li>;
+              return <p>Error! {error.message}</p>;
             }
             const { deck } = data;
             return (

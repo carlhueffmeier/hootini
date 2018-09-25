@@ -21,7 +21,7 @@ const Header = styled('div')(({ theme }) => ({
   width: '100%',
   maxWidth: '1000px',
   margin: '0 auto',
-  color: theme.colors.primary,
+  color: theme.colors.brand,
   alignItems: 'baseline'
 }));
 
@@ -46,10 +46,17 @@ const CTA = styled('div')(({ theme }) => ({
 
 const CTAButton = styled(Button)(({ theme }) => ({
   fontSize: '1.3rem',
+  position: 'relative',
   letterSpacing: '0.16rem',
   height: '4rem',
-  padding: '0 2rem',
-  marginBottom: '1rem'
+  padding: '0 2.5rem',
+  boxShadow: 'none',
+  borderRadius: '2rem',
+  marginBottom: '0.8rem',
+  background: theme.gradients.candy,
+  '&:hover, &:focus': {
+    boxShadow: 'none'
+  }
 }));
 
 class Landing extends Component {
@@ -58,7 +65,7 @@ class Landing extends Component {
       <Container>
         <Header>
           <BrandIcon />
-          <Title>mnemo</Title>
+          <Title>hootini</Title>
         </Header>
         <Tagline>Remember anything, forever.</Tagline>
         <CTA>

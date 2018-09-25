@@ -15,7 +15,7 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   width: '80vw',
   maxWidth: '30rem',
   display: 'flex',
-  background: theme.colors.backgroundLight,
+  background: theme.colors.backgroundLight1,
   flexDirection: 'column',
   borderRadius: 2,
   boxShadow: '0px 19px 38px rgba(0, 0, 0, 0.3), 0px 15px 12px rgba(0, 0, 0, 0.22)',

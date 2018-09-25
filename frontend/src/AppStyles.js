@@ -1,8 +1,10 @@
 import { injectGlobal } from 'emotion';
-import * as typography from './shared/typography';
+import * as breakpoints from './shared/breakpoints';
 import * as colors from './shared/colors';
-import * as timings from './shared/timings';
 import * as dimensions from './shared/dimensions';
+import * as gradients from './shared/gradients';
+import * as timings from './shared/timings';
+import * as typography from './shared/typography';
 
 injectGlobal`
   html {
@@ -15,7 +17,7 @@ injectGlobal`
     font-family: 'Roboto', sans-serif;
     width: 100%;
     min-height: 100%;
-    background: ${colors.backgroundLight};
+    background: ${colors.backgroundLight2};
   }
 
   *,
@@ -26,10 +28,12 @@ injectGlobal`
 `;
 
 const theme = {
-  typography,
+  breakpoints,
   colors,
+  dimensions,
+  gradients,
   timings,
-  dimensions
+  typography
 };
 
 export default theme;

@@ -1,14 +1,13 @@
 {
-  "name": "mnemo",
+  "name": "hootini",
   "version": "0.1.0",
   "private": true,
-  "repository": "github:carlhueffmeier/mnemo",
+  "repository": "github:carlhueffmeier/hootini",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:server": "cd server && npm run prod",
-    "watch:server": "cd server && npm run watch",
-    "watch:frontend": "cd frontend && npm run start",
-    "watch": "run-p watch:server watch:frontend"
+    "start:backend": "cd backend && npm start",
+    "watch:frontend": "cd frontend && yarn start",
+    "start": "run-p watch:backend watch:frontend"
   },
   "author": "Carl Hüffmeier",
   "license": "MIT",

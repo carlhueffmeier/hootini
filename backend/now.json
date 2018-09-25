@@ -1,0 +1,15 @@
+{
+  "name": "hootini-backend",
+  "alias": "hootini-backend",
+  "env": {
+    "MONGO_URL": "@hootini-mongo-url",
+    "ENGINE_API_KEY": "@engine-api-key",
+    "APP_SECRET": "@hootini-app-secret",
+    "FRONTEND_URL": "https://hootini-frontend.now.sh",
+    "MAIL_HOST": "smtp.mailtrap.io",
+    "MAIL_PORT": "2525",
+    "MAIL_USER": "@hootini-mail-user",
+    "MAIL_PASS": "@hootini-mail-pass",
+    "MAIL_FROM": "support@hootini.com"
+  }
+}

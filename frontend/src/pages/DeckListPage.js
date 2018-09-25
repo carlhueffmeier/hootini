@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar';
 import AddDeckButton from '../components/DeckCreateButton';
 import PleaseSignIn from '../components/PleaseSignIn';
 
-const DECKS_QUERY = gql`
+const ALL_DECKS_QUERY = gql`
   query allDecks {
     allDecks {
       slug
@@ -37,13 +37,13 @@ class DeckListPage extends Component {
         <Navbar title="All Decks" />
         <Main>
           <PleaseSignIn>
-            <Query query={DECKS_QUERY}>
+            <Query query={ALL_DECKS_QUERY}>
               {({ data, error, loading }) => {
                 if (loading) {
                   return 'Loading list of decks...';
                 }
                 if (error) {
-                  return <li>Error! {error.message}</li>;
+                  return <p>Error! {error.message}</p>;
                 }
                 const { allDecks } = data;
                 return (
@@ -51,7 +51,12 @@ class DeckListPage extends Component {
                     {allDecks.length > 0 ? (
                       <DeckList decks={allDecks} />
                     ) : (
-                      <Message>No decks yet 🐥</Message>
+                      <Message>
+                        No decks yet{' '}
+                        <span role="img" aria-label="Baby Chick">
+                          🐥
+                        </span>
+                      </Message>
                     )}
                     <AddDeckButton />
                   </Fragment>
@@ -66,4 +71,4 @@ class DeckListPage extends Component {
 }
 
 export default DeckListPage;
-export { DECKS_QUERY };
+export { ALL_DECKS_QUERY };

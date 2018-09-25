@@ -17,7 +17,7 @@ class DeckCreateForm extends Component {
   handleSubmit = async (createDeck, formData) => {
     const {
       data: {
-        newDeck: { slug }
+        createDeck: { slug }
       }
     } = await createDeck({ variables: formData });
     // Wait until the refetch finishes and go to new deck's page

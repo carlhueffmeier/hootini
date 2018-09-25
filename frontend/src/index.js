@@ -6,7 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import App from './App';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:5001/graphql',
+  uri: 'https://hootini-backend.now.sh/graphql',
   credentials: 'include'
 });
 

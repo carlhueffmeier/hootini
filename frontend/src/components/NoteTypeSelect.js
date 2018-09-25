@@ -37,7 +37,7 @@ class NoteTypeSelect extends Component {
                 return <li>Loading...</li>;
               }
               if (error) {
-                return <li>Error! {error.message}</li>;
+                return <p>Error! {error.message}</p>;
               }
               return allNoteTypes.map((noteType, index) => (
                 <Item

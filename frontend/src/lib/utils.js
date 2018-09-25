@@ -3,22 +3,24 @@ import shortid from 'shortid';
 
 // General Utilities
 function curry(fn) {
-  return (...args) =>
-    args.length >= fn.length ? fn(...args) : curry(fn.bind(null, ...args));
+  return (...args) => (args.length >= fn.length ? fn(...args) : curry(fn.bind(null, ...args)));
 }
 
 function pick(keysToPick, obj) {
   return keysToPick.reduce(
-    (target, key) =>
-      obj.hasOwnProperty(key) ? { ...target, [key]: obj[key] } : target,
+    (target, key) => (obj.hasOwnProperty(key) ? { ...target, [key]: obj[key] } : target),
     {}
   );
 }
 
 const curriedPick = curry(pick);
 
-const wait = (timeInMs = 0) =>
-  new Promise(resolve => setTimeout(resolve, timeInMs));
+const wait = (timeInMs = 0) => new Promise(resolve => setTimeout(resolve, timeInMs));
+
+// min: inclusive --- max: exclusive
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 
 // Templating
 function renderTemplate(template, fields) {
@@ -40,10 +42,7 @@ function handleDragInFieldArray({ dragInfo, fields }) {
     // Don't do anything if dragged outside the tab bar
     return false;
   }
-  if (
-    destination.droppableId === source.droppableId &&
-    destination.index === source.index
-  ) {
+  if (destination.droppableId === source.droppableId && destination.index === source.index) {
     // Don't do anything if position is unchanged
     return false;
   }
@@ -98,6 +97,7 @@ export {
   curry,
   curriedPick as pick,
   getUniqueKey,
+  randomInteger,
   renderTemplate,
   handleDragInFieldArray,
   correctDraggableOffset

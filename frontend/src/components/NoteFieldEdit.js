@@ -43,7 +43,7 @@ class NoteFieldEdit extends Component {
             return 'Loading note type...';
           }
           if (error) {
-            return <li>Error! {error.message}</li>;
+            return <p>Error! {error.message}</p>;
           }
           const { noteType } = data;
           return noteType.fieldDefinitions.map(({ key, type }) => (

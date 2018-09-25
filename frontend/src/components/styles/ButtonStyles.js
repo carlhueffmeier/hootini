@@ -22,20 +22,16 @@ const Button = styled(BaseButton)(
   ({ theme }) => ({
     color: theme.colors.textLight,
     background: theme.colors.primary,
-    opacity: 0.8,
     minWidth: '4rem',
     height: '2.25rem',
     padding: '0 1rem',
-    boxShadow:
-      '0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12)',
+    boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12)',
     '&:focus, &:hover': {
       outline: 'none',
-      boxShadow:
-        '0px 4px 4px rgba(0, 0, 0, 0.24), 0px 0px 4px rgba(0, 0, 0, 0.12)'
+      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.24), 0px 0px 4px rgba(0, 0, 0, 0.12)'
     },
     '&:active': {
-      boxShadow:
-        '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
+      boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
     },
     '&:disabled': {
       boxShadow: 'none',
@@ -143,6 +139,35 @@ const OutlinedButton = styled(Button)(
   }
 );
 
+const FlatButton = styled(Button)(
+  ({ theme }) => ({
+    boxShadow: 'none',
+    '&:active, &:focus': {
+      background: `${theme.colors.primary}33`
+    },
+    '&:hover, &:focus': {
+      border: '2px solid grey'
+    },
+    '&:active, &:focus, &:hover': {
+      boxShadow: 'none'
+    },
+    '&:disabled': {
+      background: theme.colors.lightGrey3,
+      color: theme.colors.textDark
+    }
+  }),
+  ({ theme, textColor, backgroundColor }) => {
+    const styles = [];
+    if (textColor) {
+      styles.push({ color: theme.colors[textColor] });
+    }
+    if (backgroundColor) {
+      styles.push({ backgroundColor: theme.colors[backgroundColor] });
+    }
+    return styles;
+  }
+);
+
 const TabButton = styled(Button)(({ theme, isActive }) => ({
   color: isActive ? theme.colors.primary : theme.colors.textDark,
   borderColor: isActive ? theme.colors.primary : 'transparent',
@@ -193,9 +218,7 @@ const IconButton = styled('button')(({ theme, color, padding }) => ({
 const RoundIconButton = styled('button')(({ theme, backgroundColor }) => ({
   opacity: 0.5,
   color: 'white',
-  background: backgroundColor
-    ? theme.colors[backgroundColor]
-    : theme.colors.primary,
+  background: backgroundColor ? theme.colors[backgroundColor] : theme.colors.primary,
   transition: `all 200ms ${theme.timings.easeOutCirc}`,
   cursor: 'pointer',
   height: '1rem',
@@ -227,9 +250,7 @@ const FloatingActionButton = styled('button')(({ theme, backgroundColor }) => ({
   right: '2rem',
   color: 'white',
   opacity: 0.9,
-  background: backgroundColor
-    ? theme.colors[backgroundColor]
-    : theme.colors.primary,
+  background: backgroundColor ? theme.colors[backgroundColor] : theme.colors.primary,
   transition: `all 200ms ${theme.timings.easeOutCirc}`,
   cursor: 'pointer',
   height: '3.5rem',
@@ -242,13 +263,11 @@ const FloatingActionButton = styled('button')(({ theme, backgroundColor }) => ({
   fontSize: '1.8rem',
   boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)',
   '&:active:active': {
-    boxShadow:
-      '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
+    boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.12)'
   },
   '&:focus, &:hover': {
     opacity: 1,
-    boxShadow:
-      '0px 14px 14px rgba(0, 0, 0, 0.237602), 0px 0px 14px rgba(0, 0, 0, 0.12)'
+    boxShadow: '0px 14px 14px rgba(0, 0, 0, 0.237602), 0px 0px 14px rgba(0, 0, 0, 0.12)'
   },
   '&:focus': {
     outline: 'none'
@@ -260,6 +279,7 @@ const FloatingActionButton = styled('button')(({ theme, backgroundColor }) => ({
 
 export {
   Button,
+  FlatButton,
   IconButton,
   TextButton,
   OutlinedButton,

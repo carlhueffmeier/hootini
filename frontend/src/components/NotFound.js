@@ -29,7 +29,12 @@ class NotFound extends Component {
       <Container>
         <Navbar title="Not found" />
         <Main>
-          <Message>Page Not Found 👻</Message>
+          <Message>
+            Page Not Found{' '}
+            <span role="img" aria-label="ghost">
+              👻
+            </span>
+          </Message>
         </Main>
       </Container>
     );
