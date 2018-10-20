@@ -37,14 +37,15 @@ class DeckDetailsActions extends Component {
     const { deck } = this.props;
     return (
       <StyledDeckActions>
-        {deck.cardsDue === 0 && (
-          <Message>
-            All reviews done{' '}
-            <span role="img" aria-label="thumbs up">
-              👍
-            </span>
-          </Message>
-        )}
+        {deck.cardsTotal > 0 &&
+          deck.cardsDue === 0 && (
+            <Message>
+              All reviews done{' '}
+              <span role="img" aria-label="thumbs up">
+                👍
+              </span>
+            </Message>
+          )}
         <OutlinedButton large onClick={this.handleAddNote}>
           Add Note
         </OutlinedButton>

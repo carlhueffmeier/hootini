@@ -42,7 +42,6 @@ class ReviewPage extends Component {
               return <p>Error! {error.message}</p>;
             }
             const { allCards } = data;
-            console.log('all cards', allCards);
             return <Review cards={allCards} deckSlug={slug} />;
           }}
         </Query>

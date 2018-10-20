@@ -8,8 +8,8 @@ const UPDATE_NOTE_TYPE_MUTATION = gql`
   mutation updateNoteTypeAndUpsertTemplates(
     $id: ID!
     $name: String
-    $fieldDefinitions: [UpsertedFieldDefinition!]
-    $templates: [UpsertedTemplate!]
+    $fieldDefinitions: [FieldDefinitionUpsertInput!]
+    $templates: [TemplateUpsertInput!]
   ) {
     updateNoteTypeAndUpsertTemplates(
       data: { id: $id, name: $name, fieldDefinitions: $fieldDefinitions, templates: $templates }

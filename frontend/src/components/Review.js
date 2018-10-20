@@ -30,6 +30,12 @@ const FlipButton = styled(OutlinedButton)({
   bottom: '5rem'
 });
 
+const CardStyles = styled('div')({
+  '& p': {
+    fontSize: '2rem'
+  }
+});
+
 class Review extends Component {
   static propTypes = {
     cards: array
@@ -86,7 +92,9 @@ class Review extends Component {
     );
     return (
       <Container>
-        <TemplateRenderer template={template} values={keyValuePairs} showAnswer={isAnswerShown} />
+        <CardStyles>
+          <TemplateRenderer template={template} values={keyValuePairs} showAnswer={isAnswerShown} />
+        </CardStyles>
         {isAnswerShown ? (
           <Mutation
             mutation={REVIEW_CARD_MUTATION}

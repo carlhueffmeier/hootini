@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { number, shape } from 'prop-types';
 import styled from 'react-emotion';
 
@@ -14,6 +14,11 @@ const Stat = styled('h3')(({ theme }) => ({
   margin: '1rem 0'
 }));
 
+const Message = styled('h3')(({ theme }) => ({
+  ...theme.typography.h4,
+  textAlign: 'center'
+}));
+
 class DeckDetailsInfo extends Component {
   static propTypes = {
     deck: shape({
@@ -25,8 +30,19 @@ class DeckDetailsInfo extends Component {
     const { deck } = this.props;
     return (
       <StyledDeckInfo>
-        <Stat>TOTAL: {deck.cardsTotal}</Stat>
-        <Stat>DUE: {deck.cardsDue}</Stat>
+        {deck.cardsTotal === 0 ? (
+          <Message>
+            Go ahead and add some notes{' '}
+            <span role="img" aria-label="sparkle">
+              ✨
+            </span>
+          </Message>
+        ) : (
+          <Fragment>
+            <Stat>TOTAL: {deck.cardsTotal}</Stat>
+            <Stat>DUE: {deck.cardsDue}</Stat>
+          </Fragment>
+        )}
       </StyledDeckInfo>
     );
   }

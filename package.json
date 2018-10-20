@@ -5,9 +5,9 @@
   "repository": "github:carlhueffmeier/hootini",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:backend": "cd backend && npm start",
-    "watch:frontend": "cd frontend && yarn start",
-    "start": "run-p watch:backend watch:frontend"
+    "start:backend": "cd backend && npm run watch",
+    "start:frontend": "cd frontend && yarn start",
+    "start": "run-p start:backend start:frontend"
   },
   "author": "Carl Hüffmeier",
   "license": "MIT",
