@@ -12,7 +12,7 @@
     "start:server": "cd server && npm run watch",
     "start:client": "cd client && yarn start",
     "deploy": "run-p deploy:server deploy:client",
-    "deploy:server": "cd server && npm run watch",
+    "deploy:server": "cd server && npm run deploy",
     "deploy:client": "cd client && yarn run deploy"
   },
   "devDependencies": {
