@@ -1,6 +1,7 @@
 {
   "name": "hootini-server",
   "version": "0.1.0",
+  "description": "GraphQL server for the flashcard learning application hootini",
   "repository": "github:carlhueffmeier/hootini",
   "author": "Carl Hüffmeier",
   "license": "MIT",

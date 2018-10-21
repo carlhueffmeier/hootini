@@ -1,6 +1,7 @@
 {
   "name": "hootini",
   "version": "0.1.0",
+  "description": "Flashcard learning application with a flexible templating engine",
   "repository": "github:carlhueffmeier/hootini",
   "author": "Carl Hüffmeier",
   "license": "MIT",

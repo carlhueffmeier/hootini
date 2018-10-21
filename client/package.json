@@ -1,6 +1,7 @@
 {
   "name": "hootini-client",
   "version": "0.1.0",
+  "description": "Web client for the flashcard learning application hootini",
   "repository": "github:carlhueffmeier/hootini",
   "author": "Carl Hüffmeier",
   "license": "MIT",
