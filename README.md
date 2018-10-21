@@ -1,5 +1,8 @@
 <h1>
-<img src="https://user-images.githubusercontent.com/27681148/47261359-d57e2b80-d4cd-11e8-841a-b9352bfce657.png" alt="Hootini" height=24>&nbsp;Hootini&nbsp;
+  <a href="https://hootini.com">
+    <img src="https://user-images.githubusercontent.com/27681148/47261359-d57e2b80-d4cd-11e8-841a-b9352bfce657.png" alt="Hootini" height=28>&
+  </a>
+  nbsp;Hootini&nbsp;
 </h1>
 
 Flashcard learning application with a flexible templating engine.
@@ -47,7 +50,7 @@ This is what sets _Hootini_ apart:
       <td><img width="240" alt="You can add your own note types and add several templates" src="https://user-images.githubusercontent.com/27681148/47261462-1d05b700-d4d0-11e8-99fc-57293c9bdf27.png"></td>
     </tr>
     <tr>
-      <td colspan=2><img width="480" alt="The same edit note screen on a desktop" src="https://user-images.githubusercontent.com/27681148/47261512-204d7280-d4d1-11e8-95de-308003e1cbe6.png">
+      <td align="center" colspan=2><img width="480" alt="The edit note screen on a larger screen" src="https://user-images.githubusercontent.com/27681148/47268867-86c8a400-d556-11e8-9aa4-8db953d06aca.png">
       </td>
     </tr>
   </table>
