@@ -1,16 +1,15 @@
 {
-  "name": "hootini-backend",
+  "name": "hootini-server",
   "version": "0.1.0",
-  "private": true,
+  "repository": "github:carlhueffmeier/hootini",
+  "author": "Carl Hüffmeier",
+  "license": "MIT",
   "main": "start.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon start.js",
     "start": "node start.js",
     "deploy": "now --docker -e PORT=443 -e NODE_ENV=production && now alias"
   },
-  "author": "Carl Hüffmeier",
-  "license": "MIT",
   "dependencies": {
     "apollo-server-express": "^2.0.0",
     "bcryptjs": "^2.4.3",

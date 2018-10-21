@@ -14,8 +14,7 @@ const { typeDef: FieldDefinition } = require('./entities/FieldDefinition');
 const { typeDef: Template, resolvers: templateResolvers } = require('./entities/Template');
 const { typeDef: Card, resolvers: cardResolvers } = require('./entities/Card');
 
-// These are the queries and mutations not associated with a type
-// Empty for now!
+// These base Query & Mutation types get extended in the type definitions
 const Query = gql`
   type Query {
     _empty: String
@@ -28,36 +27,32 @@ const Mutation = gql`
   }
 `;
 
-const resolvers = {};
-
-// == Putting everything together ==
 // The ApolloServer constructor conveniently takes an array of
-// type definitions.
-// For the resolvers, we have to combine them via object deep merge.
-const schema = {
-  typeDefs: [
-    Query,
-    Mutation,
-    DateTime,
-    User,
-    FieldDefinition,
-    Deck,
-    NoteField,
-    Note,
-    NoteType,
-    Template,
-    Card
-  ],
-  resolvers: merge(
-    resolvers,
-    dateTimeResolvers,
-    userResolvers,
-    deckResolvers,
-    noteResolvers,
-    noteTypeResolvers,
-    templateResolvers,
-    cardResolvers
-  )
-};
+// type definitions
+const typeDefs = [
+  Query,
+  Mutation,
+  DateTime,
+  User,
+  FieldDefinition,
+  Deck,
+  NoteField,
+  Note,
+  NoteType,
+  Template,
+  Card
+];
 
-module.exports = schema;
+// For the resolvers, we have to combine them via object deep merge
+const resolvers = merge(
+  dateTimeResolvers,
+  userResolvers,
+  deckResolvers,
+  noteResolvers,
+  noteTypeResolvers,
+  templateResolvers,
+  cardResolvers
+);
+
+exports.typeDefs = typeDefs;
+exports.resolvers = resolvers;

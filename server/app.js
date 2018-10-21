@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const apolloServer = require('./apollo');
 const { getUserIdFromCookie } = require('./helper/utils');
 
 const app = express();
@@ -10,7 +11,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL
+    origin: process.env.CLIENT_URL
   })
 );
 
@@ -34,5 +35,9 @@ app.use(async (req, res, next) => {
   req.user = user;
   next();
 });
+
+// We have to turn off 'cors' to prevent apollo from overwriting origin headers
+// https://github.com/apollographql/apollo-server/blob/79191397faa3f544e9241faa8e9110014bf00e43/packages/apollo-server-express/src/ApolloServer.ts#L127
+apolloServer.applyMiddleware({ app, cors: false });
 
 module.exports = app;

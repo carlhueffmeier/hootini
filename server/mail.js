@@ -15,7 +15,7 @@ const makeResetMail = ({ name, resetToken }) => {
     Hi ${name}!
     <p>
       We received a password reset request for your account.<br>
-      <a href="${process.env.FRONTEND_URL}/reset/${resetToken}">Click Here to Reset</a><br>
+      <a href="${process.env.CLIENT_URL}/reset/${resetToken}">Click Here to Reset</a><br>
       If you didn't sent the request, you can ignore this email.<br><br>
       See you soon 👋<br>
       Carl from hootini

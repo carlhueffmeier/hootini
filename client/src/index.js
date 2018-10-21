@@ -6,7 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import App from './App';
 
 const client = new ApolloClient({
-  uri: 'https://api.hootini.com/graphql',
+  uri: process.env.REACT_APP_APOLLO_URL,
   credentials: 'include'
 });
 

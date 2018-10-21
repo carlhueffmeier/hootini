@@ -104,7 +104,7 @@ const requestReset = async (_, { data: { email } }, { db }) => {
   const resetTokenExpiry = Date.now() + 1000 * 60 * 60; // expire 1 hour from now
   await db.user.findOneAndUpdate({ id: user.id }, { resetToken, resetTokenExpiry });
   // 🚚 🎁 Send reset email
-  console.log(`🧞‍  Open this link to reset http://localhost:3000/reset/${resetToken}`);
+  console.log(`🧞‍  Open this link to reset ${process.env.CLIENT_URL}/reset/${resetToken}`);
   await sendResetMail({ to: user.email, name: user.name, resetToken });
   return { message: 'Mail is on the way!' };
 };

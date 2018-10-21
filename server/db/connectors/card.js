@@ -90,28 +90,30 @@ function generateCardModel({ user } = {}) {
     if (where.dueTime_in) {
       pipeline.push({
         $match: {
-          $or: [{ due: { $gt: where.dueTime_in[0], $lt: where.dueTime_in[1] } }, { due: null }]
+          $or: [
+            { due: { $gt: new Date(where.dueTime_in[0]), $lt: new Date(where.dueTime_in[1]) } },
+            { due: null }
+          ]
         }
       });
     }
     if (where.dueTime_gt) {
       pipeline.push({
         $match: {
-          $or: [{ due: { $gt: where.dueTime_gt } }, { due: null }]
+          $or: [{ due: { $gt: new Date(where.dueTime_gt) } }, { due: null }]
         }
       });
     }
     if (where.dueTime_lt) {
       pipeline.push({
         $match: {
-          $or: [{ due: { $lt: where.dueTime_lt } }, { due: null }]
+          $or: [{ due: { $lt: new Date(where.dueTime_lt) } }, { due: null }]
         }
       });
     }
 
     pipeline.push(...addFieldsStages, ...addTemplateStages, aliasIdStage);
     const res = await Card.aggregate(pipeline);
-    console.log(res[0]);
     return res;
   };
 
@@ -132,7 +134,6 @@ function generateCardModel({ user } = {}) {
       consecutiveCorrectAnswers: reviewedCard.consecutiveCorrectAnswers,
       answer
     });
-    console.log(update);
     return Card.findByIdAndUpdate(createFilter({ _id: id }, user), update, {
       new: true
     });

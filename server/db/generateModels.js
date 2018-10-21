@@ -1,14 +1,3 @@
-const mongoose = require('mongoose');
-
-mongoose.connect(
-  process.env.MONGO_URL,
-  { useNewUrlParser: true }
-);
-mongoose.Promise = global.Promise; // use ES6 promises
-mongoose.connection.on('error', err => {
-  console.error(`Can't connect to database → ${err.message}`);
-});
-
 // Import mongoose models
 require('./models/user');
 require('./models/deck');

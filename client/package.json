@@ -1,7 +1,9 @@
 {
-  "name": "hootini-frontend",
+  "name": "hootini-client",
   "version": "0.1.0",
-  "private": true,
+  "repository": "github:carlhueffmeier/hootini",
+  "author": "Carl Hüffmeier",
+  "license": "MIT",
   "dependencies": {
     "@reach/dialog": "^0.1.2",
     "@reach/router": "^1.1.1",
