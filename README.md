@@ -1,6 +1,6 @@
 <h1>
   <a href="https://hootini.com">
-    <img src="https://user-images.githubusercontent.com/27681148/47261359-d57e2b80-d4cd-11e8-841a-b9352bfce657.png" alt="Hootini" height=28>&
+    <img src="https://user-images.githubusercontent.com/27681148/47261359-d57e2b80-d4cd-11e8-841a-b9352bfce657.png" alt="Hootini" height=28>
   </a>
   &nbsp;Hootini&nbsp;
 </h1>
