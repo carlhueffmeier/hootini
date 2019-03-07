@@ -1,4 +1,7 @@
 {
   "name": "hootini.com",
-  "alias": "hootini.com"
+  "alias": "hootini.com",
+  "env": {
+    "REACT_APP_APOLLO_URL": "https://api.hootini.com/graphql"
+  }
 }
