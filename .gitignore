@@ -6,6 +6,7 @@ coverage/
 
 # Production
 build/
+serverless-output.yaml
 
 # Environment variables
 .env

@@ -1,0 +1,13 @@
+{
+  "name": "hootini-graphql-api",
+  "version": "1.0.0",
+  "description": "GraphQL API",
+  "main": "index.js",
+  "author": "Carl Huffmeier",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server-lambda": "^2.4.8",
+    "graphql": "^14.1.1",
+    "graphql-type-json": "^0.2.1"
+  }
+}
