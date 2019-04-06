@@ -7,14 +7,9 @@ exports.typeDef = gql`
     type: String!
   }
 
-  input FieldDefinitionUpdateInput {
-    key: String
-    type: String
-  }
-
   input FieldDefinitionCreateInput {
     key: String!
-    type: String
+    type: String!
   }
 
   input FieldDefinitionUpsertInput {

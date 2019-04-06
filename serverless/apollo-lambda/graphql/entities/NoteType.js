@@ -1,47 +1,37 @@
 const { gql } = require('apollo-server-lambda');
-const { createSearchFilter } = require('../../lib/utils');
 
 exports.typeDef = gql`
   extend type Query {
-    noteType(where: NoteTypeWhereUniqueInput): NoteType!
+    noteType(where: NoteTypeWhereUniqueInput!): NoteType!
     allNoteTypes(where: NoteTypeWhereInput): [NoteType]!
   }
 
   extend type Mutation {
     createNoteType(data: NoteTypeCreateInput!): NoteType!
-    updateNoteType(data: NoteTypeUpdateInput!): NoteType!
-    updateNoteTypeAndUpsertTemplates(data: NoteTypeUpdateAndUpsertTemplatesInput!): NoteType!
+    updateNoteType(where: NoteTypeWhereUniqueInput!, data: NoteTypeUpdateInput!): NoteType!
   }
 
   type NoteType {
     id: ID!
     name: String!
     slug: String!
-    fieldDefinitions: [FieldDefinition!]!
+    fields: [FieldDefinition!]!
     templates: [Template!]!
-  }
-
-  input NoteTypeUpdateInput {
-    id: ID!
-    name: String
-    fieldDefinitions: [FieldDefinitionUpdateInput!]
   }
 
   input NoteTypeCreateInput {
     name: String!
-    fieldDefinitions: [FieldDefinitionCreateInput!]
+    fields: [FieldDefinitionCreateInput!]
     templates: [TemplateCreateInput!]
   }
 
-  input NoteTypeUpdateAndUpsertTemplatesInput {
-    id: ID!
+  input NoteTypeUpdateInput {
     name: String
-    fieldDefinitions: [FieldDefinitionUpsertInput!]
+    fields: [FieldDefinitionUpsertInput!]
     templates: [TemplateUpsertInput!]
   }
 
   input NoteTypeWhereUniqueInput {
-    id: ID
     slug: String
   }
 
@@ -50,26 +40,20 @@ exports.typeDef = gql`
   }
 `;
 
-const getNoteType = (_, { where }, { db }) => {
-  return db.noteType.findOne(where);
+const getNoteType = (_, { where }, { services }) => {
+  return services.noteType.findOneBySlug(where.slug);
 };
 
-const allNoteTypes = (_, { where = {} }, { db }) => {
-  const filter = createSearchFilter(['name'], where);
-  return db.noteType.find(filter);
+const allNoteTypes = (_, { where }, { services }) => {
+  return services.noteType.find(where);
 };
 
-const createNoteType = (_, { data }, { db }) => {
-  return db.noteType.create(data);
+const createNoteType = (_, { data: noteTypeData }, { services }) => {
+  return services.noteType.createDeck(noteTypeData);
 };
 
-const updateNoteTypeAndUpsertTemplates = async (_, { data }, { db }) => {
-  let { id, templates, ...update } = data;
-  if (templates && templates.length > 0) {
-    const { allIds } = await db.template.upsertMany(templates);
-    update.templates = allIds;
-  }
-  return db.noteType.findOneAndUpdate({ id }, update);
+const updateNoteType = (_, { data: changes }, { services }) => {
+  return services.noteType.updateDeck(changes);
 };
 
 exports.resolvers = {
@@ -80,6 +64,6 @@ exports.resolvers = {
 
   Mutation: {
     createNoteType,
-    updateNoteTypeAndUpsertTemplates
+    updateNoteType
   }
 };

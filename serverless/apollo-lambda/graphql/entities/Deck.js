@@ -1,5 +1,4 @@
 const { gql } = require('apollo-server-lambda');
-const { createSearchFilter } = require('../../lib/utils');
 
 exports.typeDef = gql`
   extend type Query {
@@ -9,7 +8,7 @@ exports.typeDef = gql`
 
   extend type Mutation {
     createDeck(data: DeckCreateInput!): Deck!
-    updateDeck(data: DeckUpdateInput!): Deck!
+    updateDeck(where: DeckWhereUniqueInput!, data: DeckUpdateInput!): Deck!
   }
 
   type Deck {
@@ -20,15 +19,9 @@ exports.typeDef = gql`
     createdAt: DateTime
     lastReview: DateTime
     lastActivity: DateTime
-    lastNoteType: NoteType
+    lastNoteType: Int
     cardsDue: Int
     cardsTotal: Int
-  }
-
-  input DeckUpdateInput {
-    id: ID!
-    name: String
-    description: String
   }
 
   input DeckCreateInput {
@@ -36,8 +29,12 @@ exports.typeDef = gql`
     description: String
   }
 
+  input DeckUpdateInput {
+    name: String
+    description: String
+  }
+
   input DeckWhereUniqueInput {
-    id: ID
     slug: String
   }
 
@@ -46,22 +43,20 @@ exports.typeDef = gql`
   }
 `;
 
-const getDeck = (_, { where = {} }, { db }) => {
-  return db.deck.findOne(where);
+const getDeck = (_, { where }, { services }) => {
+  return services.deck.findOne(where);
 };
 
-const allDecks = async (_, { where = {} }, { db }) => {
-  const filter = createSearchFilter(['name'], where);
-  return db.deck.find(filter);
+const allDecks = async (_, { where }, { services }) => {
+  return services.deck.find(where);
 };
 
-const createDeck = (_, { data }, { db }) => {
-  return db.deck.create(data);
+const createDeck = (_, { data: deckInfo }, { services }) => {
+  return services.deck.createDeck(deckInfo);
 };
 
-const updateDeck = (_, { data }, { db }) => {
-  const { id, ...update } = data;
-  return db.deck.findOneAndUpdate({ id }, update);
+const updateDeck = (_, { where, data }, { services }) => {
+  return services.deck.updateDeck(where, data);
 };
 
 exports.resolvers = {

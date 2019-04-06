@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-lambda');
 
 exports.typeDef = gql`
   type NoteField {
+    id: ID
     key: String!
     value: String
   }

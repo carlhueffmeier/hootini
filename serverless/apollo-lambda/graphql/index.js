@@ -11,18 +11,25 @@ const { typeDef: Note, resolvers: noteResolvers } = require('./entities/Note');
 const { typeDef: NoteField } = require('./entities/NoteField');
 const { typeDef: NoteType, resolvers: noteTypeResolvers } = require('./entities/NoteType');
 const { typeDef: FieldDefinition } = require('./entities/FieldDefinition');
-const { typeDef: Template, resolvers: templateResolvers } = require('./entities/Template');
+const { typeDef: Template } = require('./entities/Template');
 const { typeDef: Card, resolvers: cardResolvers } = require('./entities/Card');
+const { typeDef: User, resolvers: userResolvers } = require('./entities/User');
 
 // These have to be present so we can expand them in each module
 const _baseTypes = gql`
   type Query {
-    _empty: String
+    debug: Json
   }
   type Mutation {
     _empty: String
   }
 `;
+
+const globalResolvers = {
+  Query: {
+    debug: (_, __, context) => context
+  }
+};
 
 // The ApolloServer constructor conveniently takes an array of
 // type definitions
@@ -36,17 +43,19 @@ const typeDefs = [
   Note,
   NoteType,
   Template,
-  Card
+  Card,
+  User
 ];
 
 const resolvers = merge(
+  globalResolvers,
   dateTimeResolvers,
   jsonResolvers,
   deckResolvers,
   noteResolvers,
   noteTypeResolvers,
-  templateResolvers,
-  cardResolvers
+  cardResolvers,
+  userResolvers,
 );
 
 exports.typeDefs = typeDefs;

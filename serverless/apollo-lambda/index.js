@@ -1,21 +1,22 @@
 const { ApolloServer } = require('apollo-server-lambda');
 const { typeDefs, resolvers } = require('./graphql');
+const { createContext } = require('./graphQLContext');
 
-const server = new ApolloServer({
+const apolloServerOptions = {
   typeDefs,
   resolvers,
-  context: ({ event, context }) => ({
-    headers: event.headers,
-    functionName: context.functionName,
-    event,
-    context
-  }),
-  mocks: true
-});
+  context: createContext,
+  mocks: true,
+  mockEntireSchema: false
+};
 
-exports.graphqlHandler = server.createHandler({
+const createHandlerOptions = {
   cors: {
     origin: '*',
-    credentials: true,
+    credentials: true
   }
-});
+};
+
+const server = new ApolloServer(apolloServerOptions);
+
+exports.graphqlHandler = server.createHandler(createHandlerOptions);

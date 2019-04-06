@@ -12,17 +12,17 @@ exports.resolvers = {
     description: 'Date custom scalar type',
     // Value from the client
     parseValue(value) {
-      return new Date(value).toISOString();
-    },
-    // Value sent to the client
-    serialize(value) {
-      return value;
+      return new Date(value).getTime();
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.STRING) {
-        return new Date(ast.value).toISOString();
+        return new Date(ast.value).getTime();
       }
       return null;
+    },
+    // Value sent to the client
+    serialize(value) {
+      return new Date(value).toISOString();
     }
   })
 };

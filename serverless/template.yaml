@@ -1,15 +1,103 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Resources:
+  LambdaGraphQLRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "lambda.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+
   GraphQL:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
+      MemorySize: 256
+      Timeout: 10
       CodeUri: apollo-lambda
       Handler: index.graphqlHandler
+      Role:
+        Fn::GetAtt: 
+          - "LambdaGraphQLRole"
+          - "Arn"
+      Environment:
+        Variables:
+          TABLE_NAME: "hootini"
+          APP_SECRET: "supersecretnooneknows"
       Events:
         AnyRequest:
           Type: Api
           Properties:
             Path: /graphql
             Method: ANY
+
+  Hootini: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: "hootini"
+      AttributeDefinitions: 
+        - 
+          AttributeName: "pk"
+          AttributeType: "S"
+        - 
+          AttributeName: "sk"
+          AttributeType: "S"
+        - 
+          AttributeName: "due"
+          AttributeType: "N"
+        - 
+          AttributeName: "sk2"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "pk"
+          KeyType: "HASH"
+        - 
+          AttributeName: "sk"
+          KeyType: "RANGE"
+      ProvisionedThroughput: 
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
+      GlobalSecondaryIndexes: 
+        - 
+          IndexName: "DueCardsGSI"
+          KeySchema: 
+            - 
+              AttributeName: "pk"
+              KeyType: "HASH"
+            - 
+              AttributeName: "due"
+              KeyType: "RANGE"
+          Projection: 
+            NonKeyAttributes: 
+              - "sk"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
+        - 
+          IndexName: "NoteTypeGSI"
+          KeySchema: 
+            - 
+              AttributeName: "pk"
+              KeyType: "HASH"
+            - 
+              AttributeName: "sk2"
+              KeyType: "RANGE"
+          Projection: 
+            NonKeyAttributes: 
+              - "sk2"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"

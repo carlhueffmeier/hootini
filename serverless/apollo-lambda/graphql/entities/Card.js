@@ -2,7 +2,6 @@ const { gql } = require('apollo-server-lambda');
 
 exports.typeDef = gql`
   extend type Query {
-    card(where: CardWhereUniqueInput!): Card!
     allCards(where: CardWhereInput): [Card!]!
   }
 
@@ -21,12 +20,7 @@ exports.typeDef = gql`
     ease: Float
   }
 
-  input CardWhereUniqueInput {
-    id: ID!
-  }
-
   input CardWhereInput {
-    deckId: ID
     deckSlug: String
     dueTime_lt: DateTime
     dueTime_gt: DateTime
@@ -47,21 +41,19 @@ exports.typeDef = gql`
   }
 `;
 
-const getCard = (_, { where }, { db }) => {
-  return db.card.findOne(where);
+const allCards = (_, { where }, { services }) => {
+  if (where.deckSlug) {
+    return services.card.findOneBySlug(where.deckSlug);
+  }
+  return services.card.find();
 };
 
-const allCards = (_, { where }, { db }) => {
-  return db.card.find(where);
-};
-
-const reviewCard = async (_, { data }, { db }) => {
-  return db.card.review(data);
+const reviewCard = async (_, { data }, { services }) => {
+  return services.card.review(data);
 };
 
 exports.resolvers = {
   Query: {
-    card: getCard,
     allCards
   },
 
