@@ -41,19 +41,19 @@ exports.typeDef = gql`
 `;
 
 const getNoteType = (_, { where }, { services }) => {
-  return services.noteType.findOneBySlug(where.slug);
+  return services.noteType.findOne(where);
 };
 
 const allNoteTypes = (_, { where }, { services }) => {
   return services.noteType.find(where);
 };
 
-const createNoteType = (_, { data: noteTypeData }, { services }) => {
-  return services.noteType.createDeck(noteTypeData);
+const createNoteType = (_, { data }, { services }) => {
+  return services.noteType.createDeck(data);
 };
 
-const updateNoteType = (_, { data: changes }, { services }) => {
-  return services.noteType.updateDeck(changes);
+const updateNoteType = (_, { where, data }, { services }) => {
+  return services.noteType.findOneAndUpdate(where, data);
 };
 
 exports.resolvers = {

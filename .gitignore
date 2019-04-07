@@ -14,6 +14,7 @@ serverless-output.yaml
 .env.development.local
 .env.test.local
 .env.production.local
+env.json
 
 # Misc
 .DS_Store

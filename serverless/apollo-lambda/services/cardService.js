@@ -1,9 +1,8 @@
-const cardRepository = require('../repositories/cardRepository');
-const deckRepository = require('../repositories/deckRepository');
+const cardRepository = require('../gateways/cardRepository');
+const deckRepository = require('../gateways/deckGateway');
 const scheduler = require('../lib/scheduler');
 
 class CardService {
-  
   constructor(user) {
     this.user = user;
   }

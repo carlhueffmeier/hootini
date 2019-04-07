@@ -70,7 +70,7 @@ const groupBy = curry((key, objects) =>
   }, {})
 );
 
-const pluck = curry((key, objects) => objects.map(pick(key)));
+const pluck = curry((key, objects) => objects.map(prop(key)));
 
 const mapKeys = curry((mapFn, obj) =>
   Object.entries(obj).reduce((result, [key, value]) => {

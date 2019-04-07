@@ -1,35 +1,41 @@
-const userRepository = require('../repositories/userRepository');
-const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const UserGateway = require('../gateways/userGateway');
+const { mapKeys } = require('../lib/functionalUtils');
+const { snakeCaseToCamelCase } = require('../lib/utils');
+
+const toVM = mapKeys(snakeCaseToCamelCase);
 
 class UserService {
-  
-  constructor(user) {
-    this.user = user;
+  constructor(userId) {
+    this.userId = userId;
+    this.userGateway = new UserGateway();
   }
 
   getCurrentUser() {
-    if (this.user) {
-      return userRepository.findByEmail(this.user);
+    if (this.userId) {
+      return this.userGateway.findOneById(this.userId).then(toVM);
     }
   }
 
   async createUser(vm) {
-    const newUser = new User();
-    newUser.email = vm.email;
-    newUser.password = vm.password;
-    newUser.name = vm.name;
-    return newUser.save();
+    const newUser = {
+      email: vm.email,
+      password: await bcrypt.hash(vm.password, 10),
+      name: vm.name
+    };
+    return this.userGateway.insert(newUser).then(toVM);
   }
 
   async authenticate(credentials) {
-    const user = await userRepository.findByEmail(credentials.email);
+    const user = await this.userGateway.findOneByEmail(credentials.email);
     if (!user) {
       throw new Error(`No user found for email ${credentials.email}.`);
     }
-    if (!await user.isValidPassword(credentials.password)) {
+    const isValid = await bcrypt.compare(credentials.password, user.password);
+    if (!isValid) {
       throw new Error(`Invalid password.`);
     }
-    return user;
+    return toVM(user);
   }
 }
 

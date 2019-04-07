@@ -50,12 +50,11 @@ const allNotes = (_, __, { services }) => {
 };
 
 const createNote = (_, { data }, { services }) => {
-  return services.note.create(data);
+  return services.note.createNote(data);
 };
 
-const updateNote = (_, { data }, { services }) => {
-  const { id, ...update } = data;
-  return services.note.findOneAndUpdate({ id }, update);
+const updateNote = (_, { where, data }, { services }) => {
+  return services.note.findOneAndUpdate(where, data);
 };
 
 exports.resolvers = {

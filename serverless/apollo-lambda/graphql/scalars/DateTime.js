@@ -12,11 +12,11 @@ exports.resolvers = {
     description: 'Date custom scalar type',
     // Value from the client
     parseValue(value) {
-      return new Date(value).getTime();
+      return new Date(value);
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.STRING) {
-        return new Date(ast.value).getTime();
+        return new Date(ast.value);
       }
       return null;
     },

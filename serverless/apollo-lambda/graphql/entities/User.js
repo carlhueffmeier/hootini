@@ -14,8 +14,11 @@ exports.typeDef = gql`
   }
 
   type User {
+    id: ID!
     email: String!
     name: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   type SuccessMessage {
@@ -23,8 +26,7 @@ exports.typeDef = gql`
   }
 
   type UserAuthenticationResponse {
-    email: String!
-    name: String!
+    user: User!
     token: String!
   }
 
@@ -54,20 +56,18 @@ const me = (_, __, { services }) => {
 };
 
 const signup = async (_, { data: userInfo }, { services }) => {
-  const newUser = await services.user.create(userInfo);
+  const newUser = await services.user.createUser(userInfo);
   return {
-    email: newUser.email,
-    name: newUser.name,
+    user: newUser,
     token: generateUserToken(newUser)
   };
 };
 
 const signin = async (_, { data: credentials }, { services }) => {
   try {
-    const user = services.user.authenticate(credentials);
+    const user = await services.user.authenticate(credentials);
     return {
-      email: user.email,
-      name: user.name,
+      user,
       token: generateUserToken(user)
     };
   } catch (error) {

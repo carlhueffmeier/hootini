@@ -1,19 +1,16 @@
-const noteTypeRepository = require('../repositories/noteTypeRepository');
-const cardRepository = require('../repositories/cardRepository');
-const deckRepository = require('../repositories/deckRepository');
+const noteTypeRepository = require('../gateways/noteTypeRepository');
+const cardRepository = require('../gateways/cardRepository');
+const deckRepository = require('../gateways/deckGateway');
 const Card = require('../models/Card');
 const uuidv4 = require('uuid/v4');
 
 class NoteService {
-  
   constructor(user) {
     this.user = user;
   }
 
   async createNote(vm) {
-    const noteType = await noteTypeRepository.findBySlug(
-      vm.noteTypeSlug
-    );
+    const noteType = await noteTypeRepository.findBySlug(vm.noteTypeSlug);
     const noteId = uuidv4();
     const cards = noteType.templates.map(template => {
       const card = new Card();

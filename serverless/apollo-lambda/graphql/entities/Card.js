@@ -42,10 +42,7 @@ exports.typeDef = gql`
 `;
 
 const allCards = (_, { where }, { services }) => {
-  if (where.deckSlug) {
-    return services.card.findOneBySlug(where.deckSlug);
-  }
-  return services.card.find();
+  return services.card.find(where);
 };
 
 const reviewCard = async (_, { data }, { services }) => {

@@ -16,12 +16,13 @@ exports.typeDef = gql`
     name: String!
     slug: String!
     description: String
-    createdAt: DateTime
-    lastReview: DateTime
-    lastActivity: DateTime
     lastNoteType: Int
     cardsDue: Int
     cardsTotal: Int
+    lastReview: DateTime
+    lastActivity: DateTime
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   input DeckCreateInput {
@@ -35,6 +36,7 @@ exports.typeDef = gql`
   }
 
   input DeckWhereUniqueInput {
+    id: ID
     slug: String
   }
 
@@ -56,7 +58,7 @@ const createDeck = (_, { data: deckInfo }, { services }) => {
 };
 
 const updateDeck = (_, { where, data }, { services }) => {
-  return services.deck.updateDeck(where, data);
+  return services.deck.findOneAndUpdate(where, data);
 };
 
 exports.resolvers = {

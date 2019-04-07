@@ -1,10 +1,9 @@
-const noteTypeRepository = require('../repositories/noteTypeRepository');
-const cardRepository = require('../repositories/cardRepository');
+const noteTypeRepository = require('../gateways/noteTypeRepository');
+const cardRepository = require('../gateways/cardRepository');
 const NoteType = require('../models/NoteType');
 const { groupBy, pluck } = require('../lib/functionalUtils');
 
 class NoteTypeService {
-
   constructor(user) {
     this.user = user;
   }
@@ -41,7 +40,10 @@ class NoteTypeService {
 
   findOne(whereUnique) {
     if (whereUnique.slug) {
-      return noteTypeRepository.findOneByUserAndSlug(this.user, whereUnique.slug);
+      return noteTypeRepository.findOneByUserAndSlug(
+        this.user,
+        whereUnique.slug
+      );
     }
   }
 
@@ -58,11 +60,14 @@ class NoteTypeService {
     const newIds = new Set(pluck('id', data.newTemplates));
 
     const deletedIds = [...oldIds].filter(id => !newIds.has(id));
-    const pendingDeleteOps = deletedIds.map(templateId => 
-      cardRepository.deleteByNoteTypeIdAndTemplateId(data.noteTypeId, templateId)
+    const pendingDeleteOps = deletedIds.map(templateId =>
+      cardRepository.deleteByNoteTypeIdAndTemplateId(
+        data.noteTypeId,
+        templateId
+      )
     );
 
-    const pendingUpdateOps = newIds.map(templateId => 
+    const pendingUpdateOps = newIds.map(templateId =>
       cardRepository.bulkUpdateByNoteTypeIdAndTemplateId(
         { noteTypeId: data.noteTypeId, templateId },
         { fieldMeta: data.fieldMeta, template: newTemplates[templateId] }
